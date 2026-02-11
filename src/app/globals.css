@@ -1,0 +1,371 @@
+@import "tailwindcss";
+
+:root {
+	--background: #fff8f3;
+	--foreground: #2d1b0e;
+	--cream-50: #fffcf9;
+	--cream-100: #fff8f3;
+	--cream-200: #fff0e6;
+	--cream-300: #ffe8d9;
+	--cream-400: #ffd6b8;
+	--cream-500: #ffc497;
+	--cream-600: #e6a876;
+	--cream-700: #cc8c55;
+	--cream-800: #b37034;
+	--cream-900: #995413;
+}
+
+body {
+	background: var(--background);
+	color: var(--foreground);
+	font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		sans-serif;
+	font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+	min-height: 100vh;
+}
+
+/* Modern dashboard animations */
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.animate-slide-in {
+	animation: slideIn 0.5s ease-out;
+}
+
+.animate-fade-in {
+	animation: fadeIn 0.3s ease-out;
+}
+
+.animate-scale-in {
+	animation: scaleIn 0.2s ease-out;
+}
+
+/* Enhanced glass morphism with cream theme */
+.glass-effect {
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	background: rgba(255, 248, 243, 0.85);
+	border: 1px solid rgba(255, 232, 217, 0.3);
+}
+
+/* Smooth transitions */
+* {
+	transition-property: color, background-color, border-color,
+		text-decoration-color, fill, stroke, opacity, box-shadow, transform,
+		filter, backdrop-filter;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+	width: 6px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 3px;
+	transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+
+/* Enhanced scrollbar for notifications */
+.scrollbar-thin::-webkit-scrollbar {
+	width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+	background: #e2e8f0;
+	border-radius: 2px;
+	transition: all 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+	background: #cbd5e1;
+	width: 6px;
+}
+
+/* Focus styles */
+.focus-ring:focus {
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* Button enhancements with cream theme */
+.btn-primary {
+	background: linear-gradient(135deg, #cc8c55 0%, #b37034 100%);
+	box-shadow: 0 4px 14px 0 rgba(204, 140, 85, 0.25);
+	transition: all 0.2s ease;
+	color: white;
+}
+
+.btn-primary:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 8px 25px 0 rgba(204, 140, 85, 0.35);
+	background: linear-gradient(135deg, #b37034 0%, #995413 100%);
+}
+
+/* Card hover effects */
+.card-hover:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Smooth scroll behavior */
+.smooth-scroll {
+	scroll-behavior: smooth;
+}
+
+/* Notification animations */
+@keyframes slideInFromRight {
+	from {
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.animate-slide-in-right {
+	animation: slideInFromRight 0.3s ease-out;
+}
+
+/* Line clamp utility for better text truncation */
+.line-clamp-2 {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* RTL Support for Arabic */
+[dir="rtl"] {
+	direction: rtl;
+	text-align: right;
+}
+
+/* RTL spacing fixes - swap left/right margins and paddings */
+[dir="rtl"] .ml-auto {
+	margin-left: 0;
+	margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+	margin-right: 0;
+	margin-left: auto;
+}
+
+/* RTL flex direction fixes */
+[dir="rtl"] .flex-row {
+	flex-direction: row-reverse;
+}
+
+/* RTL text alignment */
+[dir="rtl"] .text-left {
+	text-align: right;
+}
+
+[dir="rtl"] .text-right {
+	text-align: left;
+}
+
+/* RTL positioning fixes */
+[dir="rtl"] .left-0 {
+	left: auto;
+	right: 0;
+}
+
+[dir="rtl"] .right-0 {
+	right: auto;
+	left: 0;
+}
+
+/* RTL border radius fixes for asymmetric borders */
+[dir="rtl"] .rounded-l-lg {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0.5rem;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0.5rem;
+}
+
+[dir="rtl"] .rounded-r-lg {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0.5rem;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0.5rem;
+}
+
+/* RTL transform fixes */
+[dir="rtl"] .translate-x-full {
+	transform: translateX(-100%);
+}
+
+[dir="rtl"] .-translate-x-full {
+	transform: translateX(100%);
+}
+
+/* RTL responsive grid fixes */
+[dir="rtl"] .grid {
+	direction: rtl;
+}
+
+/* RTL responsive flex fixes */
+[dir="rtl"] .flex-row {
+	flex-direction: row-reverse;
+}
+
+/* RTL responsive positioning for mobile */
+@media (max-width: 1023px) {
+	[dir="rtl"] .fixed.right-0 {
+		right: 0;
+		left: auto;
+	}
+	
+	[dir="rtl"] .fixed.left-0 {
+		left: 0;
+		right: auto;
+	}
+}
+
+/* Responsive Utilities */
+@media (max-width: 640px) {
+	/* Mobile-specific utilities */
+	.mobile-hidden {
+		display: none;
+	}
+}
+
+@media (min-width: 641px) {
+	/* Tablet and up */
+	.mobile-only {
+		display: none;
+	}
+}
+
+/* Responsive container padding */
+.container-responsive {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+	.container-responsive {
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
+	}
+}
+
+@media (min-width: 1024px) {
+	.container-responsive {
+		padding-left: 2rem;
+		padding-right: 2rem;
+	}
+}
+
+/* Responsive text sizes */
+.text-responsive-xs {
+	font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+	.text-responsive-xs {
+		font-size: 0.875rem;
+	}
+}
+
+.text-responsive-sm {
+	font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+	.text-responsive-sm {
+		font-size: 1rem;
+	}
+}
+
+.text-responsive-base {
+	font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+	.text-responsive-base {
+		font-size: 1.125rem;
+	}
+}
+
+.text-responsive-lg {
+	font-size: 1.125rem;
+}
+
+@media (min-width: 640px) {
+	.text-responsive-lg {
+		font-size: 1.25rem;
+	}
+}
+
+@media (min-width: 1024px) {
+	.text-responsive-lg {
+		font-size: 1.5rem;
+	}
+}
+
+/* Responsive spacing */
+.space-responsive {
+	gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+	.space-responsive {
+		gap: 1rem;
+	}
+}
+
+@media (min-width: 1024px) {
+	.space-responsive {
+		gap: 1.5rem;
+	}
+}
