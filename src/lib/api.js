@@ -10,7 +10,7 @@ const getApiBaseUrl = () => {
 	}
 	// Fallback: check window only on client side
 	if (typeof window !== "undefined") {
-		return window.location.hostname === 'localhost' 
+		return window.location.hostname === 'localhost'
 			? '/api'  // Use Next.js proxy in development (proxies to localhost:5000)
 			: "https://backend-production-3bcd.up.railway.app/api";  // Direct URL in production
 	}
@@ -53,7 +53,7 @@ const apiRequest = async (endpoint, options = {}) => {
 		credentials: "include", // Include cookies for authentication
 		...options,
 	};
-	
+
 	// Remove token from config to avoid sending it in body
 	delete config.token;
 
@@ -109,16 +109,16 @@ const apiRequest = async (endpoint, options = {}) => {
 
 	// Check if this is the create order endpoint - must use multipart/form-data
 	const isCreateOrderEndpoint = url.includes('/orders') && options.method === 'POST' && !url.includes('/orders/');
-	
+
 	// Handle multipart/form-data for file uploads OR create order endpoint
 	if (options.body && options.method !== "GET" && (hasFile(options.body) || isCreateOrderEndpoint)) {
 		const formData = new FormData();
-		
+
 		// Handle image files separately - backend expects them in req.files, not req.body
 		// Check if images array contains File objects
 		const images = options.body.images;
 		const imageFiles = options.body._imageFiles || (images && Array.isArray(images) ? images.filter(img => img instanceof File) : []);
-		
+
 		if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
 			// Add each image file with the key 'images' (not 'images[]') - backend expects req.files['images']
 			// According to FRONTEND_INTEGRATION_GUIDE.md, field name should be 'images' (plural)
@@ -128,13 +128,13 @@ const apiRequest = async (endpoint, options = {}) => {
 				}
 			});
 		}
-		
+
 		// Build FormData from the rest of the body
 		// Remove _imageFiles and images array completely - backend doesn't accept images in req.body
 		const bodyForFormData = { ...options.body };
 		delete bodyForFormData._imageFiles;
 		delete bodyForFormData.images; // Remove images completely - backend validation rejects it
-		
+
 		// For create order endpoint, stringify JSON objects (location, destination_location, services)
 		if (isCreateOrderEndpoint) {
 			// Stringify location if it exists
@@ -150,10 +150,10 @@ const apiRequest = async (endpoint, options = {}) => {
 				bodyForFormData.services = JSON.stringify(bodyForFormData.services);
 			}
 		}
-		
+
 		// Build FormData for the rest of the body
 		buildFormData(formData, bodyForFormData);
-		
+
 		config.body = formData;
 		// Remove Content-Type header as FormData sets it automatically with the correct boundary
 		delete config.headers["Content-Type"];
@@ -167,7 +167,7 @@ const apiRequest = async (endpoint, options = {}) => {
 
 		// Check if response is JSON
 		let data;
-		
+
 		try {
 			const text = await response.text();
 			if (!text) {
@@ -211,9 +211,18 @@ const apiRequest = async (endpoint, options = {}) => {
 			);
 		}
 
-		// Handle 401 (Unauthorized) as a special case - not an error, just not authenticated
+		// Handle 401 (Unauthorized) as a special case
 		if (response.status === 401) {
-			// Return null to indicate user is not authenticated (no error thrown)
+			// For login/register endpoints, throw an error so the form can show the message
+			const isAuthEndpoint = url.includes('/auth/login') || url.includes('/auth/register');
+			if (isAuthEndpoint) {
+				throw new ApiError(
+					data?.message || "Invalid email or password",
+					response.status,
+					data,
+				);
+			}
+			// For other endpoints, return null to indicate user is not authenticated (no error thrown)
 			return null;
 		}
 
@@ -235,10 +244,10 @@ const apiRequest = async (endpoint, options = {}) => {
 
 		// Throw API error for non-success responses
 		// Handle cases where data might not be an object or might not have a message
-		const errorMessage = (data && typeof data === 'object' && data.message) 
+		const errorMessage = (data && typeof data === 'object' && data.message)
 			? data.message
 			: (typeof data === 'string' ? data : `HTTP ${response.status}: ${response.statusText}`);
-		
+
 		throw new ApiError(
 			errorMessage,
 			response.status,
@@ -300,7 +309,7 @@ export const servicesApi = {
 		apiRequest("/services", {
 			method: "GET",
 		}),
-	
+
 	getAdditionById: (additionId) =>
 		apiRequest(`/additions/${additionId}`, {
 			method: "GET",
@@ -313,7 +322,7 @@ export const companiesApi = {
 		apiRequest("/companies", {
 			method: "GET",
 		}),
-	
+
 	getCompanyById: (companyId) =>
 		apiRequest(`/companies/${companyId}`, {
 			method: "GET",
@@ -365,20 +374,20 @@ export const customerApi = {
 			body: { reason },
 			token,
 		}),
-	
+
 	updateOrder: (orderId, orderData, token = null) =>
 		apiRequest(`/orders/${orderId}`, {
 			method: "PATCH",
 			body: orderData,
 			token,
 		}),
-	
+
 	getOrderServiceCompanies: (orderId, orderServiceId, token = null) =>
 		apiRequest(`/orders/${orderId}/orderServices/${orderServiceId}/companies`, {
 			method: "GET",
 			token,
 		}),
-	
+
 	assignCompanyToOrderService: (orderId, orderServiceId, companyId, token = null) =>
 		apiRequest(`/orders/${orderId}/orderServices/${orderServiceId}/assign`, {
 			method: "POST",
@@ -404,46 +413,46 @@ export const companyAdminApi = {
 			method: "GET",
 		});
 	},
-	
+
 	checkClientEmail: (email) =>
 		apiRequest("/companies/clients/check-email", {
 			method: "POST",
 			body: { email },
 		}),
-	
+
 	createClient: (companyId, clientData) =>
 		apiRequest(`/companies/${companyId}/clients`, {
 			method: "POST",
 			body: clientData,
 		}),
-	
+
 	createOrder: (companyId, orderData) =>
 		apiRequest(`/companies/${companyId}/orders`, {
 			method: "POST",
 			body: orderData,
 		}),
-	
+
 	acceptOrderService: (orderId, orderServiceId) =>
 		apiRequest(`/orders/${orderId}/orderServices/${orderServiceId}/accept`, {
 			method: "PATCH",
 		}),
-	
+
 	rejectOrderService: (orderId, orderServiceId) =>
 		apiRequest(`/orders/${orderId}/orderServices/${orderServiceId}/reject`, {
 			method: "PATCH",
 		}),
-	
+
 	sendOrderServiceOffer: (orderId, orderServiceId, offerData) =>
 		apiRequest(`/orders/${orderId}/orderServices/${orderServiceId}/offers`, {
 			method: "POST",
 			body: offerData,
 		}),
-	
+
 	cancelOffer: (offerId) =>
 		apiRequest(`/offers/${offerId}/cancel`, {
 			method: "PATCH",
 		}),
-	
+
 	getCompanyEmployees: (companyId, params = {}) => {
 		const queryParams = new URLSearchParams();
 		if (params.page) queryParams.append("page", params.page);
@@ -451,7 +460,7 @@ export const companyAdminApi = {
 		if (params.role) queryParams.append("role", params.role);
 		if (params.status) queryParams.append("status", params.status);
 		if (params.sort !== undefined) queryParams.append("sort", params.sort);
-		
+
 		const queryString = queryParams.toString();
 		return apiRequest(`/companies/${companyId}/employees${queryString ? `?${queryString}` : ""}`, {
 			method: "GET",
@@ -485,23 +494,23 @@ export const companyAdminApi = {
 		apiRequest(`/companies/${companyId}/employments/${employmentId}/cancel`, {
 			method: "PATCH",
 		}),
-	
+
 	getOfferAssignments: (offerId) =>
 		apiRequest(`/offers/${offerId}/assignments`, {
 			method: "GET",
 		}),
-	
+
 	assignEmployeeToOffer: (offerId, assignmentData) =>
 		apiRequest(`/offers/${offerId}/assignments`, {
 			method: "POST",
 			body: assignmentData,
 		}),
-	
+
 	cancelAssignment: (offerId, assignmentId) =>
 		apiRequest(`/offers/${offerId}/assignments/${assignmentId}/cancel`, {
 			method: "PATCH",
 		}),
-	
+
 	makeEmployeeLeader: (offerId, employeeId) =>
 		apiRequest(`/offers/${offerId}/employees/${employeeId}/make-leader`, {
 			method: "PATCH",
@@ -530,31 +539,31 @@ export const notificationsApi = {
 			method: "GET",
 		});
 	},
-	
+
 	// GET /notifications/:id - Get notification by ID
 	getNotificationById: (notificationId) =>
 		apiRequest(`/notifications/${notificationId}`, {
 			method: "GET",
 		}),
-	
+
 	// PATCH /notifications/:id/read - Mark notification as read
 	markNotificationAsRead: (notificationId) =>
 		apiRequest(`/notifications/${notificationId}/read`, {
 			method: "PATCH",
 		}),
-	
+
 	// PATCH /notifications/read-all - Mark all notifications as read
 	markAllNotificationsAsRead: () =>
 		apiRequest("/notifications/read-all", {
 			method: "PATCH",
 		}),
-	
+
 	// PATCH /notifications/:id/hide - Hide notification
 	hideNotification: (notificationId) =>
 		apiRequest(`/notifications/${notificationId}/hide`, {
 			method: "PATCH",
 		}),
-	
+
 	// PATCH /notifications/hide-all - Hide all notifications
 	hideAllNotifications: () =>
 		apiRequest("/notifications/hide-all", {
@@ -645,13 +654,13 @@ export const siteAdminApi = {
 			method: "GET",
 		});
 	},
-	
+
 	createOrder: (orderData) =>
 		apiRequest("/site-admin/orders", {
 			method: "POST",
 			body: orderData,
 		}),
-	
+
 	cancelOrder: (orderId, reason) =>
 		apiRequest(`/orders/${orderId}/cancel`, {
 			method: "PATCH",

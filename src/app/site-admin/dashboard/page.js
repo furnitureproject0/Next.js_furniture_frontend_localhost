@@ -3,23 +3,23 @@
 import OrderServiceCompanyAssignmentModal from "@/components/modals/OrderServiceCompanyAssignmentModal";
 import SiteAdminOrdersList from "@/components/site-admin/SiteAdminOrdersList";
 import SiteAdminStatsCards from "@/components/site-admin/SiteAdminStatsCards";
-import SiteAdminOrderModal from "@/components/site-admin/SiteAdminOrderModal";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/selectors";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SiteAdminDashboard() {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(selectUser);
+	const router = useRouter();
 	const [isAssignCompanyModalOpen, setIsAssignCompanyModalOpen] =
 		useState(false);
-	const [isCreateOrderModalOpen, setIsCreateOrderModalOpen] = useState(false);
 	const [selectedOrderForAssignment, setSelectedOrderForAssignment] =
 		useState(null);
 	const [refreshTrigger, setRefreshTrigger] = useState(0);
-	
+
 	const handleAssignCompany = (order) => {
 		setSelectedOrderForAssignment(order);
 		setIsAssignCompanyModalOpen(true);
@@ -45,7 +45,7 @@ export default function SiteAdminDashboard() {
 						</p>
 					</div>
 					<button
-						onClick={() => setIsCreateOrderModalOpen(true)}
+						onClick={() => router.push("/site-admin/create-order")}
 						className="w-full sm:w-auto btn-primary px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer"
 					>
 						<svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,18 +66,6 @@ export default function SiteAdminDashboard() {
 			</div>
 
 			{/* Modals */}
-			<SiteAdminOrderModal
-				isOpen={isCreateOrderModalOpen}
-				onClose={() => setIsCreateOrderModalOpen(false)}
-				onOrderCreated={(newOrder) => {
-					console.log("Order created:", newOrder);
-					// Refresh orders list after 1 second
-					setTimeout(() => {
-						setRefreshTrigger(prev => prev + 1);
-					}, 1000);
-				}}
-			/>
-
 			<OrderServiceCompanyAssignmentModal
 				isOpen={isAssignCompanyModalOpen}
 				onClose={() => {

@@ -4,13 +4,9 @@ import { useTranslation } from "@/hooks/useTranslation";
 import ServicePricingInputs from "./ServicePricingInputs";
 import ServiceAdditionsList from "./ServiceAdditionsList";
 
-/**
- * Service card component - displays a single service with its details
- * Handles service selection and displays pricing/additions when selected
- */
-export default function ServiceCard({ 
-	service, 
-	isSelected, 
+export default function ServiceCard({
+	service,
+	isSelected,
 	selectedAdditions,
 	pricing,
 	showPricing,
@@ -23,39 +19,30 @@ export default function ServiceCard({
 	const { t } = useTranslation();
 
 	return (
-		<div className="space-y-2">
-			{/* Service Selection Card */}
+		<div className="space-y-1.5">
+			{/* Service Row */}
 			<div
-				className={`cursor-pointer transition-all duration-200 border-2 rounded-lg p-3 sm:p-4 ${
-					isSelected
-						? "ring-2 ring-orange-500 bg-orange-50 border-orange-300"
-						: "hover:bg-gray-50 border-gray-200 hover:border-orange-200"
-				}`}
+				className={`cursor-pointer transition-colors border rounded-md px-3 py-2 flex items-center justify-between gap-2 ${isSelected
+						? "bg-gray-50 border-gray-400"
+						: "border-gray-200 hover:bg-gray-50 hover:border-gray-300"
+					}`}
 				onClick={() => onServiceToggle(service)}
 			>
-				<div className="flex items-center justify-between gap-3">
-					<div className="flex items-center gap-3 flex-1 min-w-0">
-						<div className="text-2xl sm:text-3xl flex-shrink-0">{service.icon}</div>
-						<div className="flex-1 min-w-0">
-							<h4 className="text-sm sm:text-base font-semibold text-gray-900">
-								{service.name}
-							</h4>
-							<p className="text-xs sm:text-sm text-gray-600 mt-0.5 line-clamp-2">
-								{service.description}
-							</p>
-						</div>
+				<div className="flex items-center gap-2 flex-1 min-w-0">
+					<span className="text-base flex-shrink-0">{service.icon}</span>
+					<div className="flex-1 min-w-0">
+						<span className="text-xs font-medium text-gray-800 block truncate">{service.name}</span>
+						<span className="text-[10px] text-gray-400 block truncate">{service.description}</span>
 					</div>
-					{isSelected && (
-						<div className="p-1.5 bg-orange-500 rounded-full flex-shrink-0">
-							<svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-							</svg>
-						</div>
-					)}
 				</div>
+				{isSelected && (
+					<svg className="w-4 h-4 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+					</svg>
+				)}
 			</div>
 
-			{/* Pricing Section (for internal companies) */}
+			{/* Pricing */}
 			{isSelected && showPricing && (
 				<ServicePricingInputs
 					serviceId={service.id}
@@ -65,7 +52,7 @@ export default function ServiceCard({
 				/>
 			)}
 
-			{/* Service Additions */}
+			{/* Additions */}
 			{isSelected && service.additions && service.additions.length > 0 && (
 				<ServiceAdditionsList
 					serviceId={service.id}
