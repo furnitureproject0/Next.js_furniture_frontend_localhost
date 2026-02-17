@@ -9,10 +9,10 @@ import ServiceCard from "./ServiceCard";
 // Service name to ID mapping
 const mapServiceNameToId = (serviceName) => {
 	const nameMap = {
-		"Moving": "furniture_moving",
-		"Cleaning": "cleaning_service",
-		"Painting": "painting",
-		"Packing": "packing",
+		Moving: "furniture_moving",
+		Cleaning: "cleaning_service",
+		Painting: "painting",
+		Packing: "packing",
 	};
 	return nameMap[serviceName] || serviceName.toLowerCase().replace(/\s+/g, "_");
 };
@@ -28,18 +28,12 @@ const getServiceIcon = (serviceId) => {
 	return iconMap[serviceId] || "📋";
 };
 
-/**
- * Site Admin Service Selection Step
- * Displays services with pricing inputs for internal companies
- * Refactored into smaller components for better maintainability
- */
 export default function SiteAdminServiceStep({ formData, setFormData, companyScope }) {
 	const { t } = useTranslation();
 	const [services, setServices] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	// Use custom hook for service selection logic
 	const {
 		handleServiceToggle,
 		handlePricingChange,
@@ -49,13 +43,13 @@ export default function SiteAdminServiceStep({ formData, setFormData, companySco
 		calculateGrandTotal,
 	} = useServiceSelection(formData, setFormData);
 
-	// Fetch services on mount
 	useEffect(() => {
 		const fetchServices = async () => {
 			try {
 				setIsLoading(true);
 				setError(null);
 				const response = await servicesApi.getServices();
+
 				if (response?.success && response?.data?.services) {
 					const transformedServices = response.data.services.map((service) => ({
 						id: service.id,
@@ -69,20 +63,15 @@ export default function SiteAdminServiceStep({ formData, setFormData, companySco
 				}
 			} catch (err) {
 				console.error("Error fetching services:", err);
-				setError(
-					err instanceof ApiError
-						? err.message
-						: "Failed to load services"
-				);
+				setError(err instanceof ApiError ? err.message : "Failed to load services");
 			} finally {
 				setIsLoading(false);
 			}
 		};
 
 		fetchServices();
-	}, []); // Only fetch once on mount
+	}, []);
 
-	// Show pricing for internal companies
 	const showPricing = companyScope === "internal";
 
 	if (isLoading) {
@@ -130,23 +119,27 @@ export default function SiteAdminServiceStep({ formData, setFormData, companySco
 
 			{/* Summary */}
 			{formData.services.length > 0 && (
-				<div className="p-2 bg-green-50 border border-green-200 rounded-md">
-					<p className="text-[11px] font-medium text-green-700">
-						{t("orderSteps.servicesSelected", { count: formData.services.length })}
-					</p>
-				</div>
+				<div className="space-y-2">
+					<div className="p-2 bg-green-50 border border-green-200 rounded-md">
+						<p className="text-[11px] font-medium text-green-700">
+							{t("orderSteps.servicesSelected", {
+								count: formData.services.length,
+							})}
+						</p>
+					</div>
 
 					{showPricing && (
-				<div className="p-2 bg-gray-50 border border-gray-200 rounded-md flex items-center justify-between">
-					<span className="text-xs font-medium text-gray-600">
-						{t("siteAdmin.pricing.grandTotal") || "Grand Total"}
-					</span>
-					<span className="text-xs font-bold text-gray-900">
-						${calculateGrandTotal().toFixed(2)}
-					</span>
+						<div className="p-2 bg-gray-50 border border-gray-200 rounded-md flex items-center justify-between">
+							<span className="text-xs font-medium text-gray-600">
+								{t("siteAdmin.pricing.grandTotal") || "Grand Total"}
+							</span>
+							<span className="text-xs font-bold text-gray-900">
+								${calculateGrandTotal().toFixed(2)}
+							</span>
+						</div>
+					)}
 				</div>
 			)}
-	)
-}</div >
+		</div>
 	);
 }
