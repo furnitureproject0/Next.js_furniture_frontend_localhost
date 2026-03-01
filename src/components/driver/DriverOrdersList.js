@@ -12,7 +12,7 @@ const OrderCard = ({ order, onViewOrder, t }) => {
 			case "scheduled":
 				return "bg-blue-100 text-blue-800 border-blue-200";
 			case "in-progress":
-				return "bg-orange-100 text-orange-800 border-orange-200";
+				return "bg-sky-100 text-sky-800 border-sky-200";
 			case "completed":
 				return "bg-green-100 text-green-800 border-green-200";
 			default:
@@ -22,12 +22,12 @@ const OrderCard = ({ order, onViewOrder, t }) => {
 
 	return (
 		<div
-			className="bg-white border border-orange-200/40 rounded-xl p-4 sm:p-5 lg:p-6 hover:shadow-md transition-shadow cursor-pointer"
+			className="bg-white border border-primary-200/40 rounded-xl p-4 sm:p-5 lg:p-6 hover:shadow-md transition-shadow cursor-pointer"
 			onClick={() => onViewOrder(order)}
 		>
 			<div className="flex items-start justify-between gap-3 mb-3 sm:mb-4">
 				<div className="flex-1 min-w-0">
-					<h3 className="text-base sm:text-lg font-semibold text-amber-900 mb-1.5 sm:mb-2 truncate">
+					<h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-1.5 sm:mb-2 truncate">
 						{t("driver.orderList.orderNumber", { id: order.id })}
 					</h3>
 					<span
@@ -41,7 +41,7 @@ const OrderCard = ({ order, onViewOrder, t }) => {
 			</div>
 
 			<div className="space-y-2 mb-3 sm:mb-4">
-				<div className="flex items-center gap-2 text-xs sm:text-sm text-amber-700">
+				<div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
 					<svg
 						className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"
 						fill="none"
@@ -59,7 +59,7 @@ const OrderCard = ({ order, onViewOrder, t }) => {
 				</div>
 
 				{order.address && (
-					<div className="flex items-center gap-2 text-xs sm:text-sm text-amber-700">
+					<div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
 						<svg
 							className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"
 							fill="none"
@@ -78,7 +78,7 @@ const OrderCard = ({ order, onViewOrder, t }) => {
 				)}
 
 				{order.date && (
-					<div className="flex items-center gap-2 text-xs sm:text-sm text-amber-700">
+					<div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
 						<svg
 							className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0"
 							fill="none"
@@ -97,8 +97,8 @@ const OrderCard = ({ order, onViewOrder, t }) => {
 				)}
 			</div>
 
-			<div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-orange-100 flex justify-end">
-				<button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:from-orange-600 hover:to-amber-700 transition-all">
+			<div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-primary-100 flex justify-end">
+				<button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:from-primary-600 hover:to-slate-600 transition-all">
 					{t("common.buttons.viewDetails")}
 				</button>
 			</div>
@@ -110,7 +110,7 @@ export default function DriverOrdersList({ orders, onViewOrder }) {
 	const { t } = useTranslation();
 	if (orders.length === 0) {
 		return (
-			<div className="bg-white border border-orange-200/40 rounded-xl p-8 sm:p-12 text-center">
+			<div className="bg-white border border-primary-200/40 rounded-xl p-8 sm:p-12 text-center">
 				<div className="w-16 h-16 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
 					<svg
 						className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400"
@@ -126,10 +126,10 @@ export default function DriverOrdersList({ orders, onViewOrder }) {
 						/>
 					</svg>
 				</div>
-				<h3 className="text-lg sm:text-xl font-semibold text-amber-900 mb-1 sm:mb-2">
+				<h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-1 sm:mb-2">
 					{t("driver.orderList.noOrdersAssigned")}
 				</h3>
-				<p className="text-sm sm:text-base text-amber-700/70">
+				<p className="text-sm sm:text-base text-slate-600/70">
 					{t("driver.orderList.newOrdersWillAppear")}
 					<br />
 					{t("driver.orderList.checkBackLater")}

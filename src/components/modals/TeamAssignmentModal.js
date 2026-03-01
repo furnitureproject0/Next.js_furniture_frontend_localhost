@@ -8,8 +8,8 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 		className={`border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 transition-all duration-200 cursor-pointer ${
 			employee.available
 				? isSelected
-					? "border-orange-400 bg-orange-50/60 shadow-md"
-					: "border-orange-200/60 hover:border-orange-300 hover:shadow-lg bg-white"
+					? "border-primary-400 bg-primary-50/60 shadow-md"
+					: "border-primary-200/60 hover:border-primary-300 hover:shadow-lg bg-white"
 				: "border-gray-200 bg-gray-50 opacity-60 cursor-not-allowed"
 		}`}
 		onClick={() => employee.available && onToggle(employee)}
@@ -17,8 +17,8 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 		<div className="flex items-center justify-between gap-2 sm:gap-3">
 			<div className="flex-1 min-w-0">
 				<div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
-					<div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-						<span className="text-orange-600 font-bold text-xs sm:text-sm">
+					<div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-100 to-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+						<span className="text-primary-600 font-bold text-xs sm:text-sm">
 							{employee.name
 								.split(" ")
 								.map((n) => n[0])
@@ -26,7 +26,7 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 						</span>
 					</div>
 					<div className="flex-1 min-w-0">
-						<h3 className="text-base sm:text-lg font-semibold text-amber-900 truncate">
+						<h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate">
 							{employee.name}
 						</h3>
 						<div className="flex items-center flex-wrap gap-1.5 sm:gap-2 mt-0.5">
@@ -47,7 +47,7 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 								>
 									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
 								</svg>
-								<span className="text-xs text-amber-700">
+								<span className="text-xs text-slate-600">
 									{employee.rating}
 								</span>
 							</div>
@@ -62,15 +62,15 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-2 sm:mb-3">
 					<div>
-						<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1">
+						<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1">
 							{t("modals.teamAssignment.experience")}
 						</p>
-						<p className="text-sm text-amber-900 font-medium">
+						<p className="text-sm text-slate-800 font-medium">
 							{employee.experience}
 						</p>
 					</div>
 					<div>
-						<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1">
+						<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1">
 							{t("modals.teamAssignment.specialties")}
 						</p>
 						<div className="flex flex-wrap gap-1">
@@ -79,7 +79,7 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 								.map((specialty, index) => (
 									<span
 										key={index}
-										className="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full"
+										className="px-2 py-1 bg-primary-100 text-primary-800 text-xs font-medium rounded-full"
 									>
 										{specialty}
 									</span>
@@ -94,8 +94,8 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 					<div
 						className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
 							isSelected
-								? "bg-orange-500 border-orange-500"
-								: "border-orange-300 hover:border-orange-400"
+								? "bg-primary-500 border-primary-500"
+								: "border-primary-300 hover:border-primary-400"
 						}`}
 					>
 						{isSelected && (
@@ -121,12 +121,12 @@ const EmployeeCard = ({ employee, isSelected, onToggle, t }) => (
 );
 
 const TeamRequirements = ({ hasDriver, hasWorkers, t }) => (
-	<div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-3 sm:p-4 border border-orange-200/60 mb-4 sm:mb-6">
-		<h3 className="text-sm sm:text-base font-semibold text-amber-900 mb-1.5 sm:mb-2">{t("modals.teamAssignment.teamRequirements")}</h3>
+	<div className="bg-gradient-to-r from-primary-50 to-primary-50 rounded-xl p-3 sm:p-4 border border-primary-200/60 mb-4 sm:mb-6">
+		<h3 className="text-sm sm:text-base font-semibold text-slate-800 mb-1.5 sm:mb-2">{t("modals.teamAssignment.teamRequirements")}</h3>
 		<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm">
 			<div
 				className={`flex items-center gap-2 ${
-					hasDriver ? "text-green-600" : "text-amber-700/70"
+					hasDriver ? "text-green-600" : "text-slate-600/70"
 				}`}
 			>
 				<svg
@@ -150,7 +150,7 @@ const TeamRequirements = ({ hasDriver, hasWorkers, t }) => (
 			</div>
 			<div
 				className={`flex items-center gap-2 ${
-					hasWorkers ? "text-green-600" : "text-amber-700/70"
+					hasWorkers ? "text-green-600" : "text-slate-600/70"
 				}`}
 			>
 				<svg
@@ -212,7 +212,7 @@ const LeaderSelection = ({ selectedEmployees, teamLeaderId, onSelectLeader, t })
 						onChange={() => onSelectLeader(null)}
 						className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 border-purple-300 focus:ring-purple-500 flex-shrink-0"
 					/>
-					<span className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-amber-800">
+					<span className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-slate-700">
 						{t("modals.teamAssignment.noLeaderAssigned")}
 					</span>
 				</label>
@@ -235,7 +235,7 @@ const LeaderSelection = ({ selectedEmployees, teamLeaderId, onSelectLeader, t })
 						/>
 						<div className="ml-2 sm:ml-3 flex-1 flex items-center justify-between gap-2 min-w-0">
 							<div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0">
-								<span className="font-medium text-amber-900 text-xs sm:text-sm truncate">
+								<span className="font-medium text-slate-800 text-xs sm:text-sm truncate">
 									{employee.name}
 								</span>
 								<span
@@ -326,19 +326,19 @@ export default function TeamAssignmentModal({
 			{/* Modal */}
 			<div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] sm:max-h-[80vh] flex flex-col">
 				{/* Header */}
-				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
+				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
 					<div className="flex items-center justify-between gap-3">
 						<div className="flex-1 min-w-0">
-							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent truncate">
+							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary-600 to-slate-600 bg-clip-text text-transparent truncate">
 								{t("modals.teamAssignment.assignTeam")}
 							</h2>
-							<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">
+							<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
 								{t("modals.teamAssignment.orderInfo", { id: order?.id, client: order?.client })}
 							</p>
 						</div>
 						<button
 							onClick={onClose}
-							className="p-1.5 sm:p-2 text-amber-600/60 hover:text-amber-700 hover:bg-orange-50/60 rounded-lg transition-colors flex-shrink-0"
+							className="p-1.5 sm:p-2 text-primary-600/60 hover:text-slate-600 hover:bg-primary-50/60 rounded-lg transition-colors flex-shrink-0"
 						>
 							<svg
 								className="w-4 h-4 sm:w-5 sm:h-5"
@@ -395,15 +395,15 @@ export default function TeamAssignmentModal({
 				</div>
 
 				{/* Footer */}
-				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-t border-orange-100/50 bg-gradient-to-r from-orange-50/50 to-amber-50/50">
+				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-t border-primary-100/50 bg-gradient-to-r from-primary-50/50 to-primary-50/50">
 					<div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-0">
-						<div className="text-xs sm:text-sm text-amber-700/70 text-center sm:text-left">
+						<div className="text-xs sm:text-sm text-slate-600/70 text-center sm:text-left">
 							{t("modals.teamAssignment.selected", { count: selectedEmployees.length })}
 						</div>
 						<div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
 							<button
 								onClick={onClose}
-								className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-amber-700 hover:text-amber-900 border border-orange-200/60 rounded-lg hover:bg-white/80 transition-colors font-medium"
+								className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-slate-600 hover:text-slate-800 border border-primary-200/60 rounded-lg hover:bg-white/80 transition-colors font-medium"
 							>
 								{t("common.buttons.cancel")}
 							</button>

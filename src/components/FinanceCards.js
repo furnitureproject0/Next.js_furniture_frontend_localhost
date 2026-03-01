@@ -44,7 +44,7 @@ export default function FinanceCards() {
 			{/* Finance Overview Cards */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
 				{/* Revenue Card */}
-				<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
+				<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
 					<div className="flex items-center justify-between mb-4 sm:mb-5 lg:mb-6">
 						<svg
 							className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-green-600"
@@ -97,10 +97,10 @@ export default function FinanceCards() {
 						</div>
 					</div>
 					<div>
-						<h3 className="text-amber-700/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
+						<h3 className="text-slate-600/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
 							{t("finance.cards.monthlyRevenue")}
 						</h3>
-						<p className="text-2xl sm:text-3xl font-bold text-amber-900">
+						<p className="text-2xl sm:text-3xl font-bold text-slate-800">
 							{formatCurrency(
 								financeData.revenue.current,
 								financeData.revenue.currency,
@@ -110,7 +110,7 @@ export default function FinanceCards() {
 				</div>
 
 				{/* Expenses Card */}
-				<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
+				<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
 					<div className="flex items-center justify-between mb-4 sm:mb-5 lg:mb-6">
 						<svg
 							className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-red-600"
@@ -163,10 +163,10 @@ export default function FinanceCards() {
 						</div>
 					</div>
 					<div>
-						<h3 className="text-amber-700/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
+						<h3 className="text-slate-600/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
 							{t("finance.cards.monthlyExpenses")}
 						</h3>
-						<p className="text-2xl sm:text-3xl font-bold text-amber-900">
+						<p className="text-2xl sm:text-3xl font-bold text-slate-800">
 							{formatCurrency(
 								financeData.expenses.current,
 								financeData.expenses.currency,
@@ -176,7 +176,7 @@ export default function FinanceCards() {
 				</div>
 
 				{/* Profit Card */}
-				<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
+				<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
 					<div className="flex items-center justify-between mb-4 sm:mb-5 lg:mb-6">
 						<svg
 							className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-blue-600"
@@ -229,10 +229,10 @@ export default function FinanceCards() {
 						</div>
 					</div>
 					<div>
-						<h3 className="text-amber-700/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
+						<h3 className="text-slate-600/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
 							{t("finance.cards.netProfit")}
 						</h3>
-						<p className="text-2xl sm:text-3xl font-bold text-amber-900">
+						<p className="text-2xl sm:text-3xl font-bold text-slate-800">
 							{formatCurrency(
 								financeData.profit.current,
 								financeData.profit.currency,
@@ -243,13 +243,13 @@ export default function FinanceCards() {
 			</div>
 
 			{/* Recent Transactions */}
-			<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg">
-				<div className="p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
+			<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg">
+				<div className="p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-						<h2 className="text-lg sm:text-xl font-bold text-amber-900">
+						<h2 className="text-lg sm:text-xl font-bold text-slate-800">
 							{t("finance.cards.recentTransactions")}
 						</h2>
-						<button className="text-orange-600 hover:text-orange-700 text-xs sm:text-sm font-medium transition-colors">
+						<button className="text-primary-600 hover:text-primary-700 text-xs sm:text-sm font-medium transition-colors">
 							{t("finance.cards.viewAll")}
 						</button>
 					</div>
@@ -258,7 +258,7 @@ export default function FinanceCards() {
 					<div className="space-y-3 sm:space-y-4">
 						{recentTransactions.length === 0 ? (
 							<div className="text-center py-8">
-								<div className="text-amber-700/50 mb-2">
+								<div className="text-slate-600/50 mb-2">
 									<svg
 										className="w-12 h-12 mx-auto"
 										fill="none"
@@ -273,10 +273,10 @@ export default function FinanceCards() {
 										/>
 									</svg>
 								</div>
-								<p className="text-amber-700/70 text-sm">
+								<p className="text-slate-600/70 text-sm">
 									{t("finance.cards.noTransactionsAvailable")}
 								</p>
-								<p className="text-amber-600/50 text-xs mt-1">
+								<p className="text-primary-600/50 text-xs mt-1">
 									{t("finance.cards.switchToDummyData")}
 								</p>
 							</div>
@@ -284,7 +284,7 @@ export default function FinanceCards() {
 							recentTransactions.map((transaction) => (
 								<div
 									key={transaction.id}
-									className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl hover:bg-orange-50/60 transition-colors gap-3 sm:gap-0"
+									className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl hover:bg-primary-50/60 transition-colors gap-3 sm:gap-0"
 								>
 									<div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
 										<div
@@ -325,19 +325,19 @@ export default function FinanceCards() {
 											)}
 										</div>
 										<div className="flex-1 min-w-0">
-											<h3 className="text-sm sm:text-base font-medium text-amber-900 truncate">
+											<h3 className="text-sm sm:text-base font-medium text-slate-800 truncate">
 												{transaction.description}
 											</h3>
 											<div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-1">
-												<p className="text-xs text-amber-700/70">
+												<p className="text-xs text-slate-600/70">
 													{transaction.date}
 												</p>
 												{transaction.orderRef && (
 													<>
-														<span className="text-orange-300">
+														<span className="text-primary-300">
 															•
 														</span>
-														<p className="text-xs text-orange-600 font-medium">
+														<p className="text-xs text-primary-600 font-medium">
 															{
 																transaction.orderRef
 															}
@@ -346,10 +346,10 @@ export default function FinanceCards() {
 												)}
 												{transaction.category && (
 													<>
-														<span className="text-orange-300">
+														<span className="text-primary-300">
 															•
 														</span>
-														<p className="text-xs text-amber-600/60">
+														<p className="text-xs text-primary-600/60">
 															{
 																transaction.category
 															}

@@ -40,13 +40,13 @@ export default function CustomerOrdersList({ orders = [], customerId, openOrderI
 	return (
 		<div className="space-y-4 sm:space-y-6">
 			{/* Filters */}
-			<div className="bg-white/60 backdrop-blur-sm border border-orange-200/60 rounded-xl p-4 sm:p-6">
+			<div className="bg-white/60 backdrop-blur-sm border border-primary-200/60 rounded-xl p-4 sm:p-6">
 				<div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
 					{/* Search */}
 					<div className="flex-1 min-w-0">
 						<div className="relative">
 							<svg
-								className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-amber-600/60"
+								className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-primary-600/60"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -63,7 +63,7 @@ export default function CustomerOrdersList({ orders = [], customerId, openOrderI
 								placeholder={t("orders.searchByOrderId")}
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
-								className="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm sm:text-base border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+								className="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm sm:text-base border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 							/>
 						</div>
 					</div>
@@ -73,7 +73,7 @@ export default function CustomerOrdersList({ orders = [], customerId, openOrderI
 						<select
 							value={selectedStatus}
 							onChange={(e) => setSelectedStatus(e.target.value)}
-							className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80 cursor-pointer"
+							className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80 cursor-pointer"
 						>
 							{statusFilters.map((filter) => (
 								<option key={filter.value} value={filter.value}>
@@ -88,9 +88,9 @@ export default function CustomerOrdersList({ orders = [], customerId, openOrderI
 			{/* Orders List */}
 			<div className="space-y-3 sm:space-y-4">
 				{filteredOrders.length === 0 ? (
-					<div className="bg-white/60 backdrop-blur-sm border border-orange-200/60 rounded-xl p-8 sm:p-12 text-center">
+					<div className="bg-white/60 backdrop-blur-sm border border-primary-200/60 rounded-xl p-8 sm:p-12 text-center">
 						<svg
-							className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-amber-600/40"
+							className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-primary-600/40"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -102,10 +102,10 @@ export default function CustomerOrdersList({ orders = [], customerId, openOrderI
 								d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
 							/>
 						</svg>
-						<h3 className="text-base sm:text-lg font-semibold text-amber-900 mb-1 sm:mb-2">
+						<h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-1 sm:mb-2">
 							{t("orders.noOrdersFound")}
 						</h3>
-						<p className="text-sm sm:text-base text-amber-700/70">
+						<p className="text-sm sm:text-base text-slate-600/70">
 							{searchQuery
 								? t("orders.tryAdjustingSearch")
 								: t("orders.createFirstOrder")}

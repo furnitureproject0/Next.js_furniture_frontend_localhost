@@ -1,7 +1,7 @@
 export default function OrderAddresses({ order, t }) {
 	const AddressIcon = () => (
 		<svg
-			className="w-4 h-4 text-amber-600/60 mt-0.5 flex-shrink-0"
+			className="w-4 h-4 text-primary-600/60 mt-0.5 flex-shrink-0"
 			fill="none"
 			stroke="currentColor"
 			viewBox="0 0 24 24"
@@ -24,24 +24,24 @@ export default function OrderAddresses({ order, t }) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 			<div>
-				<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2">
+				<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2">
 					{t("orderDetails.fromAddress")}
 				</p>
 				<div className="flex items-start gap-2">
 					<AddressIcon />
-					<p className="text-sm text-amber-900 font-medium leading-relaxed">
+					<p className="text-sm text-slate-800 font-medium leading-relaxed">
 						{order.fromAddress || order.addresses?.from || "-"}
 					</p>
 				</div>
 			</div>
 			{order.toAddress && (
 				<div>
-					<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2">
+					<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2">
 						{t("orderDetails.toAddress")}
 					</p>
 					<div className="flex items-start gap-2">
 						<AddressIcon />
-						<p className="text-sm text-amber-900 font-medium leading-relaxed">
+						<p className="text-sm text-slate-800 font-medium leading-relaxed">
 							{order.toAddress || order.addresses?.to || "-"}
 						</p>
 					</div>

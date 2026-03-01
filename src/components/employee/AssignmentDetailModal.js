@@ -83,17 +83,17 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 	if (!isOpen || !assignment) return null;
 
 	const themeColors = {
-		primaryText: "text-amber-900",
-		primaryBorder: "border-orange-200/40",
-		secondaryText: "text-amber-700",
-		hoverBg: "hover:bg-orange-50",
+		primaryText: "text-slate-800",
+		primaryBorder: "border-primary-200/40",
+		secondaryText: "text-slate-600",
+		hoverBg: "hover:bg-primary-50",
 	};
 
 	return (
 		<div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
 			<div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
 				{/* Header */}
-				<div className="sticky top-0 bg-white border-b border-orange-200/40 px-6 sm:px-8 py-4 sm:py-6 rounded-t-2xl flex items-center justify-between">
+				<div className="sticky top-0 bg-white border-b border-primary-200/40 px-6 sm:px-8 py-4 sm:py-6 rounded-t-2xl flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<h2 className={`text-xl sm:text-2xl font-bold ${themeColors.primaryText}`}>
 							{t("employee.assignments.assignment")} #{assignment.id}
@@ -109,7 +109,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 						className={`p-2 ${themeColors.hoverBg} rounded-lg transition-colors`}
 					>
 						<svg
-							className="w-5 h-5 sm:w-6 sm:h-6 text-amber-700"
+							className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -141,10 +141,10 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 						{/* Company */}
 						{company && (
-							<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+							<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 								<div className="flex items-center gap-2 mb-2">
 									<svg
-										className="w-5 h-5 text-orange-600"
+										className="w-5 h-5 text-primary-600"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -166,10 +166,10 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 
 						{/* Service */}
 						{service && (
-							<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+							<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 								<div className="flex items-center gap-2 mb-2">
 									<svg
-										className="w-5 h-5 text-orange-600"
+										className="w-5 h-5 text-primary-600"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -197,10 +197,10 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 
 					{/* Schedule */}
 					{offer?.date && (
-						<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+						<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 							<div className="flex items-center gap-2 mb-3">
 								<svg
-									className="w-5 h-5 text-orange-600"
+									className="w-5 h-5 text-primary-600"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -231,10 +231,10 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 
 					{/* Payment Details */}
 					{offer?.hourly_rate && (
-						<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+						<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 							<div className="flex items-center gap-2 mb-3">
 								<svg
-									className="w-5 h-5 text-orange-600"
+									className="w-5 h-5 text-primary-600"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -271,10 +271,10 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 
 					{/* Notes */}
 					{offer?.notes && (
-						<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+						<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 							<div className="flex items-center gap-2 mb-2">
 								<svg
-									className="w-5 h-5 text-orange-600"
+									className="w-5 h-5 text-primary-600"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -298,10 +298,10 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 
 					{/* Order Information */}
 					{order && (
-						<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+						<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 							<div className="flex items-center gap-2 mb-3">
 								<svg
-									className="w-5 h-5 text-orange-600"
+									className="w-5 h-5 text-primary-600"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -367,7 +367,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 								<div className="space-y-3">
 									<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 										<div>
-											<p className="text-xs text-amber-700/70 mb-1">
+											<p className="text-xs text-slate-600/70 mb-1">
 												{t("employee.report.numofHours") || "Number of Hours"}:
 											</p>
 											<p className={`text-sm font-medium ${themeColors.secondaryText}`}>
@@ -375,7 +375,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 											</p>
 										</div>
 										<div>
-											<p className="text-xs text-amber-700/70 mb-1">
+											<p className="text-xs text-slate-600/70 mb-1">
 												{t("employee.report.paidAmount") || "Paid Amount"}:
 											</p>
 											<p className={`text-sm font-medium ${themeColors.secondaryText}`}>
@@ -383,7 +383,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 											</p>
 										</div>
 										<div>
-											<p className="text-xs text-amber-700/70 mb-1">
+											<p className="text-xs text-slate-600/70 mb-1">
 												{t("employee.report.paymentMethod") || "Payment Method"}:
 											</p>
 											<p className={`text-sm font-medium ${themeColors.secondaryText}`}>
@@ -396,7 +396,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 										</div>
 										{report.expected_amount && (
 											<div>
-												<p className="text-xs text-amber-700/70 mb-1">
+												<p className="text-xs text-slate-600/70 mb-1">
 													{t("employee.report.expectedAmount") || "Expected Amount"}:
 												</p>
 												<p className={`text-sm font-medium ${themeColors.secondaryText}`}>
@@ -407,7 +407,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 									</div>
 									{report.notes && (
 										<div>
-											<p className="text-xs text-amber-700/70 mb-1">
+											<p className="text-xs text-slate-600/70 mb-1">
 												{t("employee.report.notes") || "Notes"}:
 											</p>
 											<p className={`text-sm ${themeColors.secondaryText} whitespace-pre-wrap`}>
@@ -417,7 +417,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 									)}
 									{report.employeeHours && report.employeeHours.length > 0 && (
 										<div>
-											<p className="text-xs text-amber-700/70 mb-2">
+											<p className="text-xs text-slate-600/70 mb-2">
 												{t("employee.report.employeeHours") || "Employee Hours"}:
 											</p>
 											<div className="space-y-1">
@@ -436,7 +436,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 									)}
 									{report.transactions && report.transactions.length > 0 && (
 										<div>
-											<p className="text-xs text-amber-700/70 mb-2">
+											<p className="text-xs text-slate-600/70 mb-2">
 												{t("employee.report.transactions") || "Transactions"}:
 											</p>
 											<div className="space-y-1">
@@ -462,7 +462,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 									)}
 									{report.createdAt && (
 										<div className="pt-2 border-t border-blue-200/60">
-											<p className="text-xs text-amber-700/70">
+											<p className="text-xs text-slate-600/70">
 												{t("employee.assignments.createdAt") || "Created At"}: {new Date(report.createdAt).toLocaleString()}
 											</p>
 										</div>
@@ -504,7 +504,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 				</div>
 
 				{/* Footer */}
-				<div className="sticky bottom-0 bg-white border-t border-orange-200/40 px-6 sm:px-8 py-4 rounded-b-2xl flex justify-end gap-3">
+				<div className="sticky bottom-0 bg-white border-t border-primary-200/40 px-6 sm:px-8 py-4 rounded-b-2xl flex justify-end gap-3">
 					{assignment.is_leader && assignment.status === "accepted" && (
 						<button
 							onClick={() => setIsReportModalOpen(true)}
@@ -515,7 +515,7 @@ export default function AssignmentDetailModal({ isOpen, onClose, assignment, rol
 					)}
 					<button
 						onClick={onClose}
-						className={`px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-amber-700 transition-all`}
+						className={`px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg text-sm font-medium hover:from-primary-600 hover:to-slate-600 transition-all`}
 					>
 						{t("common.buttons.close") || "Close"}
 					</button>

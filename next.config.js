@@ -9,23 +9,15 @@ const nextConfig = {
 		},
 	},
 	async rewrites() {
-		// In development, proxy API requests to localhost:5000 to avoid CORS issues
-		// In production, proxy to production backend
-		// Note: Socket.IO requires direct connection - cannot use proxy due to WebSocket upgrade
-		const isDevelopment = process.env.NODE_ENV === 'development';
-		const apiDestination = isDevelopment
-			? "http://localhost:5000/api/:path*"
-			: "https://backend-production-3bcd.up.railway.app/api/:path*";
-
+		// All requests proxy to backend API
+		// Base URL: http://159.198.70.32:5000/api
 		return [
 			{
 				source: "/api/:path*",
-				destination: apiDestination,
+				destination: "http://localhost:5000/api",
 			},
-			// Socket.IO cannot use proxy - requires direct connection
-			// Backend CORS must be configured to allow localhost:3000
 		];
-	},
+	}, 
 	async headers() {
 		return [
 			{

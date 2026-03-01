@@ -94,7 +94,9 @@
 			"noOrdersFound": "Nessun ordine trovato",
 			"noOrdersYet": "Ancora nessun ordine",
 			"allCaughtUp": "Tutto aggiornato",
-			"allCaughtUpMessage": "Nessuna nuova notifica al momento. Ti faremo sapere quando succede qualcosa di importante."
+			"allCaughtUpMessage": "Nessuna nuova notifica al momento. Ti faremo sapere quando succede qualcosa di importante.",
+			"confirmConversionTitle": "Convertire in offerta?",
+			"confirmConversionBody": "Sei sicuro di voler convertire questo appuntamento in un'offerta? I dati esistenti verranno pre-compilati per aiutarti a completare l'offerta."
 		},
 		"nA": "N/A",
 		"unknown": "Sconosciuto",
@@ -161,6 +163,7 @@
 	},
 	"orders": {
 		"title": "Ordini",
+		"createSuccess": "Ordine creato con successo",
 		"newOrder": "Nuovo ordine",
 		"allOrders": "Tutti gli ordini",
 		"assignedOrders": "Ordini assegnati",
@@ -178,6 +181,7 @@
 		"whenAssignedOrders": "Quando hai ordini assegnati, appariranno qui.",
 		"tryAdjustingSearch": "Prova ad aggiustare la tua ricerca o i filtri",
 		"createFirstOrder": "Crea il tuo primo ordine per iniziare",
+		"empty": "Nessun ordine da visualizzare",
 		"status": {
 			"pending": "In attesa",
 			"assigned": "Assegnato all'azienda",
@@ -208,7 +212,7 @@
 		"pendingOffers": "Offerte in attesa",
 		"activeOrders": "Ordini attivi",
 		"inProgress": "In corso",
-		"completed": "Completato"
+		"completed": "Ordini Completati"
 	},
 	"dashboards": {
 		"customer": {
@@ -417,6 +421,10 @@
 			"clearAll": "Cancella tutto",
 			"noMatchingOrders": "Nessun ordine corrisponde ai tuoi filtri",
 			"tryAdjustingFilters": "Prova a modificare i filtri o i criteri di ricerca"
+		},
+		"orders": {
+			"title": "Ordini",
+			"subtitle": "Gestisci e traccia tutti gli ordini"
 		}
 	},
 	"notifications": {
@@ -665,6 +673,7 @@
 		"acceptOffer": "Accetta offerta",
 		"rejectOffer": "Rifiuta offerta",
 		"noServices": "Nessun servizio",
+		"images": "Immagini",
 		"rejectionReason": "Motivo del rifiuto",
 		"rejectionReasonPlaceholder": "Si prega di fornire un motivo...",
 		"cancelConfirmMessage": "Sei sicuro di voler annullare questo ordine? Questa azione non può essere annullata.",

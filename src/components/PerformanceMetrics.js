@@ -88,13 +88,13 @@ export default function PerformanceMetrics() {
 	};
 
 	return (
-		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg">
-			<div className="p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
+		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg">
+			<div className="p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
 				<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-					<h2 className="text-base sm:text-lg font-semibold text-amber-900">
+					<h2 className="text-base sm:text-lg font-semibold text-slate-800">
 						{t("performance.title")}
 					</h2>
-					<button className="text-orange-600 hover:text-orange-700 text-xs sm:text-sm font-medium transition-colors">
+					<button className="text-primary-600 hover:text-primary-700 text-xs sm:text-sm font-medium transition-colors">
 						{t("performance.viewDetails")}
 					</button>
 				</div>
@@ -106,16 +106,16 @@ export default function PerformanceMetrics() {
 						<div key={index} className="space-y-2 sm:space-y-3">
 							<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
 								<div className="flex-1 min-w-0">
-									<h3 className="text-sm sm:text-base font-medium text-amber-900">
+									<h3 className="text-sm sm:text-base font-medium text-slate-800">
 										{metric.title}
 									</h3>
-									<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5">
+									<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5">
 										{t("performance.target")}: {metric.target}
 									</p>
 								</div>
 								<div className="text-left sm:text-right">
 									<div className="flex items-center gap-1.5 sm:gap-2">
-										<span className="text-base sm:text-lg font-bold text-amber-900">
+										<span className="text-base sm:text-lg font-bold text-slate-800">
 											{metric.value}
 										</span>
 										{getTrendIcon(metric.trend)}
@@ -132,7 +132,7 @@ export default function PerformanceMetrics() {
 								</div>
 							</div>
 
-							<div className="w-full bg-orange-200/60 rounded-full h-1.5 sm:h-2">
+							<div className="w-full bg-primary-200/60 rounded-full h-1.5 sm:h-2">
 								<div
 									className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${getProgressColor(
 										metric.value,
@@ -151,10 +151,10 @@ export default function PerformanceMetrics() {
 					))}
 				</div>
 
-				<div className="mt-4 sm:mt-5 lg:mt-6 p-3 sm:p-4 bg-orange-50/60 rounded-lg">
+				<div className="mt-4 sm:mt-5 lg:mt-6 p-3 sm:p-4 bg-primary-50/60 rounded-lg">
 					<div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
 						<svg
-							className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 flex-shrink-0"
+							className="w-4 h-4 sm:w-5 sm:h-5 text-primary-600 flex-shrink-0"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -166,11 +166,11 @@ export default function PerformanceMetrics() {
 								d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
 							/>
 						</svg>
-						<h4 className="text-sm sm:text-base font-medium text-amber-900">
+						<h4 className="text-sm sm:text-base font-medium text-slate-800">
 							{t("performance.performanceInsight")}
 						</h4>
 					</div>
-					<p className="text-xs sm:text-sm text-amber-800">
+					<p className="text-xs sm:text-sm text-slate-700">
 						{t("performance.insightMessage")}
 					</p>
 				</div>

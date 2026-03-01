@@ -11,26 +11,26 @@ const CompanyCard = ({ company, onSelect, isSelected, t }) => (
 	<div
 		className={`border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 transition-all duration-200 cursor-pointer ${
 			isSelected
-				? "border-orange-500 bg-orange-50"
-				: "border-orange-200/60 hover:border-orange-300 hover:shadow-lg bg-white"
+				? "border-primary-500 bg-primary-50"
+				: "border-primary-200/60 hover:border-primary-300 hover:shadow-lg bg-white"
 		}`}
 		onClick={() => onSelect(company.id)}
 	>
 		<div className="flex items-center justify-between gap-2 sm:gap-3">
 			<div className="flex-1 min-w-0">
-				<h3 className="text-base sm:text-lg font-semibold text-amber-900 truncate">
+				<h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate">
 					{company.name}
 				</h3>
 				{company.email && (
-					<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">{company.email}</p>
+					<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">{company.email}</p>
 				)}
 				{company.address && (
-					<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">{company.address}</p>
+					<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">{company.address}</p>
 				)}
 			</div>
 			{isSelected && (
 				<div className="ml-2 sm:ml-4 flex-shrink-0">
-					<div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-500 rounded-full flex items-center justify-center">
+					<div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary-500 rounded-full flex items-center justify-center">
 						<svg
 							className="w-3 h-3 sm:w-4 sm:h-4 text-white"
 							fill="none"
@@ -216,19 +216,19 @@ export default function OrderServiceCompanyAssignmentModal({
 			{/* Modal */}
 			<div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full mx-2 sm:mx-4 max-h-[95vh] sm:max-h-[90vh] flex flex-col">
 				{/* Header */}
-				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
+				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
 					<div className="flex items-center justify-between gap-3">
 						<div className="flex-1 min-w-0 pr-2">
-							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent truncate">
+							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary-600 to-slate-600 bg-clip-text text-transparent truncate">
 								{t("modals.companyAssignment.assignCompanyToServices") || "Assign Companies to Services"}
 							</h2>
-							<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">
+							<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
 								{t("modals.companyAssignment.orderId", { id: order?.id }) || `Order #${order?.id}`}
 							</p>
 						</div>
 						<button
 							onClick={onClose}
-							className="p-1.5 sm:p-2 text-amber-600/60 hover:text-amber-700 hover:bg-orange-50/60 rounded-lg transition-colors flex-shrink-0"
+							className="p-1.5 sm:p-2 text-primary-600/60 hover:text-slate-600 hover:bg-primary-50/60 rounded-lg transition-colors flex-shrink-0"
 						>
 							<svg
 								className="w-4 h-4 sm:w-5 sm:h-5"
@@ -266,11 +266,11 @@ export default function OrderServiceCompanyAssignmentModal({
 							const isAlreadyAssigned = orderService.company_id && orderService.company;
 
 							return (
-								<div key={orderService.id} className="border border-orange-200/60 rounded-lg sm:rounded-xl p-4 sm:p-5">
+								<div key={orderService.id} className="border border-primary-200/60 rounded-lg sm:rounded-xl p-4 sm:p-5">
 									{/* Service Header */}
 									<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
 										<div className="flex-1 min-w-0">
-											<h3 className="text-base sm:text-lg font-semibold text-amber-900 truncate">
+											<h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate">
 												{serviceName}
 											</h3>
 											<div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1.5 sm:mt-2">
@@ -286,7 +286,7 @@ export default function OrderServiceCompanyAssignmentModal({
 													{getStatusLabel(orderService.status)}
 												</span>
 												{isAlreadyAssigned && (
-													<span className="text-xs sm:text-sm text-amber-700 truncate">
+													<span className="text-xs sm:text-sm text-slate-600 truncate">
 														{t("modals.companyAssignment.currentlyAssigned") || "Currently assigned to"}: <strong>{orderService.company.name}</strong>
 													</span>
 												)}
@@ -297,10 +297,10 @@ export default function OrderServiceCompanyAssignmentModal({
 									{/* Companies List */}
 									{isLoading ? (
 										<div className="flex items-center justify-center py-6 sm:py-8">
-											<div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-orange-500"></div>
+											<div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-primary-500"></div>
 										</div>
 									) : serviceCompanies.length === 0 ? (
-										<p className="text-xs sm:text-sm text-amber-700/70 py-3 sm:py-4">
+										<p className="text-xs sm:text-sm text-slate-600/70 py-3 sm:py-4">
 											{t("modals.companyAssignment.noCompaniesAvailable") || "No companies available for this service"}
 										</p>
 									) : (
@@ -345,11 +345,11 @@ export default function OrderServiceCompanyAssignmentModal({
 				</div>
 
 				{/* Footer */}
-				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-t border-orange-100/50 bg-gradient-to-r from-orange-50/50 to-amber-50/50">
+				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-t border-primary-100/50 bg-gradient-to-r from-primary-50/50 to-primary-50/50">
 					<div className="flex justify-end">
 						<button
 							onClick={onClose}
-							className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-2 text-xs sm:text-sm text-amber-700 hover:text-amber-900 border border-orange-200/60 rounded-lg hover:bg-white/80 transition-colors font-medium cursor-pointer"
+							className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-2 text-xs sm:text-sm text-slate-600 hover:text-slate-800 border border-primary-200/60 rounded-lg hover:bg-white/80 transition-colors font-medium cursor-pointer"
 						>
 							{t("common.buttons.close")}
 						</button>

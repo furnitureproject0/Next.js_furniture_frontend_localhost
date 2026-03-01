@@ -10,10 +10,10 @@ export default function ServicePricingForm({
 	};
 
 	return (
-		<div className="ml-4 pl-4 border-l-2 border-orange-200 space-y-3">
+		<div className="ml-4 pl-4 border-l-2 border-primary-200 space-y-3">
 			<div className="grid grid-cols-3 gap-2">
 				<div>
-					<label className="block text-xs font-medium text-amber-900 mb-1">
+					<label className="block text-xs font-medium text-slate-800 mb-1">
 						{t("siteAdmin.pricing.minHours") || "Min Hours"}
 					</label>
 					<input
@@ -26,11 +26,11 @@ export default function ServicePricingForm({
 							handleChange('minHours', e.target.value);
 						}}
 						onClick={(e) => e.stopPropagation()}
-						className="w-full px-2 py-1.5 text-sm border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+						className="w-full px-2 py-1.5 text-sm border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
 					/>
 				</div>
 				<div>
-					<label className="block text-xs font-medium text-amber-900 mb-1">
+					<label className="block text-xs font-medium text-slate-800 mb-1">
 						{t("siteAdmin.pricing.maxHours") || "Max Hours"}
 					</label>
 					<input
@@ -43,11 +43,11 @@ export default function ServicePricingForm({
 							handleChange('maxHours', e.target.value);
 						}}
 						onClick={(e) => e.stopPropagation()}
-						className="w-full px-2 py-1.5 text-sm border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+						className="w-full px-2 py-1.5 text-sm border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
 					/>
 				</div>
 				<div>
-					<label className="block text-xs font-medium text-amber-900 mb-1">
+					<label className="block text-xs font-medium text-slate-800 mb-1">
 						{t("siteAdmin.pricing.pricePerHour") || "$/Hour"}
 					</label>
 					<input
@@ -60,7 +60,7 @@ export default function ServicePricingForm({
 							handleChange('pricePerHour', e.target.value);
 						}}
 						onClick={(e) => e.stopPropagation()}
-						className="w-full px-2 py-1.5 text-sm border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+						className="w-full px-2 py-1.5 text-sm border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
 					/>
 				</div>
 			</div>

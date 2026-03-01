@@ -22,14 +22,14 @@ export default function TransactionDetailsModal({
 			className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-2 sm:p-4"
 			onClick={handleBackdropClick}
 		>
-			<div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-2xl p-4 sm:p-6 lg:p-8 w-full max-w-lg">
+			<div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-2xl p-4 sm:p-6 lg:p-8 w-full max-w-lg">
 				<div className="flex items-center justify-between mb-4 sm:mb-6">
-					<h3 className="text-lg sm:text-xl font-semibold text-amber-900">
+					<h3 className="text-lg sm:text-xl font-semibold text-slate-800">
 						{t("modals.transactionDetails.title")}
 					</h3>
 					<button
 						onClick={onClose}
-						className="text-amber-700/70 hover:text-amber-900 transition-colors cursor-pointer p-1"
+						className="text-slate-600/70 hover:text-slate-800 transition-colors cursor-pointer p-1"
 					>
 						<svg
 							className="w-5 h-5 sm:w-6 sm:h-6"
@@ -50,7 +50,7 @@ export default function TransactionDetailsModal({
 				<div className="space-y-4 sm:space-y-5 lg:space-y-6">
 					{/* Transaction Type Badge */}
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-						<span className="text-xs sm:text-sm font-medium text-amber-900">
+						<span className="text-xs sm:text-sm font-medium text-slate-800">
 							{t("modals.transactionDetails.type")}
 						</span>
 						<span
@@ -68,7 +68,7 @@ export default function TransactionDetailsModal({
 
 					{/* Amount */}
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-						<span className="text-xs sm:text-sm font-medium text-amber-900">
+						<span className="text-xs sm:text-sm font-medium text-slate-800">
 							{t("modals.transactionDetails.amount")}
 						</span>
 						<span
@@ -85,20 +85,20 @@ export default function TransactionDetailsModal({
 
 					{/* Description */}
 					<div>
-						<span className="text-xs sm:text-sm font-medium text-amber-900 block mb-1.5 sm:mb-2">
+						<span className="text-xs sm:text-sm font-medium text-slate-800 block mb-1.5 sm:mb-2">
 							{t("modals.transactionDetails.description")}
 						</span>
-						<p className="text-xs sm:text-sm text-amber-800 bg-orange-50/50 p-2.5 sm:p-3 rounded-lg">
+						<p className="text-xs sm:text-sm text-slate-700 bg-primary-50/50 p-2.5 sm:p-3 rounded-lg">
 							{transaction.description}
 						</p>
 					</div>
 
 					{/* Date */}
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-						<span className="text-xs sm:text-sm font-medium text-amber-900">
+						<span className="text-xs sm:text-sm font-medium text-slate-800">
 							{t("modals.transactionDetails.date")}
 						</span>
-						<span className="text-xs sm:text-sm text-amber-800">
+						<span className="text-xs sm:text-sm text-slate-700">
 							{new Date(transaction.date).toLocaleDateString(
 								"en-US",
 								{
@@ -112,7 +112,7 @@ export default function TransactionDetailsModal({
 
 					{/* Status */}
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-						<span className="text-xs sm:text-sm font-medium text-amber-900">
+						<span className="text-xs sm:text-sm font-medium text-slate-800">
 							{t("modals.transactionDetails.status")}
 						</span>
 						<span
@@ -129,10 +129,10 @@ export default function TransactionDetailsModal({
 					{/* Order Reference */}
 					{transaction.orderRef && (
 						<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-							<span className="text-xs sm:text-sm font-medium text-amber-900">
+							<span className="text-xs sm:text-sm font-medium text-slate-800">
 								{t("modals.transactionDetails.orderReference")}
 							</span>
-							<span className="text-xs sm:text-sm text-orange-700 bg-orange-100/80 px-2 py-1 rounded-full">
+							<span className="text-xs sm:text-sm text-primary-700 bg-primary-100/80 px-2 py-1 rounded-full">
 								{transaction.orderRef}
 							</span>
 						</div>
@@ -141,7 +141,7 @@ export default function TransactionDetailsModal({
 					{/* Category */}
 					{transaction.category && (
 						<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-							<span className="text-xs sm:text-sm font-medium text-amber-900">
+							<span className="text-xs sm:text-sm font-medium text-slate-800">
 								{t("modals.transactionDetails.category")}
 							</span>
 							<span className="text-xs sm:text-sm text-blue-700 bg-blue-100/80 px-2 py-1 rounded-full">
@@ -151,12 +151,12 @@ export default function TransactionDetailsModal({
 					)}
 
 					{/* Transaction ID */}
-					<div className="pt-3 sm:pt-4 border-t border-orange-100/50">
+					<div className="pt-3 sm:pt-4 border-t border-primary-100/50">
 						<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
-							<span className="text-xs font-medium text-amber-700/70">
+							<span className="text-xs font-medium text-slate-600/70">
 								{t("modals.transactionDetails.transactionId")}
 							</span>
-							<span className="text-xs text-amber-600/60 font-mono break-all sm:break-normal">
+							<span className="text-xs text-primary-600/60 font-mono break-all sm:break-normal">
 								{transaction.id}
 							</span>
 						</div>
@@ -166,7 +166,7 @@ export default function TransactionDetailsModal({
 				<div className="flex justify-end mt-6 sm:mt-8">
 					<button
 						onClick={onClose}
-						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-white bg-orange-600 rounded-lg sm:rounded-xl hover:bg-orange-700 transition-colors cursor-pointer"
+						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 rounded-lg sm:rounded-xl hover:bg-primary-700 transition-colors cursor-pointer"
 					>
 						{t("common.buttons.close")}
 					</button>

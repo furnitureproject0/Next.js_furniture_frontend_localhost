@@ -12,44 +12,66 @@ const MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July
 const MONTHS_DE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const MONTHS_AR = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
 
-export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
+export default function CalendarDatePicker({ selectedDate, onDateSelect, busyDates = [] }) {
 	const { t, currentLanguage } = useTranslation();
 	const isRTL = currentLanguage === 'ar';
-	
-	const [currentWeekStart, setCurrentWeekStart] = useState(() => {
-		const date = selectedDate ? new Date(selectedDate) : new Date();
-		const day = date.getDay();
-		const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-		return new Date(date.setDate(diff));
+
+	const [currentMonth, setCurrentMonth] = useState(() => {
+		const d = selectedDate ? new Date(selectedDate) : new Date();
+		return new Date(d.getFullYear(), d.getMonth(), 1);
 	});
 
 	const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
-	const [pickerYear, setPickerYear] = useState(currentWeekStart.getFullYear());
-	const [pickerMonth, setPickerMonth] = useState(currentWeekStart.getMonth());
+	const [pickerYear, setPickerYear] = useState(currentMonth.getFullYear());
+	const [pickerMonth, setPickerMonth] = useState(currentMonth.getMonth());
 
-	const weekDays = useMemo(() => {
+	// Build all days for the month grid (includes padding from prev/next months)
+	const calendarDays = useMemo(() => {
+		const year = currentMonth.getFullYear();
+		const month = currentMonth.getMonth();
+
+		// First day of the month (0=Sun, 1=Mon, ...)
+		const firstDay = new Date(year, month, 1).getDay();
+		// Adjust to Monday-based (Mon=0, Tue=1, ..., Sun=6)
+		const startPad = (firstDay + 6) % 7;
+
+		// Days in this month
+		const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+		// Days from previous month to fill the first row
+		const prevMonth = new Date(year, month, 0);
+		const prevDays = prevMonth.getDate();
+
 		const days = [];
-		const start = new Date(currentWeekStart);
-		
-		for (let i = 0; i < 7; i++) {
-			const date = new Date(start);
-			date.setDate(start.getDate() + i);
-			days.push(date);
-		}
-		
-		return days;
-	}, [currentWeekStart]);
 
-	const handlePrevWeek = () => {
-		const newStart = new Date(currentWeekStart);
-		newStart.setDate(currentWeekStart.getDate() - 7);
-		setCurrentWeekStart(newStart);
+		// Previous month padding
+		for (let i = startPad - 1; i >= 0; i--) {
+			const d = new Date(year, month - 1, prevDays - i);
+			days.push({ date: d, isCurrentMonth: false });
+		}
+
+		// Current month
+		for (let i = 1; i <= daysInMonth; i++) {
+			days.push({ date: new Date(year, month, i), isCurrentMonth: true });
+		}
+
+		// Next month padding (fill to complete the last row)
+		const remaining = 7 - (days.length % 7);
+		if (remaining < 7) {
+			for (let i = 1; i <= remaining; i++) {
+				days.push({ date: new Date(year, month + 1, i), isCurrentMonth: false });
+			}
+		}
+
+		return days;
+	}, [currentMonth]);
+
+	const handlePrevMonth = () => {
+		setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
 	};
 
-	const handleNextWeek = () => {
-		const newStart = new Date(currentWeekStart);
-		newStart.setDate(currentWeekStart.getDate() + 7);
-		setCurrentWeekStart(newStart);
+	const handleNextMonth = () => {
+		setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
 	};
 
 	const handleDateClick = (date) => {
@@ -57,17 +79,19 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 	};
 
 	const handleMonthYearClick = () => {
-		setPickerYear(currentWeekStart.getFullYear());
-		setPickerMonth(currentWeekStart.getMonth());
+		setPickerYear(currentMonth.getFullYear());
+		setPickerMonth(currentMonth.getMonth());
 		setShowMonthYearPicker(true);
 	};
 
 	const handleMonthYearSelect = () => {
-		const newDate = new Date(pickerYear, pickerMonth, 1);
-		const day = newDate.getDay();
-		const diff = newDate.getDate() - day + (day === 0 ? -6 : 1);
-		setCurrentWeekStart(new Date(newDate.setDate(diff)));
+		setCurrentMonth(new Date(pickerYear, pickerMonth, 1));
 		setShowMonthYearPicker(false);
+	};
+
+	const handleGoToToday = () => {
+		const now = new Date();
+		setCurrentMonth(new Date(now.getFullYear(), now.getMonth(), 1));
 	};
 
 	const isSelected = (date) => {
@@ -77,56 +101,48 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 	};
 
 	const isToday = (date) => {
-		const today = new Date();
-		return date.toDateString() === today.toDateString();
+		return date.toDateString() === new Date().toDateString();
 	};
 
 	const getWeekdayNames = () => {
 		switch (currentLanguage) {
-			case 'de':
-				return WEEKDAYS_DE;
-			case 'ar':
-				return WEEKDAYS_AR;
-			default:
-				return WEEKDAYS_EN;
+			case 'de': return WEEKDAYS_DE;
+			case 'ar': return WEEKDAYS_AR;
+			default: return WEEKDAYS_EN;
 		}
 	};
 
 	const getMonthNames = () => {
 		switch (currentLanguage) {
-			case 'de':
-				return MONTHS_DE;
-			case 'ar':
-				return MONTHS_AR;
-			default:
-				return MONTHS_EN;
+			case 'de': return MONTHS_DE;
+			case 'ar': return MONTHS_AR;
+			default: return MONTHS_EN;
 		}
 	};
 
 	const weekdayNames = getWeekdayNames();
 	const monthNames = getMonthNames();
 	const displayWeekdays = isRTL ? [...weekdayNames].reverse() : weekdayNames;
-	const displayDays = isRTL ? [...weekDays].reverse() : weekDays;
+	const displayDays = isRTL ? [...calendarDays].reverse() : calendarDays;
 
-	const weekStart = weekDays[0];
-	const monthYearText = `${monthNames[weekStart.getMonth()]} ${weekStart.getFullYear()}`;
+	const monthYearText = `${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
 
 	const currentYear = new Date().getFullYear();
 	const years = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
 
 	const modalContent = showMonthYearPicker && typeof window !== 'undefined' ? (
 		<div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-			<div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-4 border border-orange-200">
+			<div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-4 border border-primary-200">
 				<div className="flex items-center justify-between mb-4">
-					<h3 className="text-sm font-bold text-amber-900">
+					<h3 className="text-sm font-bold text-slate-800">
 						{t("calendar.selectMonthYear") || "Select Month & Year"}
 					</h3>
 					<button
 						onClick={() => setShowMonthYearPicker(false)}
-						className="p-1 hover:bg-orange-50 rounded transition-colors cursor-pointer"
+						className="p-1 hover:bg-primary-50 rounded transition-colors cursor-pointer"
 						aria-label={t("common.buttons.close") || "Close"}
 					>
-						<svg className="w-4 h-4 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<svg className="w-4 h-4 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 						</svg>
 					</button>
@@ -134,7 +150,7 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 
 				{/* Year Selector */}
 				<div className="mb-4">
-					<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+					<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 						{t("calendar.year") || "Year"}
 					</label>
 					<div className="grid grid-cols-5 gap-1">
@@ -144,8 +160,8 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 								onClick={() => setPickerYear(year)}
 								className={`py-2 text-xs font-medium rounded transition-all cursor-pointer ${
 									pickerYear === year
-										? "bg-orange-500 text-white shadow-sm"
-										: "bg-orange-50 text-amber-900 hover:bg-orange-100"
+										? "bg-primary-500 text-white shadow-sm"
+										: "bg-primary-50 text-slate-800 hover:bg-primary-100"
 								}`}
 							>
 								{year}
@@ -156,7 +172,7 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 
 				{/* Month Selector */}
 				<div className="mb-4">
-					<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+					<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 						{t("calendar.month") || "Month"}
 					</label>
 					<div className="grid grid-cols-3 gap-1">
@@ -166,8 +182,8 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 								onClick={() => setPickerMonth(index)}
 								className={`py-2 text-xs font-medium rounded transition-all cursor-pointer ${
 									pickerMonth === index
-										? "bg-orange-500 text-white shadow-sm"
-										: "bg-orange-50 text-amber-900 hover:bg-orange-100"
+										? "bg-primary-500 text-white shadow-sm"
+										: "bg-primary-50 text-slate-800 hover:bg-primary-100"
 								}`}
 							>
 								{month.substring(0, 3)}
@@ -180,7 +196,7 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 				<div className="flex items-center gap-2">
 					<button
 						onClick={() => setShowMonthYearPicker(false)}
-						className="flex-1 px-3 py-2 text-xs text-amber-700 hover:text-amber-900 font-medium transition-colors cursor-pointer"
+						className="flex-1 px-3 py-2 text-xs text-slate-600 hover:text-slate-800 font-medium transition-colors cursor-pointer"
 					>
 						{t("common.buttons.cancel") || "Cancel"}
 					</button>
@@ -197,16 +213,16 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 
 	return (
 		<>
-			<div className="bg-white rounded-lg border border-orange-200/60 p-3 shadow-sm">
+			<div className="bg-white rounded-xl border border-primary-200/60 p-3 shadow-sm">
 				{/* Header */}
-				<div className="flex items-center justify-between mb-2">
+				<div className="flex items-center justify-between mb-3">
 					<button
-						onClick={isRTL ? handleNextWeek : handlePrevWeek}
-						className="p-1 hover:bg-orange-50 rounded transition-colors cursor-pointer"
-						aria-label={t("calendar.previousWeek") || "Previous week"}
+						onClick={isRTL ? handleNextMonth : handlePrevMonth}
+						className="p-1.5 hover:bg-primary-50 rounded-lg transition-colors cursor-pointer"
+						aria-label={t("calendar.previousMonth") || "Previous month"}
 					>
 						<svg 
-							className="w-4 h-4 text-amber-700" 
+							className="w-4 h-4 text-slate-600" 
 							fill="none" 
 							stroke="currentColor" 
 							viewBox="0 0 24 24"
@@ -215,19 +231,29 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
 						</svg>
 					</button>
+
+					<div className="flex items-center gap-2">
+						<button
+							onClick={handleMonthYearClick}
+							className="text-sm font-bold text-slate-800 hover:text-primary-600 transition-colors cursor-pointer px-3 py-1 rounded-lg hover:bg-primary-50"
+						>
+							{monthYearText}
+						</button>
+						<button
+							onClick={handleGoToToday}
+							className="text-[10px] font-semibold text-primary-600 bg-primary-50 hover:bg-primary-100 px-2 py-0.5 rounded-full transition-colors cursor-pointer"
+						>
+							{t("calendar.today") || "Today"}
+						</button>
+					</div>
+
 					<button
-						onClick={handleMonthYearClick}
-						className="text-xs font-semibold text-amber-900 hover:text-orange-600 transition-colors cursor-pointer px-2 py-1 rounded hover:bg-orange-50"
-					>
-						{monthYearText}
-					</button>
-					<button
-						onClick={isRTL ? handlePrevWeek : handleNextWeek}
-						className="p-1 hover:bg-orange-50 rounded transition-colors cursor-pointer"
-						aria-label={t("calendar.nextWeek") || "Next week"}
+						onClick={isRTL ? handlePrevMonth : handleNextMonth}
+						className="p-1.5 hover:bg-primary-50 rounded-lg transition-colors cursor-pointer"
+						aria-label={t("calendar.nextMonth") || "Next month"}
 					>
 						<svg 
-							className="w-4 h-4 text-amber-700" 
+							className="w-4 h-4 text-slate-600" 
 							fill="none" 
 							stroke="currentColor" 
 							viewBox="0 0 24 24"
@@ -241,48 +267,60 @@ export default function CalendarDatePicker({ selectedDate, onDateSelect }) {
 				{/* Weekday headers */}
 				<div className="grid grid-cols-7 gap-0.5 mb-1">
 					{displayWeekdays.map((day, index) => (
-						<div key={index} className="text-center text-[10px] font-medium text-amber-600/70 py-0.5">
+						<div key={index} className="text-center text-[10px] font-semibold text-primary-600/70 py-1 uppercase tracking-wide">
 							{day}
 						</div>
 					))}
 				</div>
 
-				{/* Week days */}
+				{/* Month grid */}
 				<div className="grid grid-cols-7 gap-0.5">
-					{displayDays.map((date, index) => {
-						const selected = isSelected(date);
-						const today = isToday(date);
+					{displayDays.map((dayObj, index) => {
+						const selected = isSelected(dayObj.date);
+						const today = isToday(dayObj.date);
+						const inMonth = dayObj.isCurrentMonth;
+						const busy = busyDates.some(bd => {
+							const d = new Date(bd);
+							return d.toDateString() === dayObj.date.toDateString();
+						});
 
 						return (
 							<button
 								key={index}
-								onClick={() => handleDateClick(date)}
-								className={`h-8 flex items-center justify-center text-sm rounded transition-all cursor-pointer ${
-									selected
-										? "bg-orange-500 text-white font-semibold shadow-sm"
+								onClick={() => handleDateClick(dayObj.date)}
+								className={`
+									h-10 flex flex-col items-center justify-center text-xs rounded-lg transition-all cursor-pointer relative
+									${selected
+										? "bg-primary-500 text-white font-bold shadow-md shadow-primary-500/20 scale-105"
 										: today
-										? "bg-orange-100 text-orange-700 font-medium border border-orange-300"
-										: "text-amber-900 hover:bg-orange-50"
-								}`}
+											? "bg-primary-100 text-primary-700 font-bold border border-primary-300 ring-1 ring-primary-200"
+											: inMonth
+												? "text-slate-700 hover:bg-primary-50 font-medium"
+												: "text-slate-300 hover:bg-slate-50"
+									}
+								`}
 							>
-								{date.getDate()}
+								{busy && !selected && (
+									<span className={`w-1 h-1 rounded-full mb-0.5 ${today ? 'bg-primary-600' : 'bg-primary-400'}`} />
+								)}
+								<span>{dayObj.date.getDate()}</span>
 							</button>
 						);
 					})}
 				</div>
 
-				{/* Clear selection button */}
+				{/* Clear selection */}
 				{selectedDate && (
 					<button
 						onClick={() => onDateSelect(null)}
-						className="w-full mt-2 px-2 py-1 text-xs text-amber-700 hover:text-amber-900 hover:bg-orange-50 rounded transition-colors cursor-pointer"
+						className="w-full mt-2 px-2 py-1.5 text-xs text-slate-500 hover:text-slate-700 hover:bg-primary-50 rounded-lg transition-colors cursor-pointer font-medium"
 					>
 						{t("common.buttons.clearSelection") || "Clear Selection"}
 					</button>
 				)}
 			</div>
 
-			{/* Month/Year Picker Modal - Rendered at root level */}
+			{/* Month/Year Picker Modal */}
 			{modalContent && createPortal(modalContent, document.body)}
 		</>
 	);

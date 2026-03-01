@@ -24,7 +24,7 @@ export default function SiteAdminOrderCard({ order, onAssignCompany }) {
 	const [cancelReason, setCancelReason] = useState("");
 	
 	const handleViewDetails = () => {
-		router.push(`/orders/${order.id}`);
+		router.push(`/site-admin/orders/${order.id}`);
 	};
 
 	const handleAcceptOffer = async () => {
@@ -53,7 +53,7 @@ export default function SiteAdminOrderCard({ order, onAssignCompany }) {
 
 	return (
 		<>
-			<div className="group border border-orange-200/60 rounded-xl p-5 hover:shadow-lg hover:border-orange-300/60 transition-all duration-200 bg-white/60 backdrop-blur-sm">
+			<div className="group border border-primary-200/60 rounded-xl p-5 hover:shadow-lg hover:border-primary-300/60 transition-all duration-200 bg-white/60 backdrop-blur-sm">
 				<OrderHeader order={order} t={t} onCancelOrder={handleCancelOrder} />
 				
 				<div className="space-y-4 mb-4">

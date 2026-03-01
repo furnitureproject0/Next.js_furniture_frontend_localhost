@@ -23,7 +23,7 @@ export default function AdditionPricingInputs({
 	return (
 		<div className="pl-2 grid grid-cols-2 gap-2">
 			<div>
-				<label className="block text-xs text-amber-700 mb-1">
+				<label className="block text-xs text-slate-600 mb-1">
 					{t("siteAdmin.pricing.price")}
 				</label>
 				<input
@@ -36,11 +36,11 @@ export default function AdditionPricingInputs({
 						handleInputChange('price', e.target.value);
 					}}
 					onClick={(e) => e.stopPropagation()}
-					className="w-full px-2 py-1.5 text-xs border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+					className="w-full px-2 py-1.5 text-xs border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
 				/>
 			</div>
 			<div>
-				<label className="block text-xs text-amber-700 mb-1">
+				<label className="block text-xs text-slate-600 mb-1">
 					{t("siteAdmin.pricing.amount")}
 				</label>
 				<input
@@ -53,11 +53,11 @@ export default function AdditionPricingInputs({
 						handleInputChange('amount', e.target.value);
 					}}
 					onClick={(e) => e.stopPropagation()}
-					className="w-full px-2 py-1.5 text-xs border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+					className="w-full px-2 py-1.5 text-xs border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
 				/>
 			</div>
 			<div className="col-span-2 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded">
-				Total: ${total.toFixed(2)}
+				Total: CHF {total.toFixed(2)}
 			</div>
 		</div>
 	);

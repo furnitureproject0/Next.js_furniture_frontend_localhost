@@ -95,6 +95,7 @@
 	},
 	"orders": {
 		"title": "Orders",
+		"createSuccess": "Order created successfully",
 		"newOrder": "New Order",
 		"allOrders": "All Orders",
 		"assignedOrders": "Assigned Orders",
@@ -131,7 +132,7 @@
 		"pendingOffers": "Pending Offers",
 		"activeOrders": "Active Orders",
 		"inProgress": "In Progress",
-		"completed": "Completed"
+		"completed": "Completed Orders"
 	},
 	"dashboards": {
 		"customer": {

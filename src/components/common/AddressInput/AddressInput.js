@@ -69,12 +69,12 @@ export default function AddressInput({
     }, []);
 
     const baseInputClasses =
-        'flex-grow bg-white border border-orange-200 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 disabled:opacity-50 disabled:cursor-not-allowed w-full transition-all';
+        'flex-grow bg-white border border-primary-200 rounded-lg px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 disabled:opacity-50 disabled:cursor-not-allowed w-full transition-all';
 
     return (
         <div className="w-full">
             {label && (
-                <label className="block text-xs sm:text-sm font-medium text-amber-800 mb-1">
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
                     {label}
                     {required && <span className="text-red-500 ml-1">*</span>}
                 </label>
@@ -96,7 +96,7 @@ export default function AddressInput({
 
                 {isLoading && (
                     <div className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2">
-                        <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-2 border-orange-300 border-t-orange-600"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-2 border-primary-300 border-t-primary-600"></div>
                     </div>
                 )}
 

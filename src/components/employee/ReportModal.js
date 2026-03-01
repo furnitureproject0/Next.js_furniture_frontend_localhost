@@ -244,12 +244,12 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 			onClick={handleBackdropClick}
 		>
 			<div 
-				className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
+				className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
 				onClick={(e) => e.stopPropagation()}
 			>
 				{/* Header - Fixed */}
-				<div className="flex items-center justify-between p-4 sm:p-6 lg:p-8 pb-4 border-b border-orange-200/60 flex-shrink-0">
-					<h3 className="text-lg sm:text-xl font-semibold text-amber-900">
+				<div className="flex items-center justify-between p-4 sm:p-6 lg:p-8 pb-4 border-b border-primary-200/60 flex-shrink-0">
+					<h3 className="text-lg sm:text-xl font-semibold text-slate-800">
 						{existingReport
 							? (t("employee.report.editTitle") || "Edit Report")
 							: (t("employee.report.createTitle") || "Create Report")}
@@ -257,7 +257,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 					<button
 						onClick={onClose}
 						disabled={isLoading}
-						className="text-amber-700/70 hover:text-amber-900 transition-colors cursor-pointer p-1 disabled:opacity-50"
+						className="text-slate-600/70 hover:text-slate-800 transition-colors cursor-pointer p-1 disabled:opacity-50"
 					>
 						<svg
 							className="w-5 h-5 sm:w-6 sm:h-6"
@@ -279,7 +279,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 				<div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 					{isFetching ? (
 						<div className="flex items-center justify-center py-8">
-							<svg className="animate-spin h-8 w-8 text-orange-600" viewBox="0 0 24 24">
+							<svg className="animate-spin h-8 w-8 text-primary-600" viewBox="0 0 24 24">
 								<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
 								<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
 							</svg>
@@ -290,7 +290,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 							{/* Number of Hours */}
 							<div>
-								<label className="block text-xs sm:text-sm font-medium text-amber-900 mb-1.5 sm:mb-2">
+								<label className="block text-xs sm:text-sm font-medium text-slate-800 mb-1.5 sm:mb-2">
 									{t("employee.report.numofHours") || "Number of Hours"} *
 								</label>
 								<input
@@ -300,14 +300,14 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 									value={formData.numofHours}
 									onChange={(e) => setFormData(prev => ({ ...prev, numofHours: e.target.value }))}
 									required
-									className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-orange-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+									className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-primary-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 									placeholder="8.5"
 								/>
 							</div>
 
 							{/* Paid Amount */}
 							<div>
-								<label className="block text-xs sm:text-sm font-medium text-amber-900 mb-1.5 sm:mb-2">
+								<label className="block text-xs sm:text-sm font-medium text-slate-800 mb-1.5 sm:mb-2">
 									{t("employee.report.paidAmount") || "Paid Amount"} *
 								</label>
 								<input
@@ -317,7 +317,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 									value={formData.paid_amount}
 									onChange={(e) => setFormData(prev => ({ ...prev, paid_amount: e.target.value }))}
 									required
-									className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-orange-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+									className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-primary-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 									placeholder="637.50"
 								/>
 							</div>
@@ -325,14 +325,14 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 
 						{/* Payment Method */}
 						<div>
-							<label className="block text-xs sm:text-sm font-medium text-amber-900 mb-1.5 sm:mb-2">
+							<label className="block text-xs sm:text-sm font-medium text-slate-800 mb-1.5 sm:mb-2">
 								{t("employee.report.paymentMethod") || "Payment Method"} *
 							</label>
 							<select
 								value={formData.payment_method}
 								onChange={(e) => setFormData(prev => ({ ...prev, payment_method: e.target.value }))}
 								required
-								className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-orange-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+								className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-primary-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 							>
 								<option value="cash">{t("employee.report.cash") || "Cash"}</option>
 								<option value="twint">{t("employee.report.twint") || "Twint"}</option>
@@ -341,14 +341,14 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 
 						{/* Notes */}
 						<div>
-							<label className="block text-xs sm:text-sm font-medium text-amber-900 mb-1.5 sm:mb-2">
+							<label className="block text-xs sm:text-sm font-medium text-slate-800 mb-1.5 sm:mb-2">
 								{t("employee.report.notes") || "Notes"}
 							</label>
 							<textarea
 								value={formData.notes}
 								onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
 								rows={3}
-								className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-orange-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80 resize-none"
+								className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-primary-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80 resize-none"
 								placeholder={t("employee.report.notesPlaceholder") || "Additional notes..."}
 							/>
 						</div>
@@ -356,13 +356,13 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 						{/* Employee Hours */}
 						<div>
 							<div className="flex items-center justify-between mb-2">
-								<label className="block text-xs sm:text-sm font-medium text-amber-900">
+								<label className="block text-xs sm:text-sm font-medium text-slate-800">
 									{t("employee.report.employeeHours") || "Employee Hours"} *
 								</label>
 								<button
 									type="button"
 									onClick={addEmployeeHour}
-									className="text-xs sm:text-sm text-orange-600 hover:text-orange-700 font-medium"
+									className="text-xs sm:text-sm text-primary-600 hover:text-primary-700 font-medium"
 								>
 									+ {t("employee.report.addEmployee") || "Add Employee"}
 								</button>
@@ -375,7 +375,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 											value={eh.employee_id}
 											onChange={(e) => updateEmployeeHour(index, "employee_id", e.target.value)}
 											placeholder={t("employee.report.employeeId") || "Employee ID"}
-											className="flex-1 px-3 py-2 border border-orange-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+											className="flex-1 px-3 py-2 border border-primary-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 										/>
 										<input
 											type="number"
@@ -384,7 +384,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 											value={eh.hours}
 											onChange={(e) => updateEmployeeHour(index, "hours", e.target.value)}
 											placeholder={t("employee.report.hours") || "Hours"}
-											className="flex-1 px-3 py-2 border border-orange-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+											className="flex-1 px-3 py-2 border border-primary-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 										/>
 										<button
 											type="button"
@@ -398,7 +398,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 									</div>
 								))}
 								{formData.employee_hours.length === 0 && (
-									<p className="text-xs text-amber-700/70 italic">
+									<p className="text-xs text-slate-600/70 italic">
 										{t("employee.report.noEmployees") || "No employees added. Click 'Add Employee' to add one."}
 									</p>
 								)}
@@ -408,27 +408,27 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 						{/* Transactions */}
 						<div>
 							<div className="flex items-center justify-between mb-2">
-								<label className="block text-xs sm:text-sm font-medium text-amber-900">
+								<label className="block text-xs sm:text-sm font-medium text-slate-800">
 									{t("employee.report.transactions") || "Transactions"}
 								</label>
 								<button
 									type="button"
 									onClick={addTransaction}
-									className="text-xs sm:text-sm text-orange-600 hover:text-orange-700 font-medium"
+									className="text-xs sm:text-sm text-primary-600 hover:text-primary-700 font-medium"
 								>
 									+ {t("employee.report.addTransaction") || "Add Transaction"}
 								</button>
 							</div>
 							<div className="space-y-2">
 								{formData.transactions.map((transaction, index) => (
-									<div key={index} className="border border-orange-200/60 rounded-lg p-3 space-y-2">
+									<div key={index} className="border border-primary-200/60 rounded-lg p-3 space-y-2">
 										<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 											<input
 												type="text"
 												value={transaction.name}
 												onChange={(e) => updateTransaction(index, "name", e.target.value)}
 												placeholder={t("employee.report.transactionName") || "Transaction Name"}
-												className="px-3 py-2 border border-orange-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+												className="px-3 py-2 border border-primary-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 											/>
 											<input
 												type="number"
@@ -437,14 +437,14 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 												value={transaction.amount}
 												onChange={(e) => updateTransaction(index, "amount", e.target.value)}
 												placeholder={t("employee.report.amount") || "Amount"}
-												className="px-3 py-2 border border-orange-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+												className="px-3 py-2 border border-primary-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 											/>
 										</div>
 										<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 											<select
 												value={transaction.payment_method}
 												onChange={(e) => updateTransaction(index, "payment_method", e.target.value)}
-												className="px-3 py-2 border border-orange-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+												className="px-3 py-2 border border-primary-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 											>
 												<option value="cash">{t("employee.report.cash") || "Cash"}</option>
 												<option value="twint">{t("employee.report.twint") || "Twint"}</option>
@@ -454,7 +454,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 												value={transaction.description}
 												onChange={(e) => updateTransaction(index, "description", e.target.value)}
 												placeholder={t("employee.report.description") || "Description"}
-												className="px-3 py-2 border border-orange-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+												className="px-3 py-2 border border-primary-200/60 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 											/>
 										</div>
 										<button
@@ -475,12 +475,12 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 
 				{/* Footer - Fixed */}
 				{!isFetching && (
-					<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 p-4 sm:p-6 lg:p-8 pt-4 border-t border-orange-200/60 flex-shrink-0">
+					<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 p-4 sm:p-6 lg:p-8 pt-4 border-t border-primary-200/60 flex-shrink-0">
 						<button
 							type="button"
 							onClick={onClose}
 							disabled={isLoading}
-							className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-amber-700 bg-white/80 border border-orange-200 rounded-lg sm:rounded-xl hover:bg-orange-50 transition-colors cursor-pointer disabled:opacity-50"
+							className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-slate-600 bg-white/80 border border-primary-200 rounded-lg sm:rounded-xl hover:bg-primary-50 transition-colors cursor-pointer disabled:opacity-50"
 						>
 							{t("common.buttons.cancel") || "Cancel"}
 						</button>
@@ -488,7 +488,7 @@ export default function ReportModal({ isOpen, onClose, assignment, onSuccess }) 
 							type="submit"
 							form="report-form"
 							disabled={isLoading}
-							className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-white bg-orange-600 rounded-lg sm:rounded-xl hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+							className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 rounded-lg sm:rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
 						>
 							{isLoading ? (
 								<span className="flex items-center justify-center gap-2">

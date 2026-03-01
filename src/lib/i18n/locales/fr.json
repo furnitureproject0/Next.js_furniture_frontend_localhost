@@ -94,7 +94,9 @@
 			"noOrdersFound": "Aucune commande trouvée",
 			"noOrdersYet": "Aucune commande pour le moment",
 			"allCaughtUp": "Tout est à jour",
-			"allCaughtUpMessage": "Aucune nouvelle notification pour le moment. Nous vous informerons lorsque quelque chose d'important se produira."
+			"allCaughtUpMessage": "Aucune nouvelle notification pour le moment. Nous vous informerons lorsque quelque chose d'important se produira.",
+			"confirmConversionTitle": "Convertir en offre ?",
+			"confirmConversionBody": "Êtes-vous sûr de vouloir convertir ce rendez-vous en offre ? Les données existantes seront pré-remplies pour vous aider à compléter l'offre."
 		},
 		"nA": "N/A",
 		"unknown": "Inconnu",
@@ -152,6 +154,7 @@
 	},
 	"orders": {
 		"title": "Commandes",
+		"createSuccess": "Commande créée avec succès",
 		"newOrder": "Nouvelle commande",
 		"allOrders": "Toutes les commandes",
 		"assignedOrders": "Commandes assignées",
@@ -169,6 +172,7 @@
 		"whenAssignedOrders": "Lorsque vous avez des commandes assignées, elles apparaîtront ici.",
 		"tryAdjustingSearch": "Essayez d'ajuster votre recherche ou vos filtres",
 		"createFirstOrder": "Créez votre première commande pour commencer",
+		"empty": "Aucune commande à afficher",
 		"status": {
 			"pending": "En attente",
 			"assigned": "Assigné à l'entreprise",
@@ -199,7 +203,7 @@
 		"pendingOffers": "Offres en attente",
 		"activeOrders": "Commandes actives",
 		"inProgress": "En cours",
-		"completed": "Terminé"
+		"completed": "Commandes terminées"
 	},
 	"dashboards": {
 		"customer": {
@@ -506,6 +510,10 @@
 			"clearAll": "Tout effacer",
 			"noMatchingOrders": "Aucune commande ne correspond à vos filtres",
 			"tryAdjustingFilters": "Essayez d'ajuster vos filtres ou critères de recherche"
+		},
+		"orders": {
+			"title": "Commandes",
+			"subtitle": "Gérer et suivre toutes les commandes"
 		}
 	},
 	"notifications": {
@@ -753,6 +761,7 @@
 		"acceptOffer": "Accepter l'offre",
 		"rejectOffer": "Rejeter l'offre",
 		"noServices": "Aucun service",
+		"images": "Images",
 		"rejectionReason": "Raison du rejet",
 		"rejectionReasonPlaceholder": "Veuillez fournir une raison...",
 		"cancelConfirmMessage": "Êtes-vous sûr de vouloir annuler cette commande ? Cette action est irréversible.",

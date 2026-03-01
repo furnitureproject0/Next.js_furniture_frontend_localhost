@@ -10,9 +10,9 @@ import { useTranslation } from "@/hooks/useTranslation";
 
 const EmptyState = ({ companyOrders, t }) => (
 	<div className="text-center py-8 sm:py-12 px-4">
-		<div className="w-16 h-16 sm:w-24 sm:h-24 bg-orange-100/60 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+		<div className="w-16 h-16 sm:w-24 sm:h-24 bg-primary-100/60 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
 			<svg
-				className="w-8 h-8 sm:w-12 sm:h-12 text-orange-400"
+				className="w-8 h-8 sm:w-12 sm:h-12 text-primary-400"
 				fill="none"
 				stroke="currentColor"
 				viewBox="0 0 24 24"
@@ -25,12 +25,12 @@ const EmptyState = ({ companyOrders, t }) => (
 				/>
 			</svg>
 		</div>
-		<h3 className="text-lg sm:text-xl font-semibold text-amber-900 mb-1 sm:mb-2">
+		<h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-1 sm:mb-2">
 			{companyOrders.length === 0
 				? t("orders.noOrdersFound")
 				: t("companyAdmin.filters.noMatchingOrders") || "No orders match your filters"}
 		</h3>
-		<p className="text-sm sm:text-base text-amber-700/70 mb-4 sm:mb-6 max-w-md mx-auto">
+		<p className="text-sm sm:text-base text-slate-600/70 mb-4 sm:mb-6 max-w-md mx-auto">
 			{companyOrders.length === 0
 				? t("orders.whenAssignedOrders")
 				: t("companyAdmin.filters.tryAdjustingFilters") || "Try adjusting your filters"}
@@ -144,14 +144,14 @@ export default function OrdersList({ onSetPrice, onAssignTeam, openOrderId = nul
 	};
 
 	return (
-		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg">
+		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg">
 			{/* Header */}
-			<div className="p-4 sm:p-6 border-b border-orange-100/50">
+			<div className="p-4 sm:p-6 border-b border-primary-100/50">
 				<div className="mb-4">
-					<h2 className="text-lg sm:text-xl font-bold text-amber-900">
+					<h2 className="text-lg sm:text-xl font-bold text-slate-800">
 						{t("orders.assignedOrders")}
 					</h2>
-					<p className="text-xs sm:text-sm text-amber-700/70 mt-1">
+					<p className="text-xs sm:text-sm text-slate-600/70 mt-1">
 						{t("orders.managePricing")}
 					</p>
 				</div>

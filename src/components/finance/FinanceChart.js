@@ -36,9 +36,9 @@ export default function FinanceChart({
 	};
 
 	return (
-		<div className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-xl border border-orange-200/60 shadow-lg p-4 sm:p-5 lg:p-6">
+		<div className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-xl border border-primary-200/60 shadow-lg p-4 sm:p-5 lg:p-6">
 			<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-5 lg:mb-6">
-				<h3 className="text-base sm:text-lg font-semibold text-amber-900 truncate">
+				<h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate">
 					{t("finance.chart.financialOverview")} - {getChartTitle()}
 				</h3>
 				<div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
@@ -74,7 +74,7 @@ export default function FinanceChart({
 					</button>
 				</div>
 			</div>
-			<div className="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-orange-50/50 to-amber-50/30 rounded-lg sm:rounded-xl border border-orange-100/50 p-3 sm:p-4">
+			<div className="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-primary-50/50 to-primary-50/30 rounded-lg sm:rounded-xl border border-primary-100/50 p-3 sm:p-4">
 				{/* Simple Chart Visualization */}
 				<div className="h-full flex items-end justify-between space-x-1">
 					{chartData.slice(-20).map((point, index) => {
@@ -126,7 +126,7 @@ export default function FinanceChart({
 											className={`w-2 rounded-t opacity-80 ${
 												point.profit >= 0
 													? "bg-blue-500"
-													: "bg-orange-500"
+													: "bg-primary-500"
 											}`}
 											style={{
 												height: `${profitHeight}%`,
@@ -137,7 +137,7 @@ export default function FinanceChart({
 										/>
 									)}
 								</div>
-								<div className="text-xs text-amber-700/60 transform rotate-45 origin-left">
+								<div className="text-xs text-slate-600/60 transform rotate-45 origin-left">
 									{new Date(point.date).getDate()}
 								</div>
 							</div>
@@ -148,7 +148,7 @@ export default function FinanceChart({
 					<div className="h-full flex items-center justify-center">
 						<div className="text-center">
 							<svg
-								className="w-12 h-12 text-orange-300 mx-auto mb-2"
+								className="w-12 h-12 text-primary-300 mx-auto mb-2"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -160,7 +160,7 @@ export default function FinanceChart({
 									d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
 								/>
 							</svg>
-							<p className="text-amber-700/70 text-sm">
+							<p className="text-slate-600/70 text-sm">
 								{t("finance.chart.noDataForPeriod")}
 							</p>
 						</div>

@@ -13,7 +13,7 @@ export default function ProgressStepper({
 				
 				{/* Active Progress Line */}
 				<div 
-					className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-orange-500 rounded-full transition-all duration-500 -z-0"
+					className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary-500 rounded-full transition-all duration-500 -z-0"
 					style={{ width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%` }}
 				/>
 
@@ -46,8 +46,8 @@ export default function ProgressStepper({
 									${showCheck 
 										? "bg-green-500 border-green-500 text-white scale-110" 
 										: isActive 
-											? "bg-orange-500 border-orange-500 text-white scale-110 shadow-lg ring-4 ring-orange-100" 
-											: "bg-white border-gray-300 text-gray-400 group-hover:border-orange-300 group-hover:text-orange-300"
+											? "bg-primary-500 border-primary-500 text-white scale-110 shadow-lg ring-4 ring-primary-100" 
+											: "bg-white border-gray-300 text-gray-400 group-hover:border-primary-300 group-hover:text-primary-300"
 									}
 								`}
 							>
@@ -78,7 +78,7 @@ export default function ProgressStepper({
 							>
 								<span className={`
 									text-[10px] sm:text-xs font-semibold
-									${isActive ? "text-orange-600" : isValid ? "text-green-600" : "text-gray-500"}
+									${isActive ? "text-primary-600" : isValid ? "text-green-600" : "text-gray-500"}
 								`}>
 									{title}
 								</span>

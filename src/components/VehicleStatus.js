@@ -155,13 +155,13 @@ export default function VehicleStatus() {
 	};
 
 	return (
-		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg">
-			<div className="p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
+		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg">
+			<div className="p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
 				<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-					<h2 className="text-base sm:text-lg font-semibold text-amber-900">
+					<h2 className="text-base sm:text-lg font-semibold text-slate-800">
 						{t("vehicles.fleet")}
 					</h2>
-					<button className="text-orange-600 hover:text-orange-700 text-xs sm:text-sm font-medium transition-colors">
+					<button className="text-primary-600 hover:text-primary-700 text-xs sm:text-sm font-medium transition-colors">
 						{t("vehicles.fleetManagement")}
 					</button>
 				</div>
@@ -172,18 +172,18 @@ export default function VehicleStatus() {
 					{vehicles.map((vehicle) => (
 						<div
 							key={vehicle.id}
-							className="border border-orange-200/60 rounded-lg p-3 sm:p-4 hover:shadow-lg transition-all duration-200 bg-white/60 backdrop-blur-sm"
+							className="border border-primary-200/60 rounded-lg p-3 sm:p-4 hover:shadow-lg transition-all duration-200 bg-white/60 backdrop-blur-sm"
 						>
 							<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 sm:mb-3 gap-2 sm:gap-0">
 								<div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-									<div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-100/60 rounded-lg flex items-center justify-center text-orange-600 flex-shrink-0">
+									<div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-100/60 rounded-lg flex items-center justify-center text-primary-600 flex-shrink-0">
 										{getVehicleIcon(vehicle.type)}
 									</div>
 									<div className="flex-1 min-w-0">
-										<h3 className="text-sm sm:text-base font-medium text-amber-900">
+										<h3 className="text-sm sm:text-base font-medium text-slate-800">
 											{vehicle.id}
 										</h3>
-										<p className="text-xs sm:text-sm text-amber-700/70">
+										<p className="text-xs sm:text-sm text-slate-600/70">
 											{vehicle.type}
 										</p>
 									</div>
@@ -200,32 +200,32 @@ export default function VehicleStatus() {
 
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4 text-xs sm:text-sm">
 								<div>
-									<p className="text-amber-700/70">{t("vehicles.driver")}:</p>
-									<p className="font-medium text-amber-900">
+									<p className="text-slate-600/70">{t("vehicles.driver")}:</p>
+									<p className="font-medium text-slate-800">
 										{vehicle.driver || t("vehicles.unassigned")}
 									</p>
 								</div>
 								<div>
-									<p className="text-amber-700/70">
+									<p className="text-slate-600/70">
 										{t("vehicles.capacity")}:
 									</p>
-									<p className="font-medium text-amber-900">
+									<p className="font-medium text-slate-800">
 										{vehicle.capacity}
 									</p>
 								</div>
 								<div>
-									<p className="text-amber-700/70">
+									<p className="text-slate-600/70">
 										{t("vehicles.location")}:
 									</p>
-									<p className="font-medium text-amber-900">
+									<p className="font-medium text-slate-800">
 										{vehicle.location}
 									</p>
 								</div>
 								<div>
-									<p className="text-amber-700/70">
+									<p className="text-slate-600/70">
 										{t("vehicles.nextService")}:
 									</p>
-									<p className="font-medium text-amber-900">
+									<p className="font-medium text-slate-800">
 										{vehicle.nextMaintenance}
 									</p>
 								</div>
@@ -235,7 +235,7 @@ export default function VehicleStatus() {
 				</div>
 
 				<div className="mt-4 sm:mt-5 lg:mt-6 flex justify-center">
-					<button className="px-3 sm:px-4 py-1.5 sm:py-2 text-orange-600 hover:text-orange-700 text-xs sm:text-sm font-medium transition-colors">
+					<button className="px-3 sm:px-4 py-1.5 sm:py-2 text-primary-600 hover:text-primary-700 text-xs sm:text-sm font-medium transition-colors">
 						{t("vehicles.viewAllVehicles")} →
 					</button>
 				</div>

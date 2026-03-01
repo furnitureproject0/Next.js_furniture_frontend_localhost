@@ -32,7 +32,7 @@ export default function OrderActions({
 	};
 
 	return (
-		<div className="flex items-center justify-between pt-3 border-t border-orange-100/50">
+		<div className="flex items-center justify-between pt-3 border-t border-primary-100/50">
 			<div className="flex items-center gap-2">
 				{shouldShowAssignButton() && (
 					<button
@@ -75,7 +75,7 @@ export default function OrderActions({
 				)}
 				<button
 					onClick={onViewDetails}
-					className="px-3 py-2 text-amber-700 hover:text-amber-900 text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
+					className="px-3 py-2 text-slate-600 hover:text-slate-800 text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
 				>
 					<svg
 						className="w-4 h-4"

@@ -50,13 +50,13 @@ export default function TransactionFilters({
 	const FILTERS = getFilters(t);
 	const STATUS_FILTERS = getStatusFilters(t);
 	return (
-		<div className="mt-4 sm:mt-6 p-4 sm:p-5 lg:p-6 bg-white/60 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-100/50 shadow-sm">
+		<div className="mt-4 sm:mt-6 p-4 sm:p-5 lg:p-6 bg-white/60 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-100/50 shadow-sm">
 			<div className="space-y-4 sm:space-y-5 lg:space-y-6">
 				{/* Search Bar */}
 				<div>
 					<div className="relative">
 						<svg
-							className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-amber-600/60"
+							className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-primary-600/60"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ export default function TransactionFilters({
 								onFilterChange("search", e.target.value)
 							}
 							placeholder={t("finance.filters.searchTransactions")}
-							className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 lg:py-3 border border-orange-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80 placeholder-amber-600/50"
+							className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 lg:py-3 border border-primary-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80 placeholder-primary-600/50"
 						/>
 					</div>
 				</div>
@@ -84,7 +84,7 @@ export default function TransactionFilters({
 				<div className="space-y-3 sm:space-y-4">
 					{/* Transaction Type */}
 					<div>
-						<p className="text-xs sm:text-sm font-medium text-amber-900 mb-2 sm:mb-3">
+						<p className="text-xs sm:text-sm font-medium text-slate-800 mb-2 sm:mb-3">
 							{t("finance.filters.transactionType")}
 						</p>
 						<div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -96,8 +96,8 @@ export default function TransactionFilters({
 									}
 									className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
 										selectedFilter === filter.value
-											? "bg-orange-100 text-orange-700 border-2 border-orange-300 shadow-sm"
-											: "bg-white/80 text-amber-700/70 border border-orange-200/60 hover:bg-orange-50/60 hover:text-amber-900"
+											? "bg-primary-100 text-primary-700 border-2 border-primary-300 shadow-sm"
+											: "bg-white/80 text-slate-600/70 border border-primary-200/60 hover:bg-primary-50/60 hover:text-slate-800"
 									}`}
 								>
 									{filter.label}
@@ -108,7 +108,7 @@ export default function TransactionFilters({
 
 					{/* Status */}
 					<div>
-						<p className="text-xs sm:text-sm font-medium text-amber-900 mb-2 sm:mb-3">
+						<p className="text-xs sm:text-sm font-medium text-slate-800 mb-2 sm:mb-3">
 							{t("finance.filters.status")}
 						</p>
 						<div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -120,8 +120,8 @@ export default function TransactionFilters({
 									}
 									className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
 										selectedStatus === filter.value
-											? "bg-orange-100 text-orange-700 border-2 border-orange-300 shadow-sm"
-											: "bg-white/80 text-amber-700/70 border border-orange-200/60 hover:bg-orange-50/60 hover:text-amber-900"
+											? "bg-primary-100 text-primary-700 border-2 border-primary-300 shadow-sm"
+											: "bg-white/80 text-slate-600/70 border border-primary-200/60 hover:bg-primary-50/60 hover:text-slate-800"
 									}`}
 								>
 									{filter.label}
@@ -133,10 +133,10 @@ export default function TransactionFilters({
 
 				{/* Clear Filters */}
 				{hasActiveFilters && (
-					<div className="pt-3 sm:pt-4 border-t border-orange-100/50">
+					<div className="pt-3 sm:pt-4 border-t border-primary-100/50">
 						<button
 							onClick={onClearFilters}
-							className="text-xs sm:text-sm text-amber-700/70 hover:text-amber-900 transition-colors flex items-center gap-1.5 sm:gap-2 cursor-pointer"
+							className="text-xs sm:text-sm text-slate-600/70 hover:text-slate-800 transition-colors flex items-center gap-1.5 sm:gap-2 cursor-pointer"
 						>
 							<svg
 								className="w-3.5 h-3.5 sm:w-4 sm:h-4"

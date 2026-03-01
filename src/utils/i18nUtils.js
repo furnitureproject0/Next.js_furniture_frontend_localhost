@@ -76,23 +76,38 @@ export const getTranslatedLocationType = (locationType, t) => {
 // Create a function to get translated STATUS_LABELS
 // Hide "offer_sent" status - show as "pending" instead
 export const getTranslatedStatusLabel = (status, t) => {
+	if (!status) return t("common.nA") || "N/A";
+
 	// Map "offer_sent" to "pending" to hide it from all roles
 	const normalizedStatus = status === "offer_sent" ? "pending" : status;
 	
 	const statusKeyMap = {
 		"pending": "pending",
 		"in_progress": "inProgress",
+		"inProgress": "inProgress",
 		"partially_done": "partiallyDone",
+		"partiallyDone": "partiallyDone",
 		"completed": "completed",
 		"cancelled": "cancelled",
 		"assigned": "assigned",
 		"offer_sent": "pending", // Hide offer_sent, show as pending
 		"offer_accepted": "offerAccepted",
+		"offerAccepted": "offerAccepted",
 		"offer_rejected": "offerRejected",
+		"offerRejected": "offerRejected",
 		"scheduled": "scheduled",
+		"accepted_by_company": "accepted_by_company",
+		"appointment": "pending"
 	};
 	
 	const key = statusKeyMap[normalizedStatus] || normalizedStatus;
-	return t(`orders.status.${key}`) || normalizedStatus;
+	const translation = t(`orders.status.${key}`);
+	
+	// If translation fails (returns the key itself or starts with orders.status.), return normalized version
+	if (!translation || translation === `orders.status.${key}` || translation.includes("orders.status.")) {
+		return normalizedStatus.replace(/_/g, " ").charAt(0).toUpperCase() + normalizedStatus.replace(/_/g, " ").slice(1);
+	}
+	
+	return translation;
 };
 

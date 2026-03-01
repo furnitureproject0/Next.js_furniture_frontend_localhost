@@ -11,12 +11,12 @@ export default function SidebarToggle({
 				position === "left"
 					? "-left-0 rounded-r-lg"
 					: "-right-0 rounded-l-lg"
-			} bg-orange-100/60 hover:bg-orange-200/80 border border-orange-200/60 hover:border-orange-300 shadow-sm hover:shadow-md`}
+			} bg-primary-100/60 hover:bg-primary-200/80 border border-primary-200/60 hover:border-primary-300 shadow-sm hover:shadow-md`}
 			title={title}
 			aria-label={title}
 		>
 			<svg
-				className={`w-2.5 h-2.5 sm:w-3 sm:h-3 text-orange-600 transition-transform duration-300 group-hover:scale-110 ${
+				className={`w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary-600 transition-transform duration-300 group-hover:scale-110 ${
 					position === "left"
 						? isCollapsed
 							? ""

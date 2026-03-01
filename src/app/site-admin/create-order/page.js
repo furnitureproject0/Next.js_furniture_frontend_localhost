@@ -5,7 +5,7 @@ import { useGlobalToast } from "@/hooks/useGlobalToast";
 import { useAppDispatch } from "@/store/hooks";
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useCompanies } from "@/hooks/useCompanies";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Shared logic
 import {
@@ -26,7 +26,35 @@ export default function CreateOrderPage() {
     const dispatch = useAppDispatch();
     const { toast } = useGlobalToast();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const orderIdToConvert = searchParams.get("orderId");
+    const emailParam = searchParams.get("email");
     const topRef = useRef(null);
+
+    // Pre-fill client from email param
+    useEffect(() => {
+        if (emailParam && !orderIdToConvert) {
+            const fetchClient = async () => {
+                try {
+                    const { companyAdminApi } = await import("@/lib/api");
+                    const response = await companyAdminApi.searchClient({ search: emailParam.trim(), limit: 1 });
+                    if (response?.success && response?.data?.clients?.length > 0) {
+                        const client = response.data.clients[0];
+                        setFormData(prev => ({
+                            ...prev,
+                            customerId: client.id,
+                            customerEmail: client.email,
+                            customerName: client.name,
+                            clientInfo: client
+                        }));
+                    }
+                } catch (err) {
+                    console.error("Error pre-filling client:", err);
+                }
+            };
+            fetchClient();
+        }
+    }, [emailParam, orderIdToConvert]);
 
     const [formData, setFormData] = useState({
         ...INITIAL_FORM_DATA,
@@ -58,9 +86,15 @@ export default function CreateOrderPage() {
         companyScope === "internal" ? internalCompanies : externalCompanies,
         [companyScope, internalCompanies, externalCompanies]);
 
+    // Auto-select first company when companies load or scope changes
     useEffect(() => {
-        setSelectedCompanyId(null);
-    }, [companyScope]);
+        if (availableCompanies && availableCompanies.length > 0) {
+            // Only auto-select if nothing is selected or if switching scope
+            setSelectedCompanyId(availableCompanies[0].id);
+        } else {
+            setSelectedCompanyId(null);
+        }
+    }, [availableCompanies]);
 
     // --- Check if form has unsaved data ---
     const hasUnsavedData = useCallback(() => {
@@ -108,20 +142,114 @@ export default function CreateOrderPage() {
     const isCustomerValid = !!formData.customerId && !!formData.customerEmail?.trim();
     const isServicesValid = (() => {
         if (!formData.services || formData.services.length === 0) return false;
-        if (companyScope === "internal") {
-            for (const serviceId of formData.services) {
-                const pricing = formData.servicePricing?.[serviceId];
+        for (const serviceId of formData.services) {
+            const pricing = formData.servicePricing?.[serviceId];
+            
+            // Check pricing if internal
+            if (companyScope === "internal") {
                 if (!pricing || !pricing.minHours || !pricing.maxHours || !pricing.pricePerHour) return false;
                 if (parseFloat(pricing.minHours) <= 0 || parseFloat(pricing.maxHours) < parseFloat(pricing.minHours) || parseFloat(pricing.pricePerHour) <= 0) return false;
             }
+
+            // Check date/time for each service
+            if (!pricing?.scheduledDate || !pricing?.scheduledTime) return false;
         }
         return true;
     })();
     const isAddressValid = validateOrderStep(2, formData);
-    const isScheduleValid = validateOrderStep(4, formData);
+    const isScheduleValid = true; // Global date/time no longer mandatory here, now part of services
     const canSubmit = isCompanyValid && isCustomerValid && isServicesValid && isAddressValid && isScheduleValid;
 
     const completedCount = [isCompanyValid, isCustomerValid, isServicesValid, isAddressValid, isScheduleValid].filter(Boolean).length;
+
+    // Sync global company to service-level company if not already set
+    useEffect(() => {
+        if (selectedCompanyId) {
+            setFormData(prev => {
+                const newPricing = { ...prev.servicePricing };
+                let changed = false;
+                
+                prev.services?.forEach(serviceId => {
+                    if (!newPricing[serviceId]) {
+                        newPricing[serviceId] = { assignedCompanyId: selectedCompanyId };
+                        changed = true;
+                    } else if (!newPricing[serviceId].assignedCompanyId) {
+                        newPricing[serviceId].assignedCompanyId = selectedCompanyId;
+                        changed = true;
+                    }
+                });
+                
+                return changed ? { ...prev, servicePricing: newPricing } : prev;
+            });
+        }
+    }, [selectedCompanyId]);
+
+    // Fetch existing order if orderId is provided
+    useEffect(() => {
+        if (orderIdToConvert) {
+            const fetchOrder = async () => {
+                try {
+                    const { siteAdminApi } = await import("@/lib/api");
+                    const response = await siteAdminApi.getOrder(orderIdToConvert);
+                    if (response?.success && response.data) {
+                        const order = response.data;
+                        
+                        // Map shared fields
+                        setFormData(prev => ({
+                            ...prev,
+                            services: order.orderServices?.map(s => s.serviceId) || [],
+                            customerEmail: order.client?.email || "",
+                            customerId: order.clientId,
+                            customerName: order.client?.name || "",
+                            clientInfo: order.client,
+                            notes: order.notes || "",
+                            fromAddress: {
+                                fullAddress: order.location?.address || "",
+                                floor: order.location?.floor || 0,
+                                hasElevator: order.location?.has_elevator || false,
+                                locationType: order.location?.type || "",
+                                area: order.location?.area || 0,
+                                numberOfRooms: order.number_of_rooms || 0,
+                                roomConfigurations: order.rooms?.map(r => ({ 
+                                    roomType: r.room_type, 
+                                    quantity: r.quantity 
+                                })) || []
+                            },
+                            toAddress: order.destination_location ? {
+                                fullAddress: order.destination_location.address || "",
+                                floor: order.destination_location.floor || 0,
+                                hasElevator: order.destination_location.has_elevator || false,
+                                locationType: order.destination_location.type || ""
+                            } : prev.toAddress,
+                            scheduledDate: order.preferred_date ? order.preferred_date.split('T')[0] : "",
+                            scheduledTime: order.preferred_time || "09:00",
+                            servicePricing: order.orderServices?.reduce((acc, s) => {
+                                acc[s.serviceId] = {
+                                    assignedCompanyId: s.company_id,
+                                    scheduledDate: s.preferred_date ? s.preferred_date.split('T')[0] : (order.preferred_date ? order.preferred_date.split('T')[0] : ""),
+                                    scheduledTime: s.preferred_time || order.preferred_time || "09:00",
+                                    minHours: s.offer?.min_hours || "",
+                                    maxHours: s.offer?.max_hours || "",
+                                    pricePerHour: s.offer?.hourly_rate || "",
+                                    notes: s.offer?.notes || ""
+                                };
+                                return acc;
+                            }, {}) || {}
+                        }));
+
+                        // Set company if global
+                        if (order.company_id) {
+                            setSelectedCompanyId(order.company_id);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error fetching order:", err);
+                    toast.error("Failed to load order data");
+                }
+            };
+            fetchOrder();
+        }
+    }, [orderIdToConvert]);
 
     const handleEmailValid = (user) => {
         setFormData((prev) => ({ ...prev, customerEmail: user.email, customerId: user.id, customerName: user.name, clientInfo: user }));
@@ -136,10 +264,10 @@ export default function CreateOrderPage() {
 
     const handleCancel = () => {
         if (hasUnsavedData()) {
-            setPendingNavigation("dashboard");
+            setPendingNavigation("orders");
             setShowLeaveConfirm(true);
         } else {
-            router.push("/site-admin/dashboard");
+            router.push("/site-admin/orders");
         }
     };
 
@@ -148,7 +276,7 @@ export default function CreateOrderPage() {
         if (pendingNavigation === "back") {
             window.history.go(-2);
         } else {
-            router.push("/site-admin/dashboard");
+            router.push("/site-admin/orders");
         }
     };
 
@@ -156,83 +284,105 @@ export default function CreateOrderPage() {
         setError(null);
         setIsSubmitting(true);
         try {
-            const location = {
+            const primary_location = {
                 address: formData.fromAddress?.fullAddress || "",
                 floor: Number(formData.fromAddress?.floor) || 0,
                 has_elevator: !!formData.fromAddress?.hasElevator,
                 type: formData.fromAddress?.locationType || "",
-                area: Number(formData.fromAddress?.area) || 0
+                area: Number(formData.fromAddress?.area) || 0,
+                latitude: formData.fromAddress?.lat || null,
+                longitude: formData.fromAddress?.lon || null
             };
-            const destination_location = {
+            const secondary_location = {
                 address: formData.toAddress?.fullAddress || "",
                 floor: Number(formData.toAddress?.floor) || 0,
                 has_elevator: !!formData.toAddress?.hasElevator,
-                type: formData.toAddress?.locationType || ""
+                type: formData.toAddress?.locationType || "",
+                latitude: formData.toAddress?.lat || null,
+                longitude: formData.toAddress?.lon || null
             };
-            let preferredTime = formData.scheduledTime || "09:00";
-            if (preferredTime.includes("-")) preferredTime = preferredTime.split("-")[0].trim();
-            if (preferredTime === "flexible") preferredTime = "09:00";
-            if (preferredTime.length === 5) preferredTime += ":00";
 
-            let rooms = [];
-            if (formData.fromAddress?.roomConfigurations?.length > 0) {
-                rooms = formData.fromAddress.roomConfigurations.map(r => ({ room_type: r.roomType, quantity: r.quantity }));
-            } else if (formData.roomDescription) {
-                rooms = [{ room_type: formData.roomDescription, quantity: 1 }];
-            }
+            // Format helper for time
+            const formatTime = (timeStr) => {
+                let time = timeStr || "09:00";
+                if (time.includes("-")) time = time.split("-")[0].trim();
+                if (time === "flexible") time = "09:00";
+                if (time.length === 5) time += ":00";
+                return time;
+            };
 
             const services = (formData.services || []).map(serviceId => {
-                const serviceObj = { service_id: serviceId, additions: [] };
-                const selectedAdditions = formData.serviceAdditions?.[serviceId] || {};
-                Object.entries(selectedAdditions).forEach(([additionId, additionData]) => {
-                    if (additionData) {
-                        const additionPayload = { addition_id: parseInt(additionId), note: additionData.note || "" };
-                        if (companyScope === "internal") {
-                            const additionPricing = formData.servicePricing?.[serviceId]?.additions?.[additionId];
-                            if (additionPricing) {
-                                additionPayload.quantity = Number(additionPricing.amount) || 1;
-                                additionPayload.price = Number(additionPricing.price) || 0;
-                            }
-                        }
-                        serviceObj.additions.push(additionPayload);
-                    }
-                });
-                serviceObj.company_id = selectedCompanyId;
-                if (companyScope === "internal") {
-                    const pricing = formData.servicePricing?.[serviceId];
-                    if (pricing) {
-                        serviceObj.offer = {
-                            hourly_rate: parseFloat(pricing.pricePerHour),
-                            currency: "CHF",
-                            min_hours: Number(pricing.minHours),
-                            max_hours: Number(pricing.maxHours),
-                            notes: pricing.notes || ""
-                        };
-                    }
+                const pricing = formData.servicePricing?.[serviceId] || {};
+                
+                // Map frontend pricing types to backend expectations
+                let backendPricingType = pricing.pricingType || "per_hour";
+                if (backendPricingType === "hourly") backendPricingType = "per_hour";
+                
+                const unitPrice = backendPricingType === "flat_rate" 
+                    ? (parseFloat(pricing.flatRatePrice) || 0)
+                    : (parseFloat(pricing.pricePerHour) || 0);
+
+                const serviceObj = {
+                    service_id: serviceId,
+                    pricing_type: backendPricingType,
+                    price_per_unit: unitPrice,
+                    min_units: Number(pricing.minHours) || 0,
+                    max_units: Number(pricing.maxHours) || 0,
+                    minimum_charge: parseFloat(pricing.minimumCharge) || 0,
+                    additions: []
+                };
+                
+                // Extract addition pricing from servicePricing
+                if (pricing.additions) {
+                    Object.entries(pricing.additions).forEach(([additionId, additionPricing]) => {
+                        const amount = Number(additionPricing.amount) || 1;
+                        const price = Number(additionPricing.price) || 0;
+                        const total = amount * price;
+                        
+                        serviceObj.additions.push({
+                            addition_id: parseInt(additionId),
+                            pricing_type: "flat_rate",
+                            fixed_price: total,
+                            total_price: total
+                        });
+                    });
                 }
+                
                 return serviceObj;
             });
 
+            // Use first service's date/time as global fallback
+            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
+            const globalDate = firstServicePricing?.scheduledDate || "";
+            const globalTime = formatTime(firstServicePricing?.scheduledTime);
+
             const requestBody = {
                 email: formData.customerEmail.trim(),
-                preferred_date: formData.scheduledDate,
-                preferred_time: preferredTime,
-                location,
-                destination_location,
-                number_of_rooms: Number(formData.fromAddress?.numberOfRooms) || 0,
-                rooms,
+                company_id: selectedCompanyId,
+                execution_date: globalDate,
+                execution_time: globalTime,
+                primary_location,
+                secondary_location,
                 services,
                 notes: formData.notes || '',
                 _imageFiles: formData.images || [],
-                order_type: orderType
+                type: orderType,
+                timelineMessage: formData.timelineMessage || "Order initiated by Admin for the client",
+                timelineStatus: formData.timelineStatus || "pending"
             };
 
             const { siteAdminApi } = await import("@/lib/api");
-            const response = await siteAdminApi.createOrder(requestBody);
+            
+            let response;
+            if (orderType === 'offer') {
+                response = await siteAdminApi.createOffer(requestBody);
+            } else {
+                response = await siteAdminApi.createOrder(requestBody);
+            }
 
             if (response && response.success) {
                 toast.success(t("orders.createSuccess") || "Order created successfully");
-                router.push("/site-admin/dashboard");
+                router.push("/site-admin/orders");
             } else {
                 throw new Error(response?.message || "Failed to create order");
             }
@@ -247,13 +397,22 @@ export default function CreateOrderPage() {
         }
     };
 
-    const stepProps = { formData, setFormData, companyScope, orderType };
+    const stepProps = { 
+        formData, 
+        setFormData, 
+        companyScope, 
+        orderType,
+        availableCompanies,
+        isLoadingCompanies,
+        companiesError,
+        globalCompanyId: selectedCompanyId
+    };
 
     return (
         <div className="min-h-screen bg-white">
             {/* ── Compact Header ── */}
             <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between">
+                <div className="w-full px-4 sm:px-8 py-2.5 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                         <button onClick={handleCancel} className="p-1.5 hover:bg-gray-100 rounded-md" title="Back">
                             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -269,7 +428,7 @@ export default function CreateOrderPage() {
             </div>
 
             {/* ── Form Body ── */}
-            <div ref={topRef} className="max-w-4xl mx-auto px-4 sm:px-6 py-5 pb-24">
+            <div ref={topRef} className="w-full px-4 sm:px-8 py-5 pb-24">
                 {/* Error */}
                 {error && (
                     <div className="mb-4 p-2.5 bg-red-50 border border-red-200 rounded flex items-center gap-2 text-xs text-red-700">
@@ -297,8 +456,6 @@ export default function CreateOrderPage() {
                             companies={availableCompanies}
                             isLoadingCompanies={isLoadingCompanies}
                             companiesError={companiesError}
-                            orderType={orderType}
-                            onOrderTypeChange={setOrderType}
                         />
                     </div>
 
@@ -342,7 +499,7 @@ export default function CreateOrderPage() {
 
             {/* ── Bottom Bar ── */}
             <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+                <div className="w-full px-4 sm:px-8 py-2.5 flex items-center justify-between gap-3">
                     <div className="hidden sm:flex items-center gap-2">
                         <div className="h-1.5 w-24 bg-gray-200 rounded-full overflow-hidden">
                             <div className="h-full bg-gray-600 rounded-full transition-all duration-500" style={{ width: `${(completedCount / 5) * 100}%` }} />
@@ -410,12 +567,15 @@ export default function CreateOrderPage() {
                 </div>
             )}
 
-            {/* Create User Modal */}
-            <CreateUserModal
-                isOpen={isCreateUserModalOpen}
-                onClose={() => setIsCreateUserModalOpen(false)}
-                onUserCreated={handleUserCreated}
-            />
+            {/* ── Create User Modal ── */}
+            {isCreateUserModalOpen && (
+                <CreateUserModal
+                    isOpen={isCreateUserModalOpen}
+                    onClose={() => setIsCreateUserModalOpen(false)}
+                    onUserCreated={handleUserCreated}
+                    companyId={selectedCompanyId}
+                />
+            )}
         </div>
     );
 }

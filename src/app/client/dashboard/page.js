@@ -67,15 +67,15 @@ export default function CustomerDashboard() {
 	};
 
 	return (
-		<div className="min-h-screen" style={{ background: "#FFF8F3" }}>
+		<div className="min-h-screen" style={{ background: "#FFFFFF" }}>
 			<div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
 				{/* Page Header */}
 				<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6 lg:mb-8">
 					<div className="flex-1 min-w-0">
-						<h1 className="text-2xl sm:text-3xl font-bold text-amber-900 mb-1 sm:mb-2">
+						<h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
 							{t("dashboards.customer.title")}
 						</h1>
-						<p className="text-sm sm:text-base text-amber-700/70">
+						<p className="text-sm sm:text-base text-slate-600/70">
 							{t("dashboards.customer.subtitle")}
 						</p>
 					</div>

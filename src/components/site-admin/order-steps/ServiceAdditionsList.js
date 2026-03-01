@@ -19,8 +19,8 @@ export default function ServiceAdditionsList({
 	const { t } = useTranslation();
 
 	return (
-		<div className="ml-4 pl-4 border-l-2 border-orange-200 space-y-2">
-			<p className="text-xs sm:text-sm font-medium text-amber-900">
+		<div className="ml-4 pl-4 border-l-2 border-primary-200 space-y-2">
+			<p className="text-xs sm:text-sm font-medium text-slate-800">
 				{t("orderSteps.selectAdditions")}
 			</p>
 			<div className="space-y-2">
@@ -38,8 +38,8 @@ export default function ServiceAdditionsList({
 								}}
 								className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg transition-all text-left ${
 									isAdditionSelected
-										? "bg-orange-500 text-white"
-										: "bg-gray-100 text-gray-700 hover:bg-orange-100"
+										? "bg-primary-500 text-white"
+										: "bg-gray-100 text-gray-700 hover:bg-primary-100"
 								}`}
 							>
 								{addition.name}

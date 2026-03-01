@@ -38,9 +38,9 @@ export default function AssignmentsList({ assignments, onStatusChange, role = "w
 
 	// Use cream/orange theme to match project theme
 	const themeColors = {
-		primaryBorder: "border-orange-200/40",
-		primaryText: "text-amber-900",
-		secondaryText: "text-amber-700/70",
+		primaryBorder: "border-primary-200/40",
+		primaryText: "text-slate-800",
+		secondaryText: "text-slate-600/70",
 	};
 
 	if (!assignments || assignments.length === 0) {

@@ -28,7 +28,7 @@ const getTokenFromUrl = () => {
 function LoadingFallback() {
 	return (
 		<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-			<div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-b-2 border-orange-500"></div>
+			<div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-b-2 border-primary-500"></div>
 		</div>
 	);
 }
@@ -406,7 +406,7 @@ function ClientOrderPageContent() {
 		// Otherwise, show loading screen
 		return (
 			<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-				<div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-b-2 border-orange-500"></div>
+				<div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-b-2 border-primary-500"></div>
 			</div>
 		);
 	}
@@ -417,19 +417,19 @@ function ClientOrderPageContent() {
 		<div className="min-h-screen bg-gray-50 py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-4xl mx-auto">
 				{/* Header - Similar to CustomerOrderDetailModal */}
-				<div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6 border-b border-orange-100 bg-gradient-to-r from-orange-50/50 to-amber-50/50">
+				<div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6 border-b border-primary-100 bg-gradient-to-r from-primary-50/50 to-primary-50/50">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-1 min-w-0">
-							<div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-orange-100 to-amber-100 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
-								<span className="text-orange-600 font-bold text-sm sm:text-base lg:text-lg">
+							<div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-primary-100 to-primary-100 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+								<span className="text-primary-600 font-bold text-sm sm:text-base lg:text-lg">
 									#{order.id.toString().padStart(4, "0")}
 								</span>
 							</div>
 							<div className="flex-1 min-w-0">
-								<h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-amber-900 truncate">
+								<h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 truncate">
 									{t("orderDetails.title") || "Order Details"}
 								</h1>
-								<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">
+								<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
 									{formatOrderId(order.id)} • {formatDate(order.createdAt)}
 								</p>
 							</div>
@@ -437,11 +437,11 @@ function ClientOrderPageContent() {
 						<div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
 							<button
 								onClick={handlePrint}
-								className="p-2 hover:bg-orange-100 rounded-lg transition-colors cursor-pointer"
+								className="p-2 hover:bg-primary-100 rounded-lg transition-colors cursor-pointer"
 								title={t("common.buttons.print") || "Print"}
 							>
 								<svg
-									className="w-5 h-5 text-amber-700"
+									className="w-5 h-5 text-slate-600"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -466,7 +466,7 @@ function ClientOrderPageContent() {
 					{/* Status & Company Info */}
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
 						<div>
-							<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
+							<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
 								{t("orderDetails.status")}
 							</p>
 							<span
@@ -477,10 +477,10 @@ function ClientOrderPageContent() {
 						</div>
 						{order.assignedCompanyId && (
 							<div className="text-left sm:text-right">
-								<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1">
+								<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1">
 									{t("orderDetails.company")}
 								</p>
-								<p className="text-xs sm:text-sm text-amber-900 font-medium">
+								<p className="text-xs sm:text-sm text-slate-800 font-medium">
 									{order.assignedCompanyName || t("orderDetails.assignedTo")}
 								</p>
 							</div>
@@ -489,7 +489,7 @@ function ClientOrderPageContent() {
 
 					{/* Services & Additions */}
 					<div>
-						<h3 className="text-sm font-semibold text-amber-900 uppercase tracking-wide mb-3">
+						<h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-3">
 							{t("orderDetails.services")}
 						</h3>
 						<div className="space-y-3">
@@ -516,27 +516,27 @@ function ClientOrderPageContent() {
 										}
 										
 										return (
-											<div key={orderService.id} className="p-3 sm:p-4 bg-orange-50/50 rounded-lg sm:rounded-xl border border-orange-200/50">
+											<div key={orderService.id} className="p-3 sm:p-4 bg-primary-50/50 rounded-lg sm:rounded-xl border border-primary-200/50">
 												<div className="flex items-center justify-between mb-2 sm:mb-3">
-													<span className="px-2 sm:px-3 py-1 sm:py-1.5 bg-orange-50 text-orange-700 rounded-lg text-xs sm:text-sm font-medium border border-orange-200/50">
+													<span className="px-2 sm:px-3 py-1 sm:py-1.5 bg-primary-50 text-primary-700 rounded-lg text-xs sm:text-sm font-medium border border-primary-200/50">
 														{serviceName}
 													</span>
 												</div>
 												
 												{/* Show all offers for this service */}
 												{orderService.offers && orderService.offers.length > 0 ? (
-													<div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-orange-200/50">
-														<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
+													<div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-primary-200/50">
+														<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
 															{t("orderDetails.offers")} ({orderService.offers.length})
 														</p>
 														<div className="space-y-2 sm:space-y-3">
 															{orderService.offers.map((offer, idx) => (
 																<div
 																	key={offer.id || idx}
-																	className="p-3 sm:p-4 bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg border border-orange-200/50"
+																	className="p-3 sm:p-4 bg-gradient-to-br from-primary-50 to-primary-50 rounded-lg border border-primary-200/50"
 																>
 																	<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 mb-1.5 sm:mb-2">
-																		<span className="text-sm font-bold text-amber-900">
+																		<span className="text-sm font-bold text-slate-800">
 																			{t("orderDetails.offer")} #{(idx + 1)}
 																		</span>
 																		{offer.status && (
@@ -560,7 +560,7 @@ function ClientOrderPageContent() {
 																	
 																	{/* Accept/Reject Buttons for pending offers */}
 																	{offer.status === "pending" && (
-																		<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 pt-2 sm:pt-3 border-t border-orange-200/50">
+																		<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 pt-2 sm:pt-3 border-t border-primary-200/50">
 																			<button
 																				onClick={() => handleRejectOffer(offer.id)}
 																				className="flex-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-white border-2 border-red-200 text-red-600 hover:bg-red-50 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer"
@@ -580,8 +580,8 @@ function ClientOrderPageContent() {
 														</div>
 													</div>
 												) : (
-													<div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-orange-200/50">
-														<p className="text-xs text-amber-400/50 text-center">
+													<div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-primary-200/50">
+														<p className="text-xs text-primary-300/50 text-center">
 															{t("orderDetails.noOffers")}
 														</p>
 													</div>
@@ -589,15 +589,15 @@ function ClientOrderPageContent() {
 												
 												{/* Show additions for this service */}
 												{serviceAdditions.length > 0 && (
-													<div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-orange-200/50">
-														<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
+													<div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-primary-200/50">
+														<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
 															{t("orderSteps.selectAdditions")}
 														</p>
 														<div className="flex flex-wrap gap-2">
 															{serviceAdditions.map((addition, idx) => (
 																<div
 																	key={addition.id || idx}
-																	className="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-lg text-sm font-medium border border-amber-200/50 flex items-center gap-2"
+																	className="px-3 py-1.5 bg-primary-100 text-slate-700 rounded-lg text-sm font-medium border border-primary-200/50 flex items-center gap-2"
 																>
 																	<svg
 																		className="w-4 h-4"
@@ -614,7 +614,7 @@ function ClientOrderPageContent() {
 																	</svg>
 																	<span>{addition.name}</span>
 																	{addition.note && (
-																		<span className="text-xs text-amber-600/70 italic">
+																		<span className="text-xs text-primary-600/70 italic">
 																			({addition.note})
 																		</span>
 																	)}
@@ -635,8 +635,8 @@ function ClientOrderPageContent() {
 
 					{/* Schedule & Room Configuration */}
 					{(order.preferred_date || order.number_of_rooms) && (
-						<div className="p-4 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-200/50">
-							<h3 className="text-sm font-semibold text-amber-900 uppercase tracking-wide mb-4">
+						<div className="p-4 bg-gradient-to-br from-primary-50 to-primary-50 rounded-xl border border-primary-200/50">
+							<h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-4">
 								{t("orderDetails.schedule")} & {t("orderDetails.roomConfiguration")}
 							</h3>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -644,7 +644,7 @@ function ClientOrderPageContent() {
 									<div className="flex items-start gap-3">
 										<div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
 											<svg
-												className="w-5 h-5 text-orange-600"
+												className="w-5 h-5 text-primary-600"
 												fill="none"
 												stroke="currentColor"
 												viewBox="0 0 24 24"
@@ -658,13 +658,13 @@ function ClientOrderPageContent() {
 											</svg>
 										</div>
 										<div>
-											<p className="text-xs text-amber-600/70 uppercase tracking-wide mb-1">
+											<p className="text-xs text-primary-600/70 uppercase tracking-wide mb-1">
 												{t("orderDetails.date")}
 											</p>
-											<p className="text-sm font-medium text-amber-900">
+											<p className="text-sm font-medium text-slate-800">
 												{formatDate(order.preferred_date)}
 												{order.preferred_time && (
-													<span className="ml-2 text-amber-700">
+													<span className="ml-2 text-slate-600">
 														• {formatTime(order.preferred_time)}
 													</span>
 												)}
@@ -676,7 +676,7 @@ function ClientOrderPageContent() {
 									<div className="flex items-start gap-3">
 										<div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
 											<svg
-												className="w-5 h-5 text-orange-600"
+												className="w-5 h-5 text-primary-600"
 												fill="none"
 												stroke="currentColor"
 												viewBox="0 0 24 24"
@@ -690,10 +690,10 @@ function ClientOrderPageContent() {
 											</svg>
 										</div>
 										<div>
-											<p className="text-xs text-amber-600/70 uppercase tracking-wide mb-1">
+											<p className="text-xs text-primary-600/70 uppercase tracking-wide mb-1">
 												{t("orderDetails.roomConfiguration")}
 											</p>
-											<p className="text-sm font-medium text-amber-900">
+											<p className="text-sm font-medium text-slate-800">
 												{order.number_of_rooms} {t("common.labels.rooms")}
 											</p>
 										</div>
@@ -705,10 +705,10 @@ function ClientOrderPageContent() {
 
 					{/* Addresses */}
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						<div className="p-4 bg-amber-50/30 rounded-xl border border-amber-200/30">
-							<h3 className="text-sm font-semibold text-amber-900 uppercase tracking-wide mb-3 flex items-center gap-2">
+						<div className="p-4 bg-primary-50/30 rounded-xl border border-primary-200/30">
+							<h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-3 flex items-center gap-2">
 								<svg
-									className="w-4 h-4 text-orange-600"
+									className="w-4 h-4 text-primary-600"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -728,15 +728,15 @@ function ClientOrderPageContent() {
 								</svg>
 								{t("orderDetails.fromAddress")}
 							</h3>
-							<p className="text-sm text-amber-900 leading-relaxed">
+							<p className="text-sm text-slate-800 leading-relaxed">
 								{order.fromAddress || order.addresses?.from || "-"}
 							</p>
 						</div>
 						{order.toAddress && (
-							<div className="p-4 bg-amber-50/30 rounded-xl border border-amber-200/30">
-								<h3 className="text-sm font-semibold text-amber-900 uppercase tracking-wide mb-3 flex items-center gap-2">
+							<div className="p-4 bg-primary-50/30 rounded-xl border border-primary-200/30">
+								<h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-3 flex items-center gap-2">
 									<svg
-										className="w-4 h-4 text-orange-600"
+										className="w-4 h-4 text-primary-600"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -756,7 +756,7 @@ function ClientOrderPageContent() {
 									</svg>
 									{t("orderDetails.toAddress")}
 								</h3>
-								<p className="text-sm text-amber-900 leading-relaxed">
+								<p className="text-sm text-slate-800 leading-relaxed">
 									{order.toAddress || order.addresses?.to || "-"}
 								</p>
 							</div>
@@ -769,11 +769,11 @@ function ClientOrderPageContent() {
 					 order.notes.trim() && 
 					 order.notes.trim().toLowerCase() !== "n/a" && 
 					 order.notes.trim().toLowerCase() !== "na" && (
-						<div className="p-4 bg-amber-50/30 rounded-xl border border-amber-200/30">
-							<h3 className="text-sm font-semibold text-amber-900 uppercase tracking-wide mb-2">
+						<div className="p-4 bg-primary-50/30 rounded-xl border border-primary-200/30">
+							<h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-2">
 								{t("orderDetails.notes")}
 							</h3>
-							<p className="text-sm text-amber-900 leading-relaxed whitespace-pre-wrap">
+							<p className="text-sm text-slate-800 leading-relaxed whitespace-pre-wrap">
 								{order.notes}
 							</p>
 						</div>
@@ -781,13 +781,13 @@ function ClientOrderPageContent() {
 
 					{/* Order History Timeline */}
 					{order.history && order.history.length > 0 && (
-						<div className="p-4 bg-amber-50/30 rounded-xl border border-amber-200/30">
-							<h3 className="text-sm font-semibold text-amber-900 uppercase tracking-wide mb-4">
+						<div className="p-4 bg-primary-50/30 rounded-xl border border-primary-200/30">
+							<h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wide mb-4">
 								{t("orderDetails.orderTimeline")}
 							</h3>
 							<div className="relative">
 								{/* Timeline line */}
-								<div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-orange-200 via-amber-200 to-orange-200"></div>
+								<div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-200 via-primary-200 to-primary-200"></div>
 								<div className="space-y-4 relative">
 									{order.history.map((event, index) => {
 										const eventLabels = {
@@ -806,16 +806,16 @@ function ClientOrderPageContent() {
 											offer_modified: "bg-purple-500 border-purple-600",
 											offer_accepted: "bg-green-600 border-green-700",
 											offer_rejected: "bg-red-500 border-red-600",
-											status_change: "bg-amber-500 border-amber-600",
+											status_change: "bg-primary-500 border-primary-600",
 										};
 										return (
 											<div key={event.id || index} className="flex items-start gap-4 relative">
 												<div className={`w-3 h-3 ${eventColors[event.type] || "bg-gray-500 border-gray-600"} rounded-full border-2 border-white mt-1 z-10 flex-shrink-0`}></div>
 												<div className="flex-1 pb-4">
-													<p className="text-sm font-medium text-amber-900">
+													<p className="text-sm font-medium text-slate-800">
 														{eventLabels[event.type] || event.type}
 													</p>
-													<p className="text-xs text-amber-700/70 mt-1">
+													<p className="text-xs text-slate-600/70 mt-1">
 														{formatDate(event.at)}
 													</p>
 													{event.type === "offer_modified" && (
@@ -847,17 +847,17 @@ function ClientOrderPageContent() {
 				{showRejectDialog && (
 					<div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
 						<div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
-							<h3 className="text-xl font-bold text-amber-900 mb-4">
+							<h3 className="text-xl font-bold text-slate-800 mb-4">
 								{t("common.buttons.rejectOffer")}
 							</h3>
-							<p className="text-sm text-amber-700 mb-4">
+							<p className="text-sm text-slate-600 mb-4">
 								{t("orderDetails.rejectConfirmMessageOptional")}
 							</p>
 							<textarea
 								value={rejectionReason}
 								onChange={(e) => setRejectionReason(e.target.value)}
 								placeholder={t("orderDetails.rejectReasonPlaceholder")}
-								className="w-full px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 text-amber-900 placeholder-amber-400 mb-4"
+								className="w-full px-3 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-slate-800 placeholder-primary-300 mb-4"
 								rows={4}
 							/>
 							<div className="flex items-center gap-3">
@@ -867,7 +867,7 @@ function ClientOrderPageContent() {
 										setRejectionReason("");
 										setSelectedOfferId(null);
 									}}
-									className="flex-1 px-4 py-2 text-amber-700 hover:text-amber-900 font-medium transition-colors"
+									className="flex-1 px-4 py-2 text-slate-600 hover:text-slate-800 font-medium transition-colors"
 								>
 									{t("common.buttons.cancel")}
 								</button>

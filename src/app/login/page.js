@@ -81,18 +81,18 @@ function LoginForm() {
 	return (
 		<div
 			className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
-			style={{ background: "#FFF8F3" }}
+			style={{ background: "var(--color-primary-50, #eff6ff)" }}
 		>
 			{/* Main container */}
 			<div className="w-full max-w-md">
 				{/* Login card */}
-				<div className="bg-white/90 backdrop-blur-sm rounded-lg border border-orange-200/60 p-6 sm:p-8 shadow-xl">
+				<div className="bg-white/90 backdrop-blur-sm rounded-lg border border-primary-200/60 p-6 sm:p-8 shadow-xl">
 					{/* Logo/Brand area */}
 					<div className="text-center mb-6 sm:mb-8">
-						<h1 className="text-xl sm:text-2xl font-semibold text-amber-900 mb-2">
+						<h1 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-2">
 							{t("login.title")}
 						</h1>
-						<p className="text-amber-700 text-xs sm:text-sm">
+						<p className="text-primary-600 text-xs sm:text-sm">
 							{t("login.signInToAccount")}
 						</p>
 					</div>
@@ -107,7 +107,7 @@ function LoginForm() {
 					{/* Form */}
 					<form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
 						<div className="space-y-1.5 sm:space-y-2">
-							<label className="text-xs sm:text-sm font-medium text-amber-800 block">
+							<label className="text-xs sm:text-sm font-medium text-slate-700 block">
 								{t("login.emailAddress")}
 							</label>
 							<input
@@ -115,7 +115,7 @@ function LoginForm() {
 								name="email"
 								value={formData.email}
 								onChange={handleInputChange}
-								className="w-full px-3 py-2 text-sm sm:text-base bg-white/80 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition-colors placeholder-amber-400"
+								className="w-full px-3 py-2 text-sm sm:text-base bg-white/80 border border-primary-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-colors placeholder-primary-300"
 								placeholder={t("login.enterEmail")}
 								disabled={isLoading}
 								required
@@ -123,7 +123,7 @@ function LoginForm() {
 						</div>
 
 						<div className="space-y-1.5 sm:space-y-2">
-							<label className="text-xs sm:text-sm font-medium text-amber-800 block">
+							<label className="text-xs sm:text-sm font-medium text-slate-700 block">
 								{t("common.labels.password")}
 							</label>
 							<input
@@ -131,7 +131,7 @@ function LoginForm() {
 								name="password"
 								value={formData.password}
 								onChange={handleInputChange}
-								className="w-full px-3 py-2 text-sm sm:text-base bg-white/80 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition-colors placeholder-amber-400"
+								className="w-full px-3 py-2 text-sm sm:text-base bg-white/80 border border-primary-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition-colors placeholder-primary-300"
 								placeholder={t("login.enterPassword")}
 								disabled={isLoading}
 								required
@@ -150,7 +150,7 @@ function LoginForm() {
 							</label>
 							<a
 								href="#"
-								className="text-orange-600 hover:text-orange-700 font-medium"
+								className="text-primary-600 hover:text-primary-700 font-medium"
 							>
 								{t("login.forgotPassword")}
 							</a>
@@ -159,7 +159,7 @@ function LoginForm() {
 						<button
 							type="submit"
 							disabled={isLoading}
-							className="w-full cursor-pointer btn-primary py-2.5 sm:py-2 px-4 rounded-md text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+							className="w-full cursor-pointer btn-primary py-2.5 sm:py-2 px-4 rounded-md text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
 						>
 							{isLoading && (
 								<div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -172,11 +172,11 @@ function LoginForm() {
 
 					{/* Footer */}
 					<div className="mt-6 sm:mt-8 text-center">
-						<p className="text-amber-700 text-xs sm:text-sm">
+						<p className="text-primary-600 text-xs sm:text-sm">
 							{t("login.dontHaveAccount")}{" "}
 							<a
 								href="#"
-								className="text-orange-600 hover:text-orange-700 font-medium"
+								className="text-slate-600 hover:text-slate-700 font-medium"
 							>
 								{t("login.contactAdministrator")}
 							</a>

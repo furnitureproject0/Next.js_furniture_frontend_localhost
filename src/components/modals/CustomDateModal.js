@@ -29,14 +29,14 @@ export default function CustomDateModal({
 			className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-2 sm:p-4"
 			onClick={handleBackdropClick}
 		>
-			<div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-2xl p-4 sm:p-6 lg:p-8 w-full max-w-md">
+			<div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-2xl p-4 sm:p-6 lg:p-8 w-full max-w-md">
 				<div className="flex items-center justify-between mb-4 sm:mb-6">
-					<h3 className="text-lg sm:text-xl font-semibold text-amber-900">
+					<h3 className="text-lg sm:text-xl font-semibold text-slate-800">
 						{t("modals.customDate.title")}
 					</h3>
 					<button
 						onClick={onClose}
-						className="text-amber-700/70 hover:text-amber-900 transition-colors cursor-pointer p-1"
+						className="text-slate-600/70 hover:text-slate-800 transition-colors cursor-pointer p-1"
 					>
 						<svg
 							className="w-5 h-5 sm:w-6 sm:h-6"
@@ -56,7 +56,7 @@ export default function CustomDateModal({
 
 				<div className="space-y-3 sm:space-y-4">
 					<div>
-						<label className="block text-xs sm:text-sm font-medium text-amber-900 mb-1.5 sm:mb-2">
+						<label className="block text-xs sm:text-sm font-medium text-slate-800 mb-1.5 sm:mb-2">
 							{t("modals.customDate.startDate")}
 						</label>
 						<input
@@ -68,12 +68,12 @@ export default function CustomDateModal({
 									startDate: e.target.value,
 								})
 							}
-							className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-orange-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+							className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-primary-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 						/>
 					</div>
 
 					<div>
-						<label className="block text-xs sm:text-sm font-medium text-amber-900 mb-1.5 sm:mb-2">
+						<label className="block text-xs sm:text-sm font-medium text-slate-800 mb-1.5 sm:mb-2">
 							{t("modals.customDate.endDate")}
 						</label>
 						<input
@@ -85,7 +85,7 @@ export default function CustomDateModal({
 									endDate: e.target.value,
 								})
 							}
-							className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-orange-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white/80"
+							className="w-full px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 border border-primary-200/60 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-white/80"
 						/>
 					</div>
 				</div>
@@ -93,14 +93,14 @@ export default function CustomDateModal({
 				<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 mt-6 sm:mt-8">
 					<button
 						onClick={onClose}
-						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-amber-700 bg-white/80 border border-orange-200 rounded-lg sm:rounded-xl hover:bg-orange-50 transition-colors cursor-pointer"
+						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-slate-600 bg-white/80 border border-primary-200 rounded-lg sm:rounded-xl hover:bg-primary-50 transition-colors cursor-pointer"
 					>
 						{t("common.buttons.cancel")}
 					</button>
 					<button
 						onClick={handleApply}
 						disabled={!dateRange.startDate || !dateRange.endDate}
-						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-white bg-orange-600 rounded-lg sm:rounded-xl hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 rounded-lg sm:rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
 					>
 						{t("modals.customDate.applyRange")}
 					</button>

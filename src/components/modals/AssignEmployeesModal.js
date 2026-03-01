@@ -26,16 +26,16 @@ const EmployeeCard = ({
 			className={`border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 transition-all duration-200 ${
 				employee.available !== false
 					? isAssignedToOffer
-						? "border-orange-400 bg-orange-50/60 shadow-md"
-						: "border-orange-200/60 hover:border-orange-300 hover:shadow-lg bg-white"
+						? "border-primary-400 bg-primary-50/60 shadow-md"
+						: "border-primary-200/60 hover:border-primary-300 hover:shadow-lg bg-white"
 					: "border-gray-200 bg-gray-50 opacity-60"
 			}`}
 		>
 			<div className="flex items-center justify-between gap-2 sm:gap-3">
 				<div className="flex-1 min-w-0">
 					<div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
-						<div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-							<span className="text-orange-600 font-bold text-xs sm:text-sm">
+						<div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-100 to-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+							<span className="text-primary-600 font-bold text-xs sm:text-sm">
 								{employee.name
 									?.split(" ")
 									.map((n) => n[0])
@@ -44,7 +44,7 @@ const EmployeeCard = ({
 						</div>
 						<div className="flex-1 min-w-0">
 							<div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1 flex-wrap">
-								<h3 className="text-base sm:text-lg font-semibold text-amber-900 truncate">
+								<h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate">
 									{employee.name || employee.email || "Unknown"}
 								</h3>
 								{isLeader && (
@@ -71,7 +71,7 @@ const EmployeeCard = ({
 										: t("modals.teamAssignment.worker") || "Worker"}
 								</span>
 								{employee.phone && (
-									<span className="text-xs text-amber-700/70 truncate">
+									<span className="text-xs text-slate-600/70 truncate">
 										{employee.phone}
 									</span>
 								)}
@@ -113,7 +113,7 @@ const EmployeeCard = ({
 								onAssign(employee);
 							}}
 							disabled={isAssigning || employee.available === false}
-							className="px-2 sm:px-3 py-1 sm:py-1.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-400 disabled:cursor-not-allowed text-white text-xs font-medium rounded-lg transition-colors cursor-pointer"
+							className="px-2 sm:px-3 py-1 sm:py-1.5 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-400 disabled:cursor-not-allowed text-white text-xs font-medium rounded-lg transition-colors cursor-pointer"
 						>
 							{t("common.buttons.assign") || "Assign"}
 						</button>
@@ -352,19 +352,19 @@ export default function AssignEmployeesModal({
 			{/* Modal */}
 			<div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] sm:max-h-[85vh] flex flex-col">
 				{/* Header */}
-				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-b border-orange-100/50 bg-gradient-to-r from-orange-50/50 to-amber-50/50">
+				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-b border-primary-100/50 bg-gradient-to-r from-primary-50/50 to-primary-50/50">
 					<div className="flex items-center justify-between gap-3">
 						<div className="flex-1 min-w-0">
-							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent truncate">
+							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary-600 to-slate-600 bg-clip-text text-transparent truncate">
 								{t("modals.assignEmployees.title") || "Assign Employees"}
 							</h2>
-							<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">
+							<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
 								{t("modals.assignEmployees.description") || "Assign employees to this offer"}
 							</p>
 						</div>
 						<button
 							onClick={onClose}
-							className="p-1.5 sm:p-2 text-amber-600/60 hover:text-amber-700 hover:bg-orange-50/60 rounded-lg transition-colors flex-shrink-0"
+							className="p-1.5 sm:p-2 text-primary-600/60 hover:text-slate-600 hover:bg-primary-50/60 rounded-lg transition-colors flex-shrink-0"
 						>
 							<svg
 								className="w-4 h-4 sm:w-5 sm:h-5"
@@ -387,14 +387,14 @@ export default function AssignEmployeesModal({
 				<div className="flex-1 p-4 sm:p-5 lg:p-6 overflow-y-auto">
 					{loading ? (
 						<div className="flex items-center justify-center py-8 sm:py-12">
-							<div className="text-sm sm:text-base text-amber-600">{t("common.labels.loading") || "Loading..."}</div>
+							<div className="text-sm sm:text-base text-primary-600">{t("common.labels.loading") || "Loading..."}</div>
 						</div>
 					) : (
 						<>
 							{/* Filter Buttons */}
 							{employees.length > 0 && (
 								<div className="mb-4 sm:mb-5 flex flex-wrap items-center gap-2 sm:gap-3">
-									<span className="text-xs sm:text-sm font-medium text-amber-700/70">
+									<span className="text-xs sm:text-sm font-medium text-slate-600/70">
 										{t("modals.assignEmployees.filterBy") || "Filter by role:"}
 									</span>
 									<div className="flex items-center gap-2">
@@ -402,8 +402,8 @@ export default function AssignEmployeesModal({
 											onClick={() => setRoleFilter("all")}
 											className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
 												roleFilter === "all"
-													? "bg-orange-500 text-white shadow-md"
-													: "bg-white text-amber-700 border border-orange-200 hover:bg-orange-50"
+													? "bg-primary-500 text-white shadow-md"
+													: "bg-white text-slate-600 border border-primary-200 hover:bg-primary-50"
 											}`}
 										>
 											{t("modals.assignEmployees.all") || "All"}
@@ -434,7 +434,7 @@ export default function AssignEmployeesModal({
 							
 							<div className="space-y-2 sm:space-y-3">
 								{filteredEmployees.length === 0 ? (
-									<div className="text-center py-8 sm:py-12 text-xs sm:text-sm text-amber-700/70">
+									<div className="text-center py-8 sm:py-12 text-xs sm:text-sm text-slate-600/70">
 										{roleFilter === "all"
 											? t("modals.assignEmployees.noEmployees") || "No employees available"
 											: t("modals.assignEmployees.noEmployeesForRole") || `No ${roleFilter === "driver" ? "drivers" : "workers"} available`}
@@ -469,7 +469,7 @@ export default function AssignEmployeesModal({
 				</div>
 
 				{/* Footer */}
-				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-t border-orange-100/50 bg-gradient-to-r from-orange-50/50 to-amber-50/50">
+				<div className="flex-shrink-0 p-4 sm:p-5 lg:p-6 border-t border-primary-100/50 bg-gradient-to-r from-primary-50/50 to-primary-50/50">
 					<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3">
 						<button
 							onClick={onClose}

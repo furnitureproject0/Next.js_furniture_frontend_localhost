@@ -5,24 +5,16 @@ import { useTranslation } from "@/hooks/useTranslation";
 import CalendarDatePicker from "./CalendarDatePicker";
 import { servicesApi } from "@/lib/api";
 
-
-
 export default function SiteAdminOrdersFilter({ 
 	onFilterChange,
-	initialFilters = {} 
+	filters
 }) {
 	const { t, currentLanguage } = useTranslation();
 	const isRTL = currentLanguage === 'ar';
 	
-	const [filters, setFilters] = useState({
-		status: initialFilters.status || "all", 
-		search: initialFilters.search || "",
-		selectedDate: initialFilters.selectedDate || null,
-		service_id: initialFilters.service_id || "all",
-	});
-
 	const [services, setServices] = useState([]);
 	const [isLoadingServices, setIsLoadingServices] = useState(false);
+	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
 	useEffect(() => {
 		const fetchServices = async () => {
@@ -43,9 +35,7 @@ export default function SiteAdminOrdersFilter({
 	}, []);
 
 	const updateFilter = (key, value) => {
-		const newFilters = { ...filters, [key]: value };
-		setFilters(newFilters);
-		onFilterChange(newFilters);
+		onFilterChange({ ...filters, [key]: value });
 	};
 
 	const handleDateSelect = (date) => {
@@ -64,21 +54,9 @@ export default function SiteAdminOrdersFilter({
 
 	return (
 		<div className="space-y-4">
-			{/* Calendar Date Picker - Full Width */}
-			<div className="w-full">
-				<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 block">
-					{t("calendar.filterByDate") || "Filter by Date"}
-				</label>
-				<CalendarDatePicker
-					selectedDate={filters.selectedDate}
-					onDateSelect={handleDateSelect}
-					className="w-full"
-				/>
-			</div>
-
 			{/* Search Bar - Full Width */}
 			<div className="relative w-full">
-				<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 block">
+				<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1.5 block">
 					{t("siteAdmin.filters.search") || "Search"}
 				</label>
 				<div className="relative">
@@ -100,7 +78,7 @@ export default function SiteAdminOrdersFilter({
 						value={filters.search}
 						onChange={(e) => updateFilter("search", e.target.value)}
 						placeholder={t("siteAdmin.filters.searchPlaceholder") || "ID, Name, Address..."}
-						className={`w-full ${isRTL ? 'pr-10 pl-10' : 'pl-10 pr-10'} py-2.5 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white/80`}
+						className={`w-full ${isRTL ? 'pr-10 pl-10' : 'pl-10 pr-10'} py-2.5 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white/80`}
 						dir={isRTL ? 'rtl' : 'ltr'}
 					/>
 					{filters.search && (
@@ -120,13 +98,13 @@ export default function SiteAdminOrdersFilter({
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 				{/* Status Filter */}
 				<div>
-					<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 block">
+					<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1.5 block">
 						{t("siteAdmin.filters.status") || "Status"}
 					</label>
 					<select
 						value={filters.status}
 						onChange={(e) => updateFilter("status", e.target.value)}
-						className="w-full py-2.5 px-3 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white/80 text-amber-900 cursor-pointer"
+						className="w-full py-2.5 px-3 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white/80 text-slate-800 cursor-pointer"
 					>
 						{orderStatuses.map(status => (
 							<option key={status.value} value={status.value}>
@@ -138,14 +116,14 @@ export default function SiteAdminOrdersFilter({
 
 				{/* Service Filter */}
 				<div>
-					<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 block">
+					<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-1.5 block">
 						{t("siteAdmin.filters.service") || "Service"}
 					</label>
 					<select
 						value={filters.service_id}
 						onChange={(e) => updateFilter("service_id", e.target.value)}
 						disabled={isLoadingServices}
-						className="w-full py-2.5 px-3 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white/80 text-amber-900 disabled:opacity-50 cursor-pointer"
+						className="w-full py-2.5 px-3 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white/80 text-slate-800 disabled:opacity-50 cursor-pointer"
 					>
 						<option value="all">{t("common.allServices") || "All Services"}</option>
 						{services.map(service => (

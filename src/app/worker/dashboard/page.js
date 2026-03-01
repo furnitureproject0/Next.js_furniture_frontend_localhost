@@ -49,16 +49,16 @@ export default function WorkerDashboard() {
 	}
 
 	return (
-		<div className="min-h-screen" style={{ background: "#FFF8F3" }}>
+		<div className="min-h-screen" style={{ background: "#FFFFFF" }}>
 			<div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
 				{/* Page Header */}
 				<div className="mb-4 sm:mb-6 lg:mb-8">
 					<div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
 						<div className="flex-1 min-w-0">
-							<h1 className="text-2xl sm:text-3xl font-bold text-amber-900 mb-1 sm:mb-2">
+							<h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
 								{t("dashboards.worker.title") || "Worker Dashboard"}
 							</h1>
-							<p className="text-sm sm:text-base text-amber-700/70">
+							<p className="text-sm sm:text-base text-slate-600/70">
 								{t("dashboards.worker.subtitle") || "Manage your job assignments and tasks"}
 							</p>
 						</div>
@@ -66,7 +66,7 @@ export default function WorkerDashboard() {
 						<div className="flex sm:flex-col sm:text-right gap-4 sm:gap-0">
 							<div className="flex items-center gap-2 sm:gap-3 sm:mb-2">
 								<svg
-									className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600 flex-shrink-0"
+									className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600 flex-shrink-0"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -79,19 +79,19 @@ export default function WorkerDashboard() {
 									/>
 								</svg>
 								<div>
-									<p className="text-xs sm:text-sm text-orange-600/60">
+									<p className="text-xs sm:text-sm text-primary-600/60">
 										{t("dashboards.worker.rating") || "Rating"}
 									</p>
-									<p className="text-xl sm:text-2xl font-bold text-amber-900">
+									<p className="text-xl sm:text-2xl font-bold text-slate-800">
 										4.8
 									</p>
 								</div>
 							</div>
 							<div className="flex flex-wrap gap-1.5 sm:gap-2">
-								<span className="px-2 sm:px-3 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full border border-orange-200 whitespace-nowrap">
+								<span className="px-2 sm:px-3 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full border border-primary-200 whitespace-nowrap">
 									{t("dashboards.worker.furnitureAssembly") || "Furniture Assembly"}
 								</span>
-								<span className="px-2 sm:px-3 py-1 text-xs font-medium bg-orange-100 text-orange-800 rounded-full border border-orange-200 whitespace-nowrap">
+								<span className="px-2 sm:px-3 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full border border-primary-200 whitespace-nowrap">
 									{t("dashboards.worker.packing") || "Packing"}
 								</span>
 							</div>
@@ -104,7 +104,7 @@ export default function WorkerDashboard() {
 
 				{/* Assignments List */}
 				<div>
-					<h2 className="text-lg sm:text-xl font-semibold text-amber-900 mb-3 sm:mb-4">
+					<h2 className="text-lg sm:text-xl font-semibold text-slate-800 mb-3 sm:mb-4">
 						{t("employee.assignments.title") || "My Assignments"}
 					</h2>
 					<AssignmentsList

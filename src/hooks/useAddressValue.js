@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { formatAddress } from '@/utils/geocoding';
 
 /**
  * Hook for managing address input value and user interaction states
@@ -25,7 +26,7 @@ export const useAddressValue = ({ value, onChange }) => {
 
     const handleResultSelect = (place) => {
         setIsSelectingResult(true);
-        const selectedAddress = place.display_name;
+        const selectedAddress = formatAddress(place);
         setDisplayValue(selectedAddress);
         lastSelectedValue.current = selectedAddress;
         onChange(selectedAddress, place);

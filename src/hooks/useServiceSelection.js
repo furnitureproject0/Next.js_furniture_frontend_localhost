@@ -23,11 +23,17 @@ export function useServiceSelection(formData, setFormData) {
 				delete newAdditions[service.id];
 				delete newPricing[service.id];
 			} else {
-				// Initialize pricing for new service
+				// Initialize pricing for new service with dynamic fields
 				newPricing[service.id] = {
+					pricingType: 'hourly', // Default
 					minHours: 1,
 					maxHours: 2,
 					pricePerHour: 50,
+					flatRatePrice: 0,
+					maxPrice: 0,
+					priceProM3: 0,
+					meters: 0,
+					discount: 0,
 					additions: {},
 				};
 			}
@@ -59,7 +65,7 @@ export function useServiceSelection(formData, setFormData) {
 				...prev.servicePricing,
 				[serviceId]: {
 					...prev.servicePricing[serviceId],
-					[field]: field === 'notes' ? value : (Number(value) || 0),
+					[field]: field === 'notes' || field === 'pricingType' ? value : (Number(value) || 0),
 				},
 			},
 		}));
@@ -120,10 +126,28 @@ export function useServiceSelection(formData, setFormData) {
 
 	const calculateServiceTotal = useCallback((serviceId) => {
 		const pricing = formData.servicePricing?.[serviceId];
-		if (!pricing) return 0;
+		if (!pricing) return { min: 0, max: 0 };
 		
-		const avgHours = (pricing.minHours + pricing.maxHours) / 2;
-		const serviceTotal = avgHours * pricing.pricePerHour;
+		let subtotalMin = 0;
+		let subtotalMax = 0;
+		const type = pricing.pricingType || 'hourly';
+
+		switch (type) {
+			case 'flat_rate':
+				subtotalMin = subtotalMax = pricing.flatRatePrice || 0;
+				break;
+			case 'max_price':
+				subtotalMin = subtotalMax = pricing.maxPrice || 0;
+				break;
+			case 'pro_m3':
+				subtotalMin = subtotalMax = (pricing.priceProM3 || 0) * (pricing.meters || 0);
+				break;
+			case 'hourly':
+			default:
+				subtotalMin = (pricing.minHours || 0) * (pricing.pricePerHour || 0);
+				subtotalMax = (pricing.maxHours || 0) * (pricing.pricePerHour || 0);
+				break;
+		}
 		
 		let additionsTotal = 0;
 		if (pricing.additions) {
@@ -132,13 +156,22 @@ export function useServiceSelection(formData, setFormData) {
 			});
 		}
 		
-		return serviceTotal + additionsTotal;
+		const discount = pricing.discount || 0;
+		
+		return {
+			min: Math.max(0, subtotalMin + additionsTotal - discount),
+			max: Math.max(0, subtotalMax + additionsTotal - discount)
+		};
 	}, [formData.servicePricing]);
 
 	const calculateGrandTotal = useCallback(() => {
 		return formData.services.reduce((total, serviceId) => {
-			return total + calculateServiceTotal(serviceId);
-		}, 0);
+			const st = calculateServiceTotal(serviceId);
+			return {
+				min: total.min + st.min,
+				max: total.max + st.max
+			};
+		}, { min: 0, max: 0 });
 	}, [formData.services, calculateServiceTotal]);
 
 	return {

@@ -13,17 +13,31 @@ const notificationsSlice = createSlice({
 			const notification = action.payload;
 			// Check if notification already exists (prevent duplicates)
 			const exists = state.items.find((n) => n.id === notification.id);
+			
+			const parsePayload = (p) => {
+				if (typeof p === 'string') {
+					try {
+						return JSON.parse(p);
+					} catch (e) {
+						return {};
+					}
+				}
+				return p || {};
+			};
+
+			const normalizedNotification = {
+				...notification,
+				read: !!(notification.is_read || notification.read || notification.read_at),
+				is_read: !!(notification.is_read || notification.read || notification.read_at),
+				show: notification.show !== undefined ? notification.show : true,
+				userId: notification.user_id || notification.userId,
+				user_id: notification.user_id || notification.userId,
+				companyId: notification.company_id || notification.companyId,
+				company_id: notification.company_id || notification.companyId,
+				payload: parsePayload(notification.payload),
+			};
+
 			if (!exists) {
-				// Normalize notification structure
-				const normalizedNotification = {
-					...notification,
-					read: notification.is_read || notification.read || false,
-					is_read: notification.is_read || notification.read || false,
-					show: notification.show !== undefined ? notification.show : true,
-					userId: notification.user_id || notification.userId,
-					companyId: notification.company_id || notification.companyId,
-					payload: notification.payload || {},
-				};
 				state.items.unshift(normalizedNotification);
 			} else {
 				// Update existing notification
@@ -31,13 +45,39 @@ const notificationsSlice = createSlice({
 				if (index !== -1) {
 					state.items[index] = {
 						...state.items[index],
-						...notification,
-						read: notification.is_read !== undefined ? notification.is_read : state.items[index].read,
-						is_read: notification.is_read !== undefined ? notification.is_read : state.items[index].is_read,
-						show: notification.show !== undefined ? notification.show : state.items[index].show,
+						...normalizedNotification
 					};
 				}
 			}
+		},
+
+		// Set notifications (for fetching from API)
+		setNotifications: (state, action) => {
+			const notifications = action.payload || [];
+			
+			const parsePayload = (p) => {
+				if (typeof p === 'string') {
+					try {
+						return JSON.parse(p);
+					} catch (e) {
+						return {};
+					}
+				}
+				return p || {};
+			};
+
+			// Normalize all notifications
+			state.items = notifications.map((notif) => ({
+				...notif,
+				read: !!(notif.is_read || notif.read || notif.read_at),
+				is_read: !!(notif.is_read || notif.read || notif.read_at),
+				show: notif.show !== undefined ? notif.show : true,
+				userId: notif.user_id || notif.userId,
+				user_id: notif.user_id || notif.userId,
+				companyId: notif.company_id || notif.companyId,
+				company_id: notif.company_id || notif.company_id,
+				payload: parsePayload(notif.payload),
+			}));
 		},
 
 		// Mark a notification as read
@@ -48,28 +88,13 @@ const notificationsSlice = createSlice({
 				notif.is_read = true;
 			}
 		},
-		
+
 		// Mark all notifications as read
 		markAllAsRead: (state) => {
 			state.items.forEach((n) => {
 				n.read = true;
 				n.is_read = true;
 			});
-		},
-		
-		// Set notifications (for fetching from API)
-		setNotifications: (state, action) => {
-			const notifications = action.payload || [];
-			// Normalize all notifications
-			state.items = notifications.map((notif) => ({
-				...notif,
-				read: notif.is_read || notif.read || false,
-				is_read: notif.is_read || notif.read || false,
-				show: notif.show !== undefined ? notif.show : true,
-				userId: notif.user_id || notif.userId,
-				companyId: notif.company_id || notif.companyId,
-				payload: notif.payload || {},
-			}));
 		},
 
 		// Hide a notification

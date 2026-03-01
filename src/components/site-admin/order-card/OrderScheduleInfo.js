@@ -17,11 +17,11 @@ export default function OrderScheduleInfo({ order, t }) {
 	if (!order.preferred_date && !order.number_of_rooms) return null;
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-amber-50/50 rounded-lg">
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-primary-50/50 rounded-lg">
 			{order.preferred_date && (
 				<div className="flex items-start gap-2">
 					<svg
-						className="w-4 h-4 text-amber-600/70 mt-0.5 flex-shrink-0"
+						className="w-4 h-4 text-primary-600/70 mt-0.5 flex-shrink-0"
 						fill="none"
 						stroke="currentColor"
 						viewBox="0 0 24 24"
@@ -34,10 +34,10 @@ export default function OrderScheduleInfo({ order, t }) {
 						/>
 					</svg>
 					<div>
-						<p className="text-xs text-amber-600/70 uppercase tracking-wide">
+						<p className="text-xs text-primary-600/70 uppercase tracking-wide">
 							{t("orderDetails.schedule")}
 						</p>
-						<p className="text-sm text-amber-900 font-medium">
+						<p className="text-sm text-slate-800 font-medium">
 							{formatDate(order.preferred_date)}
 							{order.preferred_time && ` at ${formatTime(order.preferred_time)}`}
 						</p>
@@ -47,7 +47,7 @@ export default function OrderScheduleInfo({ order, t }) {
 			{order.number_of_rooms && (
 				<div className="flex items-start gap-2">
 					<svg
-						className="w-4 h-4 text-amber-600/70 mt-0.5 flex-shrink-0"
+						className="w-4 h-4 text-primary-600/70 mt-0.5 flex-shrink-0"
 						fill="none"
 						stroke="currentColor"
 						viewBox="0 0 24 24"
@@ -60,10 +60,10 @@ export default function OrderScheduleInfo({ order, t }) {
 						/>
 					</svg>
 					<div>
-						<p className="text-xs text-amber-600/70 uppercase tracking-wide">
+						<p className="text-xs text-primary-600/70 uppercase tracking-wide">
 							{t("orderDetails.roomConfiguration")}
 						</p>
-						<p className="text-sm text-amber-900 font-medium">
+						<p className="text-sm text-slate-800 font-medium">
 							{order.number_of_rooms} {t("common.labels.rooms")}
 						</p>
 					</div>

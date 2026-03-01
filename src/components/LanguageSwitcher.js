@@ -85,7 +85,7 @@ export default function LanguageSwitcher() {
 				/>
 				<div
 					ref={dropdownRef}
-					className="fixed w-40 sm:w-44 bg-white rounded-lg shadow-xl border border-orange-200/60 overflow-hidden z-[9999]"
+					className="fixed w-40 sm:w-44 bg-white rounded-lg shadow-xl border border-primary-200/60 overflow-hidden z-[9999]"
 					style={{
 						top: `${dropdownPosition.top}px`,
 						left: dropdownPosition.left !== undefined ? `${dropdownPosition.left}px` : undefined,
@@ -102,20 +102,20 @@ export default function LanguageSwitcher() {
 									e.stopPropagation();
 									handleLanguageChange(lang.code);
 								}}
-								className={`w-full px-2.5 sm:px-3 py-2 sm:py-2.5 text-left flex items-center gap-2 sm:gap-3 hover:bg-orange-50/60 transition-colors cursor-pointer ${
+								className={`w-full px-2.5 sm:px-3 py-2 sm:py-2.5 text-left flex items-center gap-2 sm:gap-3 hover:bg-primary-50/60 transition-colors cursor-pointer ${
 									currentLanguage === lang.code
-										? "bg-gradient-to-r from-orange-50/80 to-amber-50/80 text-orange-700 font-medium border-l-2 border-orange-500"
-										: "text-amber-900"
+										? "bg-gradient-to-r from-primary-50/80 to-primary-50/80 text-primary-700 font-medium border-l-2 border-primary-500"
+										: "text-slate-800"
 								}`}
 							>
 								<span className="text-lg sm:text-xl">{lang.flag}</span>
 								<div className="flex-1 min-w-0">
 									<div className="text-xs sm:text-sm font-medium truncate">{lang.nativeName}</div>
-									<div className="text-[10px] sm:text-xs text-amber-700/70 truncate">{lang.name}</div>
+									<div className="text-[10px] sm:text-xs text-slate-600/70 truncate">{lang.name}</div>
 								</div>
 								{currentLanguage === lang.code && (
 									<svg
-										className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-600 flex-shrink-0"
+										className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-600 flex-shrink-0"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -142,7 +142,7 @@ export default function LanguageSwitcher() {
 			<button
 				ref={buttonRef}
 				onClick={handleToggle}
-				className="flex items-center justify-center p-1.5 sm:p-2 rounded-lg transition-all duration-200 text-amber-700 hover:bg-orange-50/60 hover:text-orange-700 border border-orange-200/40 hover:border-orange-300/60 bg-gradient-to-br from-orange-50/60 to-amber-50/60 hover:from-orange-50/80 hover:to-amber-50/80 shadow-sm hover:shadow-md cursor-pointer"
+				className="flex items-center justify-center p-1.5 sm:p-2 rounded-lg transition-all duration-200 text-slate-600 hover:bg-primary-50/60 hover:text-primary-700 border border-primary-200/40 hover:border-primary-300/60 bg-gradient-to-br from-primary-50/60 to-primary-50/60 hover:from-primary-50/80 hover:to-primary-50/80 shadow-sm hover:shadow-md cursor-pointer"
 				title={currentLang.name}
 			>
 				<span className="text-base sm:text-lg">{currentLang.flag}</span>

@@ -12,7 +12,7 @@ const JobCard = ({ job, onViewJob }) => {
 			case "scheduled":
 				return "bg-blue-100 text-blue-800 border-blue-200";
 			case "in-progress":
-				return "bg-orange-100 text-orange-800 border-orange-200";
+				return "bg-sky-100 text-sky-800 border-sky-200";
 			case "completed":
 				return "bg-green-100 text-green-800 border-green-200";
 			default:

@@ -15,7 +15,7 @@ export function ProgressStepper({ currentStep, totalSteps, stepTitles }) {
 
 					{/* Active Progress Line */}
 					<div
-						className="absolute top-3 sm:top-4 left-6 sm:left-8 h-0.5 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full transition-all duration-500 ease-out"
+						className="absolute top-3 sm:top-4 left-6 sm:left-8 h-0.5 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full transition-all duration-500 ease-out"
 						style={{
 							width: `calc(${
 								((currentStep - 1) / (totalSteps - 1)) * 100
@@ -35,7 +35,7 @@ export function ProgressStepper({ currentStep, totalSteps, stepTitles }) {
 										step < currentStep
 											? "bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg"
 											: step === currentStep
-											? "bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-xl ring-2 sm:ring-4 ring-orange-100"
+											? "bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-xl ring-2 sm:ring-4 ring-primary-100"
 											: "bg-white border-2 border-gray-300 text-gray-500 shadow-sm"
 									}`}
 								>
@@ -51,7 +51,7 @@ export function ProgressStepper({ currentStep, totalSteps, stepTitles }) {
 									<div
 										className={`text-[10px] sm:text-xs font-medium transition-all duration-300 leading-tight ${
 											step === currentStep
-												? "text-orange-700 font-semibold"
+												? "text-primary-700 font-semibold"
 												: step < currentStep
 												? "text-green-600"
 												: "text-gray-400"
@@ -67,12 +67,12 @@ export function ProgressStepper({ currentStep, totalSteps, stepTitles }) {
 			</div>
 
 			{/* Current Step Indicator */}
-			<div className="flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-orange-50 to-amber-50 rounded-full border border-orange-100">
-				<div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full animate-pulse"></div>
-				<span className="text-xs sm:text-sm font-medium text-orange-700 truncate max-w-[120px] sm:max-w-none">
+			<div className="flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-50 to-primary-50 rounded-full border border-primary-100">
+				<div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary-500 rounded-full animate-pulse"></div>
+				<span className="text-xs sm:text-sm font-medium text-primary-700 truncate max-w-[120px] sm:max-w-none">
 					{stepTitles[currentStep - 1]}
 				</span>
-				<span className="text-[10px] sm:text-xs text-orange-500 font-medium">
+				<span className="text-[10px] sm:text-xs text-primary-500 font-medium">
 					({currentStep}/{totalSteps})
 				</span>
 			</div>

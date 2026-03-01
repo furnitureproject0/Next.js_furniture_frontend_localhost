@@ -44,7 +44,7 @@ export const fetchCustomerOrders = createAsyncThunk(
 			ordersData.forEach((order) => {
 				(order.orderServices || []).forEach((os) => {
 					(os.orderServiceAdditions || os.additions || []).forEach((osa) => {
-						const additionId = osa.addition?.id || osa.addition_id;
+						const additionId = osa.Addition?.id || osa.addition?.id || osa.addition_id;
 						if (additionId) {
 							additionIds.add(additionId);
 						}
@@ -120,15 +120,17 @@ export const fetchCustomerOrders = createAsyncThunk(
 							serviceName: os.service?.name || "Unknown Service",
 							status: os.status,
 							assignedCompanyId: os.company_id,
-							assignedCompanyName: os.company?.name,
+							assignedCompanyName: os.company?.name || os.assignedCompanyName,
+							preferred_date: os.preferred_date,
+							preferred_time: os.preferred_time,
 							offer: transformedOffer, // Latest offer for card display (one offer per service)
 							offers: transformedOffers, // All offers for modal display
 							additions: (os.orderServiceAdditions || os.additions || []).map(osa => {
-								const additionId = osa.addition?.id || osa.addition_id;
+								const additionId = osa.Addition?.id || osa.addition?.id || osa.addition_id;
 								const additionDetails = additionsMap.get(additionId);
 								return {
 									id: additionId || osa.id,
-									name: additionDetails?.name || osa.addition?.name || osa.addition?.title || "Unknown Addition",
+									name: additionDetails?.name || osa.Addition?.name || osa.addition?.name || osa.addition?.title || "Unknown Addition",
 									note: osa.note || "",
 								};
 							}),
@@ -176,6 +178,20 @@ export const fetchCustomerOrders = createAsyncThunk(
 						addresses: {
 							from: order.location?.address || order.fromAddress || "",
 							to: order.destinationLocation?.address || order.destination_location?.address || order.toAddress || null,
+							details: {
+								from: {
+									locationType: order.location?.location_type || order.location?.locationType,
+									floor: order.location?.floor,
+									area: order.location?.area,
+									hasElevator: order.location?.has_elevator || order.location?.hasElevator,
+								},
+								to: {
+									locationType: (order.destinationLocation || order.destination_location)?.location_type || (order.destinationLocation || order.destination_location)?.locationType,
+									floor: (order.destinationLocation || order.destination_location)?.floor,
+									area: (order.destinationLocation || order.destination_location)?.area,
+									hasElevator: (order.destinationLocation || order.destination_location)?.has_elevator || (order.destinationLocation || order.destination_location)?.hasElevator,
+								}
+							}
 						},
 						
 						// Services array extracted from orderServices (array of {id, name})
@@ -205,8 +221,9 @@ export const fetchCustomerOrders = createAsyncThunk(
 						
 						// Keep original API fields
 						status: order.status,
-						preferred_date: order.preferred_date,
-						preferred_time: order.preferred_time,
+						order_type: order.type || order.order_type || order.orderType,
+						preferred_date: order.execution_date || order.preferred_date,
+						preferred_time: order.execution_time || order.preferred_time,
 						number_of_rooms: order.number_of_rooms,
 						notes: order.notes,
 						createdAt: order.createdAt,
@@ -244,15 +261,24 @@ export const fetchSiteAdminOrders = createAsyncThunk(
 		try {
 			const response = await siteAdminApi.getOrders(filters);
 			
-			// Extract orders from API response structure: { success, message, data: { orders: [...] }, pagination: {...} }
-			const ordersData = response?.data?.orders || [];
+			// Extract orders from API response
+			// Backend getOrders returns: { success, data: [...orders], meta: {...} }
+			// OR: { success, data: { orders: [...] }, pagination: {...} }
+			let ordersData = [];
+			if (Array.isArray(response?.data)) {
+				ordersData = response.data;
+			} else if (response?.data?.orders) {
+				ordersData = response.data.orders;
+			} else if (Array.isArray(response)) {
+				ordersData = response;
+			}
 			
 			// Collect all unique addition IDs from all orders
 			const additionIds = new Set();
 			ordersData.forEach((order) => {
 				(order.orderServices || []).forEach((os) => {
 					(os.orderServiceAdditions || os.additions || []).forEach((osa) => {
-						const additionId = osa.addition?.id || osa.addition_id;
+						const additionId = osa.Addition?.id || osa.addition?.id || osa.addition_id;
 						if (additionId) {
 							additionIds.add(additionId);
 						}
@@ -352,9 +378,14 @@ export const fetchSiteAdminOrders = createAsyncThunk(
 							status: os.status,
 							company: os.company || null,
 							assignedCompanyId: os.company?.id || os.company_id || null,
+							assignedCompanyName: os.company?.name || null,
+							preferred_date: os.preferred_date,
+							preferred_time: os.preferred_time,
 							offer: transformedOffer,
 							offers: transformedOffers,
 							additions: serviceAdditions,
+							preferred_date: os.preferred_date,
+							preferred_time: os.preferred_time,
 						};
 					});
 					
@@ -392,6 +423,20 @@ export const fetchSiteAdminOrders = createAsyncThunk(
 						addresses: {
 							from: order.location?.address || order.fromAddress || "",
 							to: order.destinationLocation?.address || order.destination_location?.address || order.toAddress || null,
+							details: {
+								from: {
+									locationType: order.location?.location_type || order.location?.locationType,
+									floor: order.location?.floor,
+									area: order.location?.area,
+									hasElevator: order.location?.has_elevator || order.location?.hasElevator,
+								},
+								to: {
+									locationType: (order.destinationLocation || order.destination_location)?.location_type || (order.destinationLocation || order.destination_location)?.locationType,
+									floor: (order.destinationLocation || order.destination_location)?.floor,
+									area: (order.destinationLocation || order.destination_location)?.area,
+									hasElevator: (order.destinationLocation || order.destination_location)?.has_elevator || (order.destinationLocation || order.destination_location)?.hasElevator,
+								}
+							}
 						},
 						
 						// Services array extracted from orderServices (array of {id, name})
@@ -421,8 +466,9 @@ export const fetchSiteAdminOrders = createAsyncThunk(
 						
 						// Keep original API fields
 						status: order.status,
-						preferred_date: order.preferred_date,
-						preferred_time: order.preferred_time,
+						order_type: order.type || order.order_type || order.orderType,
+						preferred_date: order.execution_date || order.preferred_date,
+						preferred_time: order.execution_time || order.preferred_time,
 						number_of_rooms: order.number_of_rooms,
 						notes: order.notes,
 						images: order.images || [],
@@ -435,7 +481,7 @@ export const fetchSiteAdminOrders = createAsyncThunk(
 			
 			return {
 				orders: transformedOrders,
-				pagination: response?.pagination || response?.data?.pagination || null,
+				pagination: response?.pagination || response?.data?.pagination || response?.meta || null,
 			};
 		} catch (error) {
 			let errorMessage = "Failed to fetch orders. Please try again.";
@@ -450,6 +496,148 @@ export const fetchSiteAdminOrders = createAsyncThunk(
 				message: errorMessage,
 				status: error instanceof ApiError ? error.status : null,
 				data: error instanceof ApiError ? error.data : null,
+			});
+		}
+	},
+);
+
+// Thunk: Fetch order by ID
+export const fetchOrderById = createAsyncThunk(
+	"orders/fetchOrderById",
+	async (orderId, { getState, rejectWithValue }) => {
+		try {
+			const response = await siteAdminApi.getOrder(orderId);
+			const order = response?.data?.order || response?.data || response;
+			
+			if (!order) {
+				throw new Error("Order not found");
+			}
+
+			// Collect all unique addition IDs
+			const additionIds = new Set();
+			(order.orderServices || []).forEach((os) => {
+				(os.orderServiceAdditions || os.additions || []).forEach((osa) => {
+					const additionId = osa.Addition?.id || osa.addition?.id || osa.addition_id;
+					if (additionId) {
+						additionIds.add(additionId);
+					}
+				});
+			});
+			
+			// Fetch all addition details in parallel
+			const additionsMap = new Map();
+			await Promise.all(
+				Array.from(additionIds).map(async (additionId) => {
+					try {
+						const additionResponse = await servicesApi.getAdditionById(additionId);
+						if (additionResponse?.success && additionResponse?.data?.addition) {
+							additionsMap.set(additionId, additionResponse.data.addition);
+						} else if (additionResponse?.data) {
+							additionsMap.set(additionId, additionResponse.data);
+						} else if (additionResponse) {
+							additionsMap.set(additionId, additionResponse);
+						}
+					} catch (error) {
+						console.warn(`Failed to fetch addition ${additionId}:`, error);
+					}
+				})
+			);
+			
+			// Transform services and additions
+			const servicesWithAdditions = (order.orderServices || []).map(os => {
+				const latestOffer = os.offers?.[0] || null;
+				const transformedOffer = latestOffer ? {
+					id: latestOffer.id,
+					status: latestOffer.status || "pending",
+					hourly_rate: latestOffer.hourly_rate,
+					currency: latestOffer.currency || "CHF",
+					min_hours: latestOffer.min_hours,
+					max_hours: latestOffer.max_hours,
+					notes: latestOffer.notes || "",
+					date: latestOffer.date || null,
+					time: latestOffer.time || null,
+					createdAt: latestOffer.createdAt,
+					updatedAt: latestOffer.updatedAt,
+				} : null;
+				
+				const transformedAdditions = (os.orderServiceAdditions || os.additions || []).map(osa => {
+					const additionId = osa.Addition?.id || osa.addition?.id || osa.addition_id;
+					const additionDetails = additionsMap.get(additionId);
+					return {
+						id: osa.id,
+						additionId: additionId,
+						name: additionDetails?.name || osa.Addition?.name || osa.addition?.name || "Unknown Addition",
+						note: osa.note || "",
+					};
+				});
+				
+				return {
+					id: os.id,
+					serviceId: os.service?.id || os.service_id,
+					serviceName: os.service?.name || "Unknown Service",
+					status: os.status,
+					company_id: os.company_id,
+					assignedCompanyName: os.company?.name || null,
+					offer: transformedOffer,
+					offers: os.offers || [],
+					additions: transformedAdditions,
+					preferred_date: os.preferred_date || order.execution_date || order.preferred_date,
+					preferred_time: os.preferred_time || order.execution_time || order.preferred_time,
+				};
+			});
+
+			// Address fields
+			const fromAddress = order.location?.address || order.fromAddress || "";
+			const toAddress = order.destinationLocation?.address || (order.destination_location && typeof order.destination_location === 'object' ? order.destination_location.address : null) || order.toAddress || null;
+
+			// Final transformed order
+			const transformedOrder = {
+				...order,
+				id: order.id,
+				customerId: order.client_id || order.customerId,
+				customerName: order.client?.name || order.customerName || "Unknown",
+				fromAddress,
+				toAddress,
+				addresses: {
+					from: fromAddress,
+					to: toAddress,
+					details: {
+						from: {
+							locationType: order.location?.location_type || order.location?.locationType,
+							floor: order.location?.floor,
+							area: order.location?.area,
+							hasElevator: order.location?.has_elevator || order.location?.hasElevator,
+						},
+						to: {
+							locationType: (order.destinationLocation || order.destination_location)?.location_type || (order.destinationLocation || order.destination_location)?.locationType,
+							floor: (order.destinationLocation || order.destination_location)?.floor,
+							area: (order.destinationLocation || order.destination_location)?.area,
+							hasElevator: (order.destinationLocation || order.destination_location)?.has_elevator || (order.destinationLocation || order.destination_location)?.hasElevator,
+						}
+					}
+				},
+				order_type: order.type || order.order_type || order.orderType,
+				preferred_date: order.execution_date || order.preferred_date,
+				preferred_time: order.execution_time || order.preferred_time,
+				status: order.status,
+				notes: order.notes,
+				images: order.images || [],
+				history: (order.timeline || []).map(timelineItem => ({
+					id: timelineItem.id,
+					type: timelineItem.status || timelineItem.type || "status_change",
+					byRole: timelineItem.by_role || "system",
+					byUserId: timelineItem.by_user_id || null,
+					at: timelineItem.createdAt || timelineItem.at,
+					payload: timelineItem.payload || { message: timelineItem.message },
+				})),
+				orderServices: servicesWithAdditions,
+			};
+
+			return transformedOrder;
+		} catch (error) {
+			return rejectWithValue({
+				message: error.data?.message || error.message || "Failed to fetch order",
+				status: error.status,
 			});
 		}
 	}
@@ -496,6 +684,7 @@ export const createCustomerOrder = createAsyncThunk(
 						},
 					},
 				],
+				order_type: orderData.order_type || orderData.orderType,
 			};
 
 			return newOrder;
@@ -652,6 +841,8 @@ export const updateCustomerOrder = createAsyncThunk(
 							note: osa.note || "",
 						};
 					}),
+					preferred_date: os.preferred_date,
+					preferred_time: os.preferred_time,
 				};
 			});
 			
@@ -705,6 +896,7 @@ export const updateCustomerOrder = createAsyncThunk(
 					payload: timelineItem.payload || { message: timelineItem.message },
 				})) || orderData.history || [],
 				status: orderData.status,
+				order_type: orderData.order_type || orderData.orderType,
 				preferred_date: orderData.preferred_date,
 				preferred_time: orderData.preferred_time,
 				number_of_rooms: orderData.number_of_rooms,
@@ -815,6 +1007,7 @@ export const createSiteAdminOrder = createAsyncThunk(
 					},
 				},
 			],
+			order_type: orderInput.order_type || "order",
 		};
 
 		// Simulate API delay
@@ -888,6 +1081,7 @@ export const createCompanyAdminOrder = createAsyncThunk(
 				// Company assignment info
 				assignedCompanyId: companyId,
 				assignedCompanyName: companyName,
+				order_type: orderData.order_type || orderData.orderType,
 			};
 
 
@@ -973,7 +1167,7 @@ export const fetchCompanyAdminOrders = createAsyncThunk(
 			ordersData.forEach((order) => {
 				(order.orderServices || []).forEach((os) => {
 					(os.orderServiceAdditions || os.additions || []).forEach((osa) => {
-						const additionId = osa.addition?.id || osa.addition_id;
+						const additionId = osa.Addition?.id || osa.addition?.id || osa.addition_id;
 						if (additionId) {
 							additionIds.add(additionId);
 						}
@@ -1051,11 +1245,11 @@ export const fetchCompanyAdminOrders = createAsyncThunk(
 							offer: transformedOffer, // Latest offer for card display (one offer per service)
 							offers: transformedOffers, // All offers for modal display
 							additions: (os.orderServiceAdditions || os.additions || []).map(osa => {
-								const additionId = osa.addition?.id || osa.addition_id;
+								const additionId = osa.Addition?.id || osa.addition?.id || osa.addition_id;
 								const additionDetails = additionsMap.get(additionId);
 								return {
 									id: additionId || osa.id,
-									name: additionDetails?.name || osa.addition?.name || osa.addition?.title || "Unknown Addition",
+									name: additionDetails?.name || osa.Addition?.name || osa.addition?.name || osa.addition?.title || "Unknown Addition",
 									note: osa.note || "",
 								};
 							}),
@@ -1133,8 +1327,9 @@ export const fetchCompanyAdminOrders = createAsyncThunk(
 						
 						// Keep original API fields
 						status: order.status,
-						preferred_date: order.preferred_date,
-						preferred_time: order.preferred_time,
+						order_type: order.type || order.order_type || order.orderType,
+						preferred_date: order.execution_date || order.preferred_date,
+						preferred_time: order.execution_time || order.preferred_time,
 						number_of_rooms: order.number_of_rooms,
 						notes: order.notes,
 						createdAt: order.createdAt,
@@ -1446,6 +1641,9 @@ export const cancelOrder = createAsyncThunk(
 		}
 	},
 );
+
+// Alias for compatibility with component imports
+export const cancelOrderThunk = cancelOrder;
 
 const initialState = {
 	orders: [],
@@ -1916,6 +2114,23 @@ const ordersSlice = createSlice({
 				}
 			})
 			.addCase(cancelOffer.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.payload?.message || action.error.message;
+			})
+			.addCase(fetchOrderById.pending, (state) => {
+				state.isLoading = true;
+				state.error = null;
+			})
+			.addCase(fetchOrderById.fulfilled, (state, action) => {
+				state.isLoading = false;
+				const orderIndex = state.orders.findIndex((o) => o.id === action.payload.id);
+				if (orderIndex !== -1) {
+					state.orders[orderIndex] = action.payload;
+				} else {
+					state.orders.push(action.payload);
+				}
+			})
+			.addCase(fetchOrderById.rejected, (state, action) => {
 				state.isLoading = false;
 				state.error = action.payload?.message || action.error.message;
 			});

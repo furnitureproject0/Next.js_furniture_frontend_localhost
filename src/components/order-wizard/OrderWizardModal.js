@@ -55,13 +55,13 @@ export default function OrderWizardModal({
 		<div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm">
 			<div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col">
 				{/* Header */}
-				<div className="flex flex-col border-b border-orange-100">
+				<div className="flex flex-col border-b border-primary-100">
 					<div className="flex items-center justify-between p-4 sm:p-5 lg:p-6 pb-2 sm:pb-3">
 						<div className="flex-1 min-w-0 pr-2">
-							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-amber-900 truncate">
+							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 truncate">
 								{t("orderSteps.createNewOrder")}
 							</h2>
-							<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">
+							<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
 								{t("orderSteps.stepOf", { 
 									current: currentStep, 
 									total: totalSteps, 
@@ -71,9 +71,9 @@ export default function OrderWizardModal({
 						</div>
 						<button
 							onClick={handleRequestClose}
-							className="p-1.5 sm:p-2 hover:bg-orange-50 rounded-lg transition-colors flex-shrink-0"
+							className="p-1.5 sm:p-2 hover:bg-primary-50 rounded-lg transition-colors flex-shrink-0"
 						>
-							<svg className="w-5 h-5 sm:w-6 sm:h-6 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<svg className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 							</svg>
 						</button>
@@ -95,7 +95,7 @@ export default function OrderWizardModal({
 								key={index}
 								className={`text-[10px] sm:text-xs font-medium truncate ${
 									index + 1 === currentStep
-										? "text-orange-600"
+										? "text-primary-600"
 										: index + 1 < currentStep
 										? "text-green-600"
 										: "text-gray-400"
@@ -109,7 +109,7 @@ export default function OrderWizardModal({
 					</div>
 					<div className="h-1.5 sm:h-2 bg-gray-200 rounded-full overflow-hidden">
 						<div
-							className="h-full bg-gradient-to-r from-orange-500 to-amber-600 transition-all duration-300"
+							className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-300"
 							style={{ width: `${(currentStep / totalSteps) * 100}%` }}
 						/>
 					</div>
@@ -121,11 +121,11 @@ export default function OrderWizardModal({
 				</div>
 
 				{/* Footer */}
-				<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0 p-4 sm:p-5 lg:p-6 border-t border-orange-100 bg-orange-50/30">
+				<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0 p-4 sm:p-5 lg:p-6 border-t border-primary-100 bg-primary-50/30">
 					<button
 						onClick={handleBack}
 						disabled={currentStep === 1}
-						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-amber-700 hover:text-amber-900 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2"
+						className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-slate-600 hover:text-slate-800 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2"
 					>
 						<svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -136,7 +136,7 @@ export default function OrderWizardModal({
 					<div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
 						<button
 							onClick={handleRequestClose}
-							className="flex-1 sm:flex-none px-4 sm:px-6 py-2 text-xs sm:text-sm text-amber-700 hover:text-amber-900 font-medium transition-colors"
+							className="flex-1 sm:flex-none px-4 sm:px-6 py-2 text-xs sm:text-sm text-slate-600 hover:text-slate-800 font-medium transition-colors"
 						>
 							{t("common.buttons.cancel")}
 						</button>
@@ -183,16 +183,16 @@ export default function OrderWizardModal({
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
 							</svg>
 						</div>
-						<h3 className="text-xl font-bold text-amber-900 mb-2">
+						<h3 className="text-xl font-bold text-slate-800 mb-2">
 							{t("orderWizard.cancelConfirmTitle") || "Cancel Order Creation?"}
 						</h3>
-						<p className="text-amber-700/70 mb-6">
+						<p className="text-slate-600/70 mb-6">
 							{t("orderWizard.cancelConfirmBody") || "Are you sure you want to cancel? All progress will be lost."}
 						</p>
 						<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
 							<button
 								onClick={() => setShowCancelConfirm(false)}
-								className="px-6 py-2 border border-orange-200 text-amber-700 hover:bg-orange-50 rounded-lg transition-colors font-medium"
+								className="px-6 py-2 border border-primary-200 text-slate-600 hover:bg-primary-50 rounded-lg transition-colors font-medium"
 							>
 								{t("common.buttons.keepEditing") || "Keep Editing"}
 							</button>

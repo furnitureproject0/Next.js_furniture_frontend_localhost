@@ -6,10 +6,10 @@ export default function FinanceStatsGrid({ stats }) {
 			{stats.map((stat, index) => (
 				<div
 					key={index}
-					className="bg-white/80 backdrop-blur-sm rounded-xl border border-orange-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300"
+					className="bg-white/80 backdrop-blur-sm rounded-xl border border-primary-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300"
 				>
 					<div className="flex items-center justify-between mb-3 sm:mb-4">
-						<div className="p-1.5 sm:p-2 bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg text-orange-600">
+						<div className="p-1.5 sm:p-2 bg-gradient-to-br from-primary-50 to-primary-50 rounded-lg text-primary-600">
 							{getIconByType(
 								stat.iconType || "revenue",
 								"w-5 h-5 sm:w-6 sm:h-6",
@@ -33,10 +33,10 @@ export default function FinanceStatsGrid({ stats }) {
 						</div>
 					</div>
 					<div>
-						<p className="text-xl sm:text-2xl font-bold text-amber-900">
+						<p className="text-xl sm:text-2xl font-bold text-slate-800">
 							{stat.value}
 						</p>
-						<p className="text-amber-700/70 text-xs sm:text-sm font-medium mt-0.5 sm:mt-1">
+						<p className="text-slate-600/70 text-xs sm:text-sm font-medium mt-0.5 sm:mt-1">
 							{stat.label}
 						</p>
 					</div>

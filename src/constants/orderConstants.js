@@ -120,7 +120,7 @@ export const STATUS_LABELS = {
 // Status colors for badges
 export const STATUS_COLORS = {
 	[ORDER_STATUSES.PENDING]: "bg-yellow-100 text-yellow-800 border-yellow-300",
-	[ORDER_STATUSES.IN_PROGRESS]: "bg-orange-100 text-orange-800 border-orange-300",
+	[ORDER_STATUSES.IN_PROGRESS]: "bg-sky-100 text-sky-800 border-sky-300",
 	[ORDER_STATUSES.PARTIALLY_DONE]: "bg-blue-100 text-blue-800 border-blue-300",
 	[ORDER_STATUSES.COMPLETED]: "bg-green-100 text-green-800 border-green-300",
 	[ORDER_STATUSES.CANCELLED]: "bg-red-100 text-red-800 border-red-300",

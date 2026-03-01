@@ -10,14 +10,14 @@ const EmploymentCard = ({ employment, onStatusChange, onViewDetails, role = "wor
 	const { toast } = useGlobalToast();
 	const [isProcessing, setIsProcessing] = useState(false);
 
-	// Use cream/orange theme to match project theme
+	// Use primary blue theme to match project theme
 	const themeColors = {
-		primary: "orange",
-		primaryText: "text-amber-900",
-		primaryBg: "bg-orange-100",
-		primaryBorder: "border-orange-200/40",
-		primaryButton: "from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700",
-		secondaryText: "text-amber-700",
+		primary: "primary",
+		primaryText: "text-slate-800",
+		primaryBg: "bg-primary-100",
+		primaryBorder: "border-primary-200/40",
+		primaryButton: "from-primary-500 to-primary-600 hover:from-primary-600 hover:to-slate-600",
+		secondaryText: "text-slate-600",
 	};
 
 	const getStatusColor = (status) => {
@@ -247,7 +247,7 @@ const EmploymentCard = ({ employment, onStatusChange, onViewDetails, role = "wor
 							e.stopPropagation();
 							onViewDetails?.(employment);
 						}}
-						className={`px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r ${themeColors.primaryButton} text-white rounded-lg text-xs sm:text-sm font-medium hover:from-orange-600 hover:to-amber-700 transition-all`}
+						className={`px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r ${themeColors.primaryButton} text-white rounded-lg text-xs sm:text-sm font-medium hover:from-primary-600 hover:to-slate-600 transition-all`}
 					>
 						{t("common.buttons.viewDetails") || "View Details"}
 					</button>

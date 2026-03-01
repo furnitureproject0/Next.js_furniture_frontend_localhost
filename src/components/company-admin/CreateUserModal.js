@@ -5,9 +5,9 @@ import { useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/selectors";
 import { companyAdminApi } from "@/lib/api";
 import { ApiError } from "@/lib/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
+export default function CreateUserModal({ isOpen, onClose, onUserCreated, companyId: propCompanyId }) {
 	const { t } = useTranslation();
 	const user = useAppSelector(selectUser);
 	const [formData, setFormData] = useState({
@@ -18,6 +18,17 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 	const [errors, setErrors] = useState({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [apiError, setApiError] = useState("");
+
+	const [error, setError] = useState(null);
+
+	// Use existing user variable
+	const companyId = propCompanyId || user?.company_id || user?.companyId;
+
+	useEffect(() => {
+		if (!companyId) {
+			setError("Company ID is required to create a user.");
+		}
+	}, [companyId]);
 
 	if (!isOpen) return null;
 
@@ -56,12 +67,11 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 			return;
 		}
 
-		// Get company ID from user
-		// const companyId = user?.company_id || user?.companyId;
-		// if (!companyId) {
-		// 	setApiError("Company ID not found. Please contact support.");
-		// 	return;
-		// }
+		const companyId = propCompanyId || user?.company_id || user?.companyId;
+		if (!companyId) {
+			setApiError("Company ID not found. Please contact support.");
+			return;
+		}
 
 		setIsSubmitting(true);
 		setApiError("");
@@ -75,7 +85,7 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 				phones: formData.phone.trim() ? [formData.phone.trim()] : [],
 			};
 
-			const response = await companyAdminApi.createClient(1, clientData);
+			const response = await companyAdminApi.createClient(companyId, clientData);
 
 			if (response?.success && response?.data) {
 				const createdClient = response.data;
@@ -166,21 +176,21 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 		<div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm">
 			<div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-md w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
 				{/* Header */}
-				<div className="flex items-center justify-between p-4 sm:p-5 lg:p-6 border-b border-orange-100">
+				<div className="flex items-center justify-between p-4 sm:p-5 lg:p-6 border-b border-primary-100">
 					<div className="flex-1 min-w-0 pr-2">
-						<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-amber-900 truncate">
+						<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 truncate">
 							{t("createUser.title")}
 						</h2>
-						<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">
+						<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
 							{t("createUser.subtitle")}
 						</p>
 					</div>
 					<button
 						onClick={handleClose}
-						className="p-1.5 sm:p-2 hover:bg-orange-50 rounded-lg transition-colors flex-shrink-0"
+						className="p-1.5 sm:p-2 hover:bg-primary-50 rounded-lg transition-colors flex-shrink-0"
 					>
 						<svg
-							className="w-5 h-5 sm:w-6 sm:h-6 text-amber-900"
+							className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -205,7 +215,7 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 					)}
 					{/* Name */}
 					<div>
-						<label className="block text-sm font-medium text-amber-800 mb-2">
+						<label className="block text-sm font-medium text-slate-700 mb-2">
 							{t("createUser.name")} <span className="text-red-500">*</span>
 						</label>
 						<input
@@ -215,8 +225,8 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 								setFormData((prev) => ({ ...prev, name: e.target.value }))
 							}
 							placeholder={t("createUser.namePlaceholder")}
-							className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-								errors.name ? "border-red-300" : "border-orange-200"
+							className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+								errors.name ? "border-red-300" : "border-primary-200"
 							}`}
 						/>
 						{errors.name && (
@@ -226,7 +236,7 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 
 					{/* Email */}
 					<div>
-						<label className="block text-sm font-medium text-amber-800 mb-2">
+						<label className="block text-sm font-medium text-slate-700 mb-2">
 							{t("createUser.email")} <span className="text-red-500">*</span>
 						</label>
 						<input
@@ -236,8 +246,8 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 								setFormData((prev) => ({ ...prev, email: e.target.value }))
 							}
 							placeholder={t("createUser.emailPlaceholder")}
-							className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-								errors.email ? "border-red-300" : "border-orange-200"
+							className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+								errors.email ? "border-red-300" : "border-primary-200"
 							}`}
 						/>
 						{errors.email && (
@@ -247,7 +257,7 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 
 					{/* Phone */}
 					<div>
-						<label className="block text-sm font-medium text-amber-800 mb-2">
+						<label className="block text-sm font-medium text-slate-700 mb-2">
 							{t("createUser.phone")}
 						</label>
 						<input
@@ -257,8 +267,8 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 								setFormData((prev) => ({ ...prev, phone: e.target.value }))
 							}
 							placeholder={t("createUser.phonePlaceholder")}
-							className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-								errors.phone ? "border-red-300" : "border-orange-200"
+							className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+								errors.phone ? "border-red-300" : "border-primary-200"
 							}`}
 						/>
 						{errors.phone && (
@@ -269,11 +279,11 @@ export default function CreateUserModal({ isOpen, onClose, onUserCreated }) {
 
 
 					{/* Footer */}
-					<div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-orange-100">
+					<div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-primary-100">
 						<button
 							type="button"
 							onClick={handleClose}
-							className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-amber-700 hover:text-amber-900 font-medium transition-colors"
+							className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-slate-600 hover:text-slate-800 font-medium transition-colors"
 						>
 							{t("common.buttons.cancel")}
 						</button>

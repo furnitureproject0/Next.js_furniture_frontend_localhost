@@ -26,8 +26,8 @@ export default function AdditionItem({
 				onClick={handleToggle}
 				className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg transition-all text-left ${
 					isSelected
-						? "bg-orange-500 text-white"
-						: "bg-gray-100 text-gray-700 hover:bg-orange-100"
+						? "bg-primary-500 text-white"
+						: "bg-gray-100 text-gray-700 hover:bg-primary-100"
 				}`}
 			>
 				{addition.name}
@@ -36,7 +36,7 @@ export default function AdditionItem({
 			{isSelected && showPricing && (
 				<div className="pl-2 grid grid-cols-2 gap-2">
 					<div>
-						<label className="block text-xs text-amber-700 mb-1">
+						<label className="block text-xs text-slate-600 mb-1">
 							{t("siteAdmin.pricing.price") || "Price"}
 						</label>
 						<input
@@ -49,11 +49,11 @@ export default function AdditionItem({
 								handlePricingChange('price', e.target.value);
 							}}
 							onClick={(e) => e.stopPropagation()}
-							className="w-full px-2 py-1.5 text-xs border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+							className="w-full px-2 py-1.5 text-xs border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
 						/>
 					</div>
 					<div>
-						<label className="block text-xs text-amber-700 mb-1">
+						<label className="block text-xs text-slate-600 mb-1">
 							{t("siteAdmin.pricing.amount") || "Amount"}
 						</label>
 						<input
@@ -66,7 +66,7 @@ export default function AdditionItem({
 								handlePricingChange('amount', e.target.value);
 							}}
 							onClick={(e) => e.stopPropagation()}
-							className="w-full px-2 py-1.5 text-xs border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+							className="w-full px-2 py-1.5 text-xs border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400"
 						/>
 					</div>
 					<div className="col-span-2 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded">

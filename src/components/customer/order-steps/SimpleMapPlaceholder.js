@@ -26,11 +26,11 @@ export default function SimpleMapPlaceholder({ address, title }) {
 	const fullAddress = address.fullAddress;
 
 	return (
-		<div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-white border border-orange-200 rounded-lg">
+		<div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-white border border-primary-200 rounded-lg">
 			<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 sm:mb-3 gap-2 sm:gap-0">
-				<h5 className="text-xs sm:text-sm font-medium text-amber-800 flex items-center gap-1.5 sm:gap-2">
+				<h5 className="text-xs sm:text-sm font-medium text-slate-700 flex items-center gap-1.5 sm:gap-2">
 					<svg 
-						className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 flex-shrink-0" 
+						className="w-4 h-4 sm:w-5 sm:h-5 text-primary-600 flex-shrink-0" 
 						fill="none" 
 						stroke="currentColor" 
 						viewBox="0 0 24 24"
@@ -50,13 +50,13 @@ export default function SimpleMapPlaceholder({ address, title }) {
 					</svg>
 					{title || t("mapPreview.locationPreview")}
 				</h5>
-				<span className="text-[10px] sm:text-xs text-amber-600 bg-orange-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
+				<span className="text-[10px] sm:text-xs text-primary-600 bg-primary-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
 					{t("mapPreview.preview")}
 				</span>
 			</div>
 
 			{/* Map Placeholder */}
-			<div className="relative w-full h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg overflow-hidden border border-orange-200">
+			<div className="relative w-full h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-primary-50 to-primary-50 rounded-lg overflow-hidden border border-primary-200">
 				{/* Grid pattern overlay to simulate map */}
 				<div className="absolute inset-0 opacity-20">
 					<svg width="100%" height="100%">
@@ -67,7 +67,7 @@ export default function SimpleMapPlaceholder({ address, title }) {
 									fill="none" 
 									stroke="currentColor" 
 									strokeWidth="0.5"
-									className="text-orange-400"
+									className="text-primary-400"
 								/>
 							</pattern>
 						</defs>
@@ -77,8 +77,8 @@ export default function SimpleMapPlaceholder({ address, title }) {
 
 				{/* Decorative "roads" */}
 				<div className="absolute inset-0">
-					<div className="absolute top-1/2 left-0 right-0 h-1 bg-orange-200/40 transform -translate-y-1/2"></div>
-					<div className="absolute top-0 bottom-0 left-1/2 w-1 bg-orange-200/40 transform -translate-x-1/2"></div>
+					<div className="absolute top-1/2 left-0 right-0 h-1 bg-primary-200/40 transform -translate-y-1/2"></div>
+					<div className="absolute top-0 bottom-0 left-1/2 w-1 bg-primary-200/40 transform -translate-x-1/2"></div>
 				</div>
 
 				{/* Center marker */}
@@ -86,13 +86,13 @@ export default function SimpleMapPlaceholder({ address, title }) {
 					<div className="relative">
 						{/* Pulsing circle animation */}
 						<div className="absolute inset-0 animate-ping">
-							<div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-400 rounded-full opacity-25"></div>
+							<div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-400 rounded-full opacity-25"></div>
 						</div>
 						
 						{/* Static marker */}
 						<div className="relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
 							<svg 
-								className="w-8 h-8 sm:w-10 sm:h-10 text-orange-600 drop-shadow-lg" 
+								className="w-8 h-8 sm:w-10 sm:h-10 text-primary-600 drop-shadow-lg" 
 								fill="currentColor" 
 								viewBox="0 0 24 24"
 							>
@@ -103,17 +103,17 @@ export default function SimpleMapPlaceholder({ address, title }) {
 				</div>
 
 				{/* Map label */}
-				<div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 bg-white/95 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-lg border border-orange-200/50">
-					<p className="text-[10px] sm:text-xs font-medium text-amber-900 mb-0.5 sm:mb-1">
+				<div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 bg-white/95 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-lg border border-primary-200/50">
+					<p className="text-[10px] sm:text-xs font-medium text-slate-800 mb-0.5 sm:mb-1">
 						📍 {title || t("mapPreview.location")}
 					</p>
-					<p className="text-[10px] sm:text-xs text-amber-700 line-clamp-2">
+					<p className="text-[10px] sm:text-xs text-slate-600 line-clamp-2">
 						{fullAddress}
 					</p>
 				</div>
 
 				{/* "OSM Integration Coming Soon" badge */}
-				<div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-orange-500 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-lg">
+				<div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-primary-500 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-lg">
 					{t("mapPreview.mapPreview")}
 				</div>
 			</div>

@@ -37,17 +37,17 @@ export default function OrderHeader({ order, t, onCancelOrder }) {
 	return (
 		<div className="flex items-center justify-between mb-4">
 			<div className="flex items-center gap-4">
-				<div className="w-12 h-12 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl flex items-center justify-center">
-					<span className="text-orange-600 font-bold text-sm">
+				<div className="w-12 h-12 bg-gradient-to-br from-primary-50 to-primary-50 rounded-xl flex items-center justify-center">
+					<span className="text-primary-600 font-bold text-sm">
 						{formatOrderIdShort(order.id)}
 					</span>
 				</div>
 				<div>
-					<h3 className="font-semibold text-amber-900 text-lg">
+					<h3 className="font-semibold text-slate-800 text-lg">
 						{formatOrderId(order.id)}
 					</h3>
 					<div className="flex items-center gap-2 mt-1">
-						<span className="text-sm text-amber-700/70">
+						<span className="text-sm text-slate-600/70">
 							{t("orderDetails.created")}: {formatDate(order.createdAt)}
 						</span>
 					</div>
@@ -68,7 +68,7 @@ export default function OrderHeader({ order, t, onCancelOrder }) {
 								e.stopPropagation();
 								setIsDropdownOpen(!isDropdownOpen);
 							}}
-							className="p-1.5 rounded-full hover:bg-orange-100/50 text-amber-900/60 transition-colors"
+							className="p-1.5 rounded-full hover:bg-primary-100/50 text-slate-800/60 transition-colors"
 						>
 							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -76,7 +76,7 @@ export default function OrderHeader({ order, t, onCancelOrder }) {
 						</button>
 						
 						{isDropdownOpen && (
-							<div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-orange-100 z-50 py-1 animate-in fade-in zoom-in-95 duration-100">
+							<div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-primary-100 z-50 py-1 animate-in fade-in zoom-in-95 duration-100">
 								<button
 									onClick={(e) => {
 										e.stopPropagation();

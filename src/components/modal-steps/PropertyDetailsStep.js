@@ -36,7 +36,7 @@ const getPropertyTypes = (t) => {
 			id: "garage",
 			name: translatedLocations.find(l => l.id === "garage")?.name || "Garage",
 			icon: Car,
-			color: "from-orange-500 to-orange-600",
+			color: "from-primary-500 to-primary-600",
 			description: t("modalSteps.propertyDetails.garageDesc"),
 		},
 		{
@@ -84,8 +84,8 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 								type="button"
 								className={`relative px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-xs sm:text-sm font-medium rounded-lg border transition-all duration-200 ${
 									isSelected
-										? "bg-orange-500 text-white border-orange-500 shadow-md"
-										: "bg-white text-gray-700 border-gray-200 hover:border-orange-300 hover:bg-orange-50"
+										? "bg-primary-500 text-white border-primary-500 shadow-md"
+										: "bg-white text-gray-700 border-gray-200 hover:border-primary-300 hover:bg-primary-50"
 								}`}
 								onClick={() =>
 									handlePropertyTypeSelect(property.id)
@@ -94,7 +94,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 								{property.name}
 								{isSelected && (
 									<div className="absolute -top-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-white rounded-full flex items-center justify-center">
-										<Check className="h-1.5 w-1.5 sm:h-2 sm:w-2 text-orange-500" />
+										<Check className="h-1.5 w-1.5 sm:h-2 sm:w-2 text-primary-500" />
 									</div>
 								)}
 							</button>
@@ -126,7 +126,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 												parseInt(e.target.value) || 0,
 											)
 										}
-										className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-center"
+										className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent text-center"
 										placeholder="0"
 									/>
 								</div>
@@ -147,7 +147,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 												parseInt(e.target.value) || 1,
 											)
 										}
-										className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-center"
+										className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent text-center"
 										placeholder="1"
 									/>
 								</div>
@@ -172,7 +172,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 										parseInt(e.target.value) || 0,
 									)
 								}
-								className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-center"
+								className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent text-center"
 								placeholder="0"
 							/>
 						</div>
@@ -191,7 +191,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 										parseInt(e.target.value) || 1,
 									)
 								}
-								className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent text-center"
+								className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent text-center"
 								placeholder="1"
 							/>
 						</div>
@@ -211,7 +211,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 										e.target.checked,
 									)
 								}
-								className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 flex-shrink-0"
+								className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 flex-shrink-0"
 							/>
 							<label
 								htmlFor="hasElevator"
@@ -238,7 +238,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 							onChange={(e) =>
 								handleInputChange("fromAddress", e.target.value)
 							}
-							className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+							className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
 						/>
 					</div>
 
@@ -253,7 +253,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 							onChange={(e) =>
 								handleInputChange("toAddress", e.target.value)
 							}
-							className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+							className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
 						/>
 					</div>
 				</div>
@@ -273,7 +273,7 @@ export function PropertyDetailsStep({ formData, setFormData }) {
 					onChange={(e) =>
 						handleInputChange("address", e.target.value)
 					}
-					className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+					className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
 				/>
 			</div>
 		</div>

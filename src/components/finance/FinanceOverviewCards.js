@@ -38,7 +38,7 @@ const FinanceCard = ({ title, icon, data, isExpense = false, currentLanguage = D
 	const changeIsGood = isExpense ? !change.isPositive : change.isPositive;
 
 	return (
-		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
+		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
 			<div className="flex items-center justify-between mb-4 sm:mb-5 lg:mb-6">
 				<div className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0">
 					{icon}
@@ -69,10 +69,10 @@ const FinanceCard = ({ title, icon, data, isExpense = false, currentLanguage = D
 				</div>
 			</div>
 			<div>
-				<h3 className="text-amber-700/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
+				<h3 className="text-slate-600/70 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
 					{title}
 				</h3>
-				<p className="text-2xl sm:text-3xl font-bold text-amber-900">
+				<p className="text-2xl sm:text-3xl font-bold text-slate-800">
 					{formatCurrency(data.current, data.currency, currentLanguage)}
 				</p>
 			</div>

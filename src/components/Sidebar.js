@@ -4,7 +4,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectIsAuthenticated, selectUser } from "@/store/selectors";
 import { logoutUser } from "@/store/slices/authSlice";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DashboardIcon from "./icons/DashboardIcon";
 import EmployeesIcon from "./icons/EmployeesIcon";
 import FinanceIcon from "./icons/FinanceIcon";
@@ -18,12 +18,8 @@ export default function Sidebar({ onClose }) {
 	const isAuthenticated = useAppSelector(selectIsAuthenticated);
 	const router = useRouter();
 	const pathname = usePathname();
-
-	// Don't show sidebar on login page or if not authenticated
-	// if (pathname === "/login") {
-	// if (!isAuthenticated || pathname === "/login") {
-	// 	return null;
-	// }
+	const searchParams = useSearchParams();
+	const activeTabParam = searchParams.get("tab");
 
 	const handleLogout = async () => {
 		try {
@@ -51,7 +47,19 @@ export default function Sidebar({ onClose }) {
 						name: t("sidebar.dashboard"),
 						href: "/super-admin/dashboard",
 						icon: DashboardIcon,
-						current: pathname === "/super-admin/dashboard",
+						current: pathname === "/super-admin/dashboard" && !activeTabParam,
+					},
+					{
+						name: t("sidebar.orders"),
+						href: "/super-admin/dashboard?tab=orders",
+						icon: OrdersIcon,
+						current: pathname === "/super-admin/dashboard" && activeTabParam === "orders",
+					},
+					{
+						name: t("sidebar.users"),
+						href: "/super-admin/dashboard?tab=users",
+						icon: EmployeesIcon,
+						current: pathname === "/super-admin/dashboard" && activeTabParam === "users",
 					},
 				];
 
@@ -65,22 +73,22 @@ export default function Sidebar({ onClose }) {
 					},
 					{
 						name: t("sidebar.orders"),
-						href: "/orders",
+						href: "/site-admin/orders",
 						icon: OrdersIcon,
-						current: pathname === "/orders",
+						current: pathname.startsWith("/site-admin/orders"),
 					},
 					{
 						name: t("sidebar.finance"),
-						href: "/finance",
+						href: "/site-admin/finance",
 						icon: FinanceIcon,
-						current: pathname === "/finance",
+						current: pathname.startsWith("/site-admin/finance"),
 						comingSoon: true,
 					},
 					{
 						name: t("sidebar.employees"),
-						href: "/staff",
+						href: "/site-admin/staff",
 						icon: EmployeesIcon,
-						current: pathname === "/staff",
+						current: pathname.startsWith("/site-admin/staff"),
 						comingSoon: true,
 					},
 				];
@@ -175,13 +183,13 @@ export default function Sidebar({ onClose }) {
 	
 	return (
 		<div className={`h-screen w-72 lg:w-full glass-effect backdrop-blur-xl shadow-2xl overflow-y-auto ${
-			isRTL ? "border-l border-orange-200/40" : "border-r border-orange-200/40"
+			isRTL ? "border-l border-primary-200/40" : "border-r border-primary-200/40"
 		}`}>
 			{/* Header with User Info and Logout */}
-			<div className="p-4 sm:p-6 border-b border-orange-100/50">
+			<div className="p-4 sm:p-6 border-b border-primary-100/50">
 				<div className="flex items-center justify-between mb-4 sm:mb-6">
 					<div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-						<div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+						<div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
 							<span className="text-white text-xs sm:text-sm font-semibold">
 								{user?.name
 									? user.name
@@ -193,10 +201,10 @@ export default function Sidebar({ onClose }) {
 							</span>
 						</div>
 						<div className="min-w-0 flex-1">
-							<h2 className="text-amber-900 font-semibold text-xs sm:text-sm truncate">
+							<h2 className="text-slate-800 font-semibold text-xs sm:text-sm truncate">
 								{user?.name || "User"}
 							</h2>
-							<p className="text-amber-700/70 text-xs truncate">
+							<p className="text-slate-600/70 text-xs truncate">
 								{user?.role || "User"}
 							</p>
 						</div>
@@ -205,7 +213,7 @@ export default function Sidebar({ onClose }) {
 						{/* Mobile Close Button */}
 						<button
 							onClick={onClose}
-							className="lg:hidden p-2 rounded-lg text-amber-700 hover:bg-orange-50 transition-colors"
+							className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-primary-50 transition-colors"
 							aria-label="Close menu"
 						>
 							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,7 +223,7 @@ export default function Sidebar({ onClose }) {
 						<LanguageSwitcher />
 						<button
 							onClick={handleLogout}
-							className="flex items-center curser-pointer justify-center p-2 rounded-lg transition-all duration-200 text-amber-700 hover:bg-red-50/60 hover:text-red-700 border border-orange-200/40 hover:border-red-200/60 bg-gradient-to-br from-orange-50/60 to-amber-50/60 hover:from-red-50/60 hover:to-red-50/60 shadow-sm hover:shadow-md"
+							className="flex items-center curser-pointer justify-center p-2 rounded-lg transition-all duration-200 text-slate-600 hover:bg-red-50/60 hover:text-red-700 border border-primary-200/40 hover:border-red-200/60 bg-gradient-to-br from-primary-50/60 to-primary-50/60 hover:from-red-50/60 hover:to-red-50/60 shadow-sm hover:shadow-md"
 							title="Logout"
 						>
 							<LogoutIcon className="w-4 h-4" />
@@ -227,16 +235,16 @@ export default function Sidebar({ onClose }) {
 			{/* Navigation */}
 			<nav className="p-4 sm:p-6">
 				<div className="mb-6 sm:mb-8">
-					<h3 className="text-amber-600/60 text-xs font-medium mb-3 sm:mb-4 uppercase tracking-wider">
+					<h3 className="text-primary-600/60 text-xs font-medium mb-3 sm:mb-4 uppercase tracking-wider">
 						{t("sidebar.navigation")}
 					</h3>
 					<ul className="space-y-1">
 						{navigationItems.map((item) => (
 							<li key={item.name}>
 								{item.comingSoon ? (
-									<div className="flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl cursor-not-allowed opacity-60 text-amber-600/50">
+									<div className="flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl cursor-not-allowed opacity-60 text-primary-600/50">
 										<div className="flex items-center gap-2 sm:gap-3 min-w-0">
-											<item.icon className="text-amber-500/50 flex-shrink-0" />
+											<item.icon className="text-primary-500/50 flex-shrink-0" />
 											<span className="text-xs sm:text-sm truncate">
 												{item.name}
 											</span>
@@ -248,15 +256,15 @@ export default function Sidebar({ onClose }) {
 										onClick={onClose}
 										className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 ${
 											item.current
-												? "bg-gradient-to-r from-orange-50 to-amber-50 text-orange-700 border border-orange-200/60 shadow-sm hover:shadow-md"
-												: "text-amber-700 hover:bg-orange-50/60 hover:text-amber-900"
+												? "bg-gradient-to-r from-primary-50 to-primary-50 text-primary-700 border border-primary-200/60 shadow-sm hover:shadow-md"
+												: "text-slate-600 hover:bg-primary-50/60 hover:text-slate-800"
 										}`}
 									>
 										<item.icon
 											className={`flex-shrink-0 ${
 												item.current
-													? "text-orange-600"
-													: "text-amber-600"
+													? "text-primary-600"
+													: "text-primary-600"
 											}`}
 										/>
 										<span

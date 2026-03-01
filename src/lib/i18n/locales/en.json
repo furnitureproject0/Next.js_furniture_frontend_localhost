@@ -13,36 +13,7 @@
 		"failedToMakeLeader": "Failed to make leader",
 		"orderNotFound": "Order Not Found"
 	},
-	"order": {
-		"orderNotFound": "Order Not Found",
-		"created": "Created",
-		"customer": "Customer",
-		"services": "Services",
-		"addresses": "Addresses",
-		"fromAddress": "From Address",
-		"toAddress": "To Address",
-		"type": "Type",
-		"floor": "Floor",
-		"area": "Area",
-		"elevator": "Elevator",
-		"yes": "Yes",
-		"no": "No",
-		"schedule": "Schedule",
-		"roomConfiguration": "Room Configuration",
-		"date": "Date",
-		"notes": "Notes",
-		"offerDetails": "Offer Details",
-		"price": "Price",
-		"estimatedHours": "Estimated Hours",
-		"hourlyRate": "Hourly Rate",
-		"offerNotes": "Offer Notes",
-		"printedOn": "Printed on",
-		"orderNumber": "Order",
-		"service": "Service",
-		"company": "Company",
-		"status": "Status",
-		"noServices": "No services"
-	},
+
 	"company": {
 		"name": "Furniture Moving Services",
 		"tagline": "Professional Moving & Furniture Services",
@@ -100,7 +71,8 @@
 			"print": "Print",
 			"backToDashboard": "Back to Dashboard",
 			"cancelOrder": "Cancel Order",
-			"confirmCancel": "Confirm Cancel"
+			"confirmCancel": "Confirm Cancel",
+			"downloadPdf": "Download PDF"
 		},
 		"labels": {
 			"email": "Email",
@@ -137,6 +109,8 @@
 			"noOrdersYet": "No orders yet",
 			"allCaughtUp": "All caught up",
 			"allCaughtUpMessage": "No new notifications at the moment. We'll let you know when something important happens.",
+			"confirmConversionTitle": "Convert to Offer?",
+			"confirmConversionBody": "Are you sure you want to convert this appointment to an offer? Existing data will be pre-filled to help you complete the offer.",
 			"notSpecified": "Not specified"
 		},
 		"nA": "N/A",
@@ -152,6 +126,7 @@
 			"completed": "Completed",
 			"cancelled": "Cancelled"
 		},
+		"globalDefault": "Default",
 		"confirmClose": "Confirm Close",
 		"unsavedChanges": "You have unsaved changes. Are you sure you want to close?",
 		"closeAnyway": "Close Anyway"
@@ -206,6 +181,7 @@
 	},
 	"orders": {
 		"title": "Orders",
+		"createSuccess": "Order created successfully",
 		"newOrder": "New Order",
 		"allOrders": "All Orders",
 		"assignedOrders": "Assigned Orders",
@@ -216,6 +192,7 @@
 		"searchByOrderId": "Search by order ID or address...",
 		"noOrdersFound": "No orders found",
 		"noOrdersYet": "No orders yet",
+		"empty": "No orders to display",
 		"whenCustomersCreate": "When customers create orders, they will appear here for you to assign to companies.",
 		"whenYouHaveOrders": "When you have orders, they'll appear here. You can create, manage, and track all your transportation orders from this dashboard.",
 		"noOrdersWithStatus": "No orders with {{status}} status found. Try selecting a different filter or create a new order.",
@@ -253,7 +230,7 @@
 		"pendingOffers": "Pending Offers",
 		"activeOrders": "Active Orders",
 		"inProgress": "In Progress",
-		"completed": "Completed"
+		"completed": "Completed Orders"
 	},
 	"dashboards": {
 		"customer": {
@@ -402,15 +379,31 @@
 		"dashboard": {
 			"title": "Site Admin Dashboard",
 			"subtitle": "Manage all transportation orders and oversee business operations",
-			"createOrder": "Create Order"
+			"createOrder": "Create Order",
+			"createOffer": "Create Offer",
+			"createAppointment": "Create Appointment",
+			"offerCreatedSuccess": "Offer created successfully!",
+			"appointmentCreatedSuccess": "Appointment created successfully!"
 		},
-		"companyScope": "Company Type",
+		"actions": {
+			"convertToOffer": "Convert to Offer",
+			"convertToOrder": "Convert to Order"
+		},
+		"companyScope": "Assignment Category",
+		"selectPrompt": "Select Provider",
 		"internalCompany": "Internal Company",
 		"internalCompanyDesc": "Companies managed by your organization",
 		"externalCompany": "External Company",
 		"externalCompanyDesc": "Third-party service providers",
 		"selectCompany": "Select Company",
 		"noCompanies": "No companies available",
+		"assignCompanyForService": "Assign Company for this Service",
+		"useGlobalCompany": "Default",
+		"offerDetails": "Offer Details",
+		"clientAddress": "Client's Address",
+		"numberOfWorkers": "Number of Workers",
+		"searchClient": "Search by name, email, or phone...",
+		"optional": "Optional",
 		"orderType": "Order Type",
 		"orderTypeOrder": "Order",
 		"orderTypeOrderDesc": "Create a confirmed order",
@@ -430,8 +423,17 @@
 			"pricePerHour": "Price/Hour",
 			"price": "Price",
 			"amount": "Amount",
+			"type": "Pricing Type",
+			"notes": "Offer Notes",
+			"discount": "Discount",
+			"flatRatePrice": "Flat Rate Price",
+			"maxPrice": "Max Price",
+			"priceProM3": "Price Pro M3",
+			"meters": "Meters (m³)",
 			"estimatedTotal": "Estimated Total",
-			"grandTotal": "Grand Total"
+			"grandTotal": "Grand Total",
+			"workersCount": "Number of Workers",
+			"notesPlaceholder": "Add specialized notes for this service offer..."
 		},
 		"filters": {
 			"filters": "Filters",
@@ -458,6 +460,33 @@
 			"tryAdjustingFilters": "Try adjusting your filters or search criteria",
 			"orders": "Orders",
 			"offers": "Offers"
+		},
+		"orders": {
+			"title": "Orders",
+			"subtitle": "Manage and track all orders",
+			"searchPlaceholder": "Search by Order ID, Client Name, Email, Status..."
+		},
+		"hints": {
+			"upcomingOrders": "Upcoming Orders",
+			"upcomingDesc": "Orders grouped by scheduled date",
+			"today": "Today",
+			"tomorrow": "Tomorrow",
+			"yesterday": "Yesterday",
+			"order": "order",
+			"orders": "orders",
+			"serviceUnassigned": "service needs assignment",
+			"servicesUnassigned": "services need assignment",
+			"dayTimeline": "Day Timeline",
+			"scheduled": "Scheduled"
+		},
+		"cards": {
+			"orders": "Orders",
+			"offers": "Offers",
+			"appointments": "Appointments",
+			"noOrdersToday": "No new orders today",
+			"noOffersToday": "No offers today",
+			"noAppointmentsToday": "No appointments today",
+			"today": "Today"
 		}
 	},
 	"calendar": {
@@ -615,8 +644,6 @@
 		"internalOfferDesc": "Enter the pricing and schedule details for this internal order.",
 		"externalOfferNotice": "Since you selected an external company, they will provide their own offer later. You don't need to enter any pricing details now.",
 		"externalFlowHint": "The external company will receive this order and submit their price for your approval.",
-		"timeHint": "Select your preferred start time",
-		"submitDescription": "Once you submit, your order will be sent to the company admin who will review it and send you an offer with pricing and schedule confirmation.",
 		"useManualAddress": "Enter manually",
 		"useSearch": "Use search instead",
 		"manualAddress": "Manual Address Entry",
@@ -651,9 +678,6 @@
 			"timeRequired": "Time is required",
 			"servicesRequired": "At least one service must be selected",
 			"allRoomsRequired": "Please configure all {{count}} room(s)",
-			"roomTypeRequired": "Room type is required",
-			"roomQuantityRequired": "Room quantity must be greater than 0",
-			"roomTypeRequired": "Room type is required",
 			"roomQuantityRequired": "Room quantity must be greater than 0"
 		}
 	},
@@ -674,6 +698,7 @@
 		"cancel": "Cancel",
 		"updateOffer": "Update Offer",
 		"sendOfferButton": "Send Offer",
+		"workersCount": "Workers Count",
 		"offerNotes": "Offer Notes",
 		"notesPlaceholder": "Any specific details about this price...",
 		"estimatedTotal": "Estimated Total Price"
@@ -788,6 +813,7 @@
 		"acceptOffer": "Accept Offer",
 		"rejectOffer": "Reject Offer",
 		"noServices": "No services",
+		"images": "Images",
 		"rejectionReason": "Reason for rejection",
 		"rejectionReasonPlaceholder": "Please provide a reason...",
 		"orderNumber": "Order",

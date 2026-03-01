@@ -147,7 +147,7 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 		return (
 			<div className="space-y-6">
 				<div className="flex items-center justify-center py-12">
-					<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+					<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
 				</div>
 			</div>
 		);
@@ -166,10 +166,10 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 	return (
 		<div className="space-y-4 sm:space-y-5 lg:space-y-6">
 			<div>
-				<h3 className="text-base sm:text-lg font-semibold text-amber-900 mb-1.5 sm:mb-2">
+				<h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-1.5 sm:mb-2">
 					{t("orderSteps.selectServicesYouNeed")}
 				</h3>
-				<p className="text-xs sm:text-sm text-amber-700/70">
+				<p className="text-xs sm:text-sm text-slate-600/70">
 					{t("orderSteps.selectOneOrMore")}
 				</p>
 			</div>
@@ -184,8 +184,8 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 							<div
 								className={`cursor-pointer transition-all duration-200 border-2 rounded-lg p-3 sm:p-4 lg:p-5 ${
 									isSelected
-										? "ring-2 ring-orange-500 bg-orange-50 border-orange-300"
-										: "hover:bg-gray-50 border-gray-200 hover:border-orange-200"
+										? "ring-2 ring-primary-500 bg-primary-50 border-primary-300"
+										: "hover:bg-gray-50 border-gray-200 hover:border-primary-200"
 								}`}
 								onClick={() => handleServiceToggle(service)}
 							>
@@ -202,7 +202,7 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 										</div>
 									</div>
 									{isSelected && (
-										<div className="ml-2 sm:ml-4 p-1.5 sm:p-2 bg-orange-500 rounded-full flex-shrink-0">
+										<div className="ml-2 sm:ml-4 p-1.5 sm:p-2 bg-primary-500 rounded-full flex-shrink-0">
 											<svg
 												className="w-4 h-4 sm:w-5 sm:h-5 text-white"
 												fill="none"
@@ -223,8 +223,8 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 
 							{/* Service Additions */}
 							{isSelected && service.additions && service.additions.length > 0 && (
-								<div className="ml-2 sm:ml-4 pl-2 sm:pl-4 border-l-2 border-orange-200 space-y-2 sm:space-y-3">
-									<p className="text-xs sm:text-sm font-medium text-amber-900">
+								<div className="ml-2 sm:ml-4 pl-2 sm:pl-4 border-l-2 border-primary-200 space-y-2 sm:space-y-3">
+									<p className="text-xs sm:text-sm font-medium text-slate-800">
 										{t("orderSteps.selectAdditions")}
 									</p>
 									<div className="space-y-2 sm:space-y-3">
@@ -242,8 +242,8 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 														}}
 														className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-all text-left ${
 															isAdditionSelected
-																? "bg-orange-500 text-white"
-																: "bg-gray-100 text-gray-700 hover:bg-orange-100"
+																? "bg-primary-500 text-white"
+																: "bg-gray-100 text-gray-700 hover:bg-primary-100"
 														}`}
 													>
 														{addition.name}
@@ -252,7 +252,7 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 													{/* Note input for selected addition */}
 													{isAdditionSelected && (
 														<div className="pl-1 sm:pl-2">
-															<label className="block text-[10px] sm:text-xs text-amber-700 mb-0.5 sm:mb-1">
+															<label className="block text-[10px] sm:text-xs text-slate-600 mb-0.5 sm:mb-1">
 																{t("orderSteps.additionNote") || "Note (optional)"}
 															</label>
 															<input
@@ -264,7 +264,7 @@ export default function CustomerServiceStep({ formData, setFormData, validationE
 																}}
 																onClick={(e) => e.stopPropagation()}
 																placeholder={t("orderSteps.additionNotePlaceholder") || "Add a note for this addition..."}
-																className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+																className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 															/>
 														</div>
 													)}

@@ -113,25 +113,25 @@ export default function StaffOverview() {
 	};
 
 	return (
-		<div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-xl">
+		<div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-xl">
 			{/* Header with Mission Count */}
-			<div className="p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
+			<div className="p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
 				<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-3 sm:gap-0">
-					<h2 className="text-lg sm:text-xl font-bold text-amber-900">
+					<h2 className="text-lg sm:text-xl font-bold text-slate-800">
 						{t("staff.overview.title")}
 					</h2>
-					<button className="cursor-pointer px-3 py-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 hover:text-orange-800 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 transform hover:scale-105 w-full sm:w-auto">
+					<button className="cursor-pointer px-3 py-1.5 bg-primary-100 hover:bg-primary-200 text-primary-700 hover:text-primary-800 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 transform hover:scale-105 w-full sm:w-auto">
 						{t("staff.overview.manageStaff")}
 					</button>
 				</div>
 
 				{/* Mission Count Stats */}
 				<div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
-					<div className="text-center p-2 sm:p-3 bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg sm:rounded-xl border border-orange-100">
-						<div className="text-xl sm:text-2xl font-bold text-orange-600">
+					<div className="text-center p-2 sm:p-3 bg-gradient-to-br from-primary-50 to-primary-50 rounded-lg sm:rounded-xl border border-primary-100">
+						<div className="text-xl sm:text-2xl font-bold text-primary-600">
 							{totalMissions}
 						</div>
-						<div className="text-[10px] sm:text-xs text-amber-700 font-medium">
+						<div className="text-[10px] sm:text-xs text-slate-600 font-medium">
 							{t("staff.overview.totalMissions")}
 						</div>
 					</div>
@@ -159,21 +159,21 @@ export default function StaffOverview() {
 					{staff.slice(0, 4).map((member) => (
 						<div
 							key={member.id}
-							className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl hover:bg-gradient-to-r hover:from-orange-50/80 hover:to-amber-50/80 transition-all duration-200 border border-transparent hover:border-orange-100/60 hover:shadow-md gap-3 sm:gap-0"
+							className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl hover:bg-gradient-to-r hover:from-primary-50/80 hover:to-primary-50/80 transition-all duration-200 border border-transparent hover:border-primary-100/60 hover:shadow-md gap-3 sm:gap-0"
 						>
 							<div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
-								<div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-100 to-amber-100 rounded-lg sm:rounded-xl flex items-center justify-center text-orange-600 shadow-sm flex-shrink-0">
+								<div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-100 to-primary-100 rounded-lg sm:rounded-xl flex items-center justify-center text-primary-600 shadow-sm flex-shrink-0">
 									{getRoleIcon(member.role)}
 								</div>
 								<div className="flex-1 min-w-0">
-									<h3 className="font-semibold text-amber-900 text-xs sm:text-sm">
+									<h3 className="font-semibold text-slate-800 text-xs sm:text-sm">
 										{member.name}
 									</h3>
-									<p className="text-[10px] sm:text-xs text-amber-700/70 capitalize font-medium">
+									<p className="text-[10px] sm:text-xs text-slate-600/70 capitalize font-medium">
 										{member.role}
 									</p>
 									{member.currentMission && (
-										<p className="text-[10px] sm:text-xs text-orange-600 font-medium mt-0.5 sm:mt-1">
+										<p className="text-[10px] sm:text-xs text-primary-600 font-medium mt-0.5 sm:mt-1">
 											📍 {member.currentMission}
 										</p>
 									)}
@@ -183,10 +183,10 @@ export default function StaffOverview() {
 							<div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
 								<div className="text-left sm:text-right">
 									<div className="flex items-center gap-1">
-										<span className="text-base sm:text-lg font-bold text-amber-900">
+										<span className="text-base sm:text-lg font-bold text-slate-800">
 											{member.completedMissions}
 										</span>
-										<span className="text-[10px] sm:text-xs text-amber-700/70 font-medium">
+										<span className="text-[10px] sm:text-xs text-slate-600/70 font-medium">
 											{t("staff.overview.missions")}
 										</span>
 									</div>
@@ -194,7 +194,7 @@ export default function StaffOverview() {
 										<span className="text-yellow-500">
 											⭐
 										</span>
-										<span className="text-[10px] sm:text-xs text-amber-700 font-medium">
+										<span className="text-[10px] sm:text-xs text-slate-600 font-medium">
 											{member.rating}
 										</span>
 									</div>
@@ -213,7 +213,7 @@ export default function StaffOverview() {
 				</div>
 
 				<div className="mt-4 sm:mt-5 lg:mt-6 flex justify-center">
-					<button className="cursor-pointer px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center gap-2">
+					<button className="cursor-pointer px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-primary-500 to-primary-500 hover:from-primary-600 hover:to-primary-600 text-white text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center gap-2">
 						<span>{t("staff.overview.viewAllStaff")}</span>
 						<svg
 							className="w-3.5 h-3.5 sm:w-4 sm:h-4"

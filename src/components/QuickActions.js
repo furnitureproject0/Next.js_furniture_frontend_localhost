@@ -106,9 +106,9 @@ export default function QuickActions() {
 	return (
 		<div className="space-y-4 sm:space-y-6">
 			{/* Quick Actions */}
-			<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg">
-				<div className="p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
-					<h2 className="text-base sm:text-lg font-semibold text-amber-900">
+			<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg">
+				<div className="p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
+					<h2 className="text-base sm:text-lg font-semibold text-slate-800">
 						{t("quickActions.title")}
 					</h2>
 				</div>
@@ -118,25 +118,25 @@ export default function QuickActions() {
 							key={index}
 							className={`w-full p-3 sm:p-4 rounded-lg sm:rounded-xl border transition-all duration-200 text-left group ${
 								action.primary
-									? "bg-orange-50/60 border-orange-200/60 hover:bg-orange-100/60"
-									: "bg-orange-50/40 border-orange-200/40 hover:bg-orange-100/40"
+									? "bg-primary-50/60 border-primary-200/60 hover:bg-primary-100/60"
+									: "bg-primary-50/40 border-primary-200/40 hover:bg-primary-100/40"
 							}`}
 						>
 							<div className="flex items-center gap-3 sm:gap-4">
 								<div
 									className={`p-2 sm:p-3 rounded-lg shadow-sm transition-shadow flex-shrink-0 ${
 										action.primary
-											? "bg-orange-500 text-white"
-											: "bg-amber-600 text-white"
+											? "bg-primary-500 text-white"
+											: "bg-primary-600 text-white"
 									}`}
 								>
 									{action.icon}
 								</div>
 								<div className="flex-1 min-w-0">
-									<h3 className="text-sm sm:text-base font-medium text-amber-900">
+									<h3 className="text-sm sm:text-base font-medium text-slate-800">
 										{action.title}
 									</h3>
-									<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5">
+									<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5">
 										{action.description}
 									</p>
 								</div>
@@ -147,13 +147,13 @@ export default function QuickActions() {
 			</div>
 
 			{/* Tasks */}
-			<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/60 shadow-lg">
-				<div className="p-4 sm:p-5 lg:p-6 border-b border-orange-100/50">
+			<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg">
+				<div className="p-4 sm:p-5 lg:p-6 border-b border-primary-100/50">
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-						<h2 className="text-base sm:text-lg font-semibold text-amber-900">
+						<h2 className="text-base sm:text-lg font-semibold text-slate-800">
 							{t("quickActions.todaysTasks")}
 						</h2>
-						<span className="text-xs sm:text-sm text-amber-700/70">
+						<span className="text-xs sm:text-sm text-slate-600/70">
 							{recentTasks.length} {t("quickActions.tasks")}
 						</span>
 					</div>
@@ -163,17 +163,17 @@ export default function QuickActions() {
 						{recentTasks.map((task, index) => (
 							<div
 								key={index}
-								className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg hover:bg-orange-50/60 transition-colors"
+								className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg hover:bg-primary-50/60 transition-colors"
 							>
 								<input
 									type="checkbox"
-									className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500 rounded border-orange-300 focus:ring-orange-500 flex-shrink-0"
+									className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-500 rounded border-primary-300 focus:ring-primary-500 flex-shrink-0"
 								/>
 								<div className="flex-1 min-w-0">
-									<p className="text-xs sm:text-sm text-amber-900">
+									<p className="text-xs sm:text-sm text-slate-800">
 										{task.task}
 									</p>
-									<p className="text-[10px] sm:text-xs text-amber-700/70">
+									<p className="text-[10px] sm:text-xs text-slate-600/70">
 										{task.dueTime}
 									</p>
 								</div>
@@ -187,7 +187,7 @@ export default function QuickActions() {
 							</div>
 						))}
 					</div>
-					<button className="w-full mt-3 sm:mt-4 p-2 text-orange-600 hover:text-orange-700 text-xs sm:text-sm font-medium transition-colors">
+					<button className="w-full mt-3 sm:mt-4 p-2 text-primary-600 hover:text-primary-700 text-xs sm:text-sm font-medium transition-colors">
 						+ {t("quickActions.addNewTask")}
 					</button>
 				</div>

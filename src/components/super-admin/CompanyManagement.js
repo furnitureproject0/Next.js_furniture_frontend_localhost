@@ -1,8 +1,8 @@
 "use client";
-
-import { useState } from "react";
-import { useAppSelector } from "@/store/hooks";
+import { useState, useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { selectDisplayCompanies } from "@/store/selectors";
+import { fetchAllCompanies } from "@/store/slices/companiesSlice";
 import { useTranslation } from "@/hooks/useTranslation";
 import CompaniesList from "./CompaniesList";
 import CompanyFilters from "./CompanyFilters";
@@ -10,33 +10,30 @@ import AddCompanyModal from "./modals/AddCompanyModal";
 
 export default function CompanyManagement() {
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
 	const allCompanies = useAppSelector(selectDisplayCompanies);
+	const isLoading = useAppSelector((state) => state.companies.isLoading);
+	const error = useAppSelector((state) => state.companies.error);
+	
 	const [searchQuery, setSearchQuery] = useState("");
 	const [statusFilter, setStatusFilter] = useState("all");
 	const [typeFilter, setTypeFilter] = useState("all");
 	const [isAddCompanyModalOpen, setIsAddCompanyModalOpen] = useState(false);
 
-	// Filter companies based on search and filters
-	const filteredCompanies = allCompanies.filter((company) => {
-		const matchesSearch =
-			company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			(company.email &&
-				company.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
-			(company.url &&
-				company.url.toLowerCase().includes(searchQuery.toLowerCase()));
+	useEffect(() => {
+		const delayDebounceFn = setTimeout(() => {
+			dispatch(fetchAllCompanies({ 
+				search: searchQuery || undefined,
+				status: statusFilter !== "all" ? statusFilter : undefined,
+				type: typeFilter !== "all" ? typeFilter : undefined
+			}));
+		}, 500);
 
-		const matchesStatus =
-			statusFilter === "all" ||
-			(statusFilter === "active" && company.available) ||
-			(statusFilter === "inactive" && !company.available);
+		return () => clearTimeout(delayDebounceFn);
+	}, [dispatch, searchQuery, statusFilter, typeFilter]);
 
-		const matchesType =
-			typeFilter === "all" ||
-			(company.type &&
-				company.type.toLowerCase() === typeFilter.toLowerCase());
-
-		return matchesSearch && matchesStatus && matchesType;
-	});
+	// Primary data now comes from the API filtered
+	const filteredCompanies = allCompanies;
 
 	return (
 		<div className="p-4 sm:p-6 lg:p-8">
@@ -44,10 +41,10 @@ export default function CompanyManagement() {
 			<div className="mb-4 sm:mb-5 lg:mb-6">
 				<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-3 sm:mb-4">
 					<div className="flex-1 min-w-0">
-						<h2 className="text-xl sm:text-2xl font-bold text-amber-900 mb-0.5 sm:mb-1">
+						<h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-0.5 sm:mb-1">
 							{t("superAdmin.companyManagement.title")}
 						</h2>
-						<p className="text-xs sm:text-sm text-amber-700/70">
+						<p className="text-xs sm:text-sm text-slate-600/70">
 							{t("superAdmin.companyManagement.subtitle")}
 						</p>
 					</div>
@@ -76,7 +73,7 @@ export default function CompanyManagement() {
 				<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
 					<div className="flex-1 relative">
 						<svg
-							className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-amber-600/50"
+							className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-primary-600/50"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -93,7 +90,7 @@ export default function CompanyManagement() {
 							placeholder={t("superAdmin.companyManagement.searchPlaceholder")}
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
-							className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm bg-white border border-orange-200/60 rounded-lg sm:rounded-xl text-amber-900 placeholder-amber-600/40 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-300"
+							className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm bg-white border border-primary-200/60 rounded-lg sm:rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
 						/>
 					</div>
 					<CompanyFilters
@@ -105,15 +102,28 @@ export default function CompanyManagement() {
 				</div>
 			</div>
 
-			{/* Companies Count */}
-			<div className="mb-3 sm:mb-4">
-				<h3 className="text-base sm:text-lg font-semibold text-amber-900">
-					{t("superAdmin.companyManagement.companiesCount", { filtered: filteredCompanies.length, total: allCompanies.length })}
-				</h3>
-			</div>
+			{/* Loading/Error State */}
+			{(isLoading && allCompanies.length === 0) ? (
+				<div className="flex items-center justify-center py-20">
+					<div className="w-10 h-10 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+				</div>
+			) : error ? (
+				<div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl text-center">
+					{error}
+				</div>
+			) : (
+				<>
+					{/* Companies Count */}
+					<div className="mb-3 sm:mb-4">
+						<h3 className="text-base sm:text-lg font-semibold text-slate-800">
+							{t("superAdmin.companyManagement.companiesCount", { filtered: filteredCompanies.length, total: allCompanies.length })}
+						</h3>
+					</div>
 
-			{/* Companies List */}
-			<CompaniesList companies={filteredCompanies} />
+					{/* Companies List */}
+					<CompaniesList companies={filteredCompanies} />
+				</>
+			)}
 
 			{/* Add Company Modal */}
 			<AddCompanyModal

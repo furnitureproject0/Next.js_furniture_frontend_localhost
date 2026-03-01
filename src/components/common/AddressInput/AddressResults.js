@@ -1,5 +1,7 @@
 "use client";
 
+import { formatAddress } from '@/utils/geocoding';
+
 /**
  * AddressResults - Dropdown showing address search results
  * Displays results from Nominatim search in a styled dropdown
@@ -19,28 +21,28 @@ export default function AddressResults({
     return (
         <div
             ref={resultsRef}
-            className="absolute z-50 w-full mt-1 sm:mt-2 bg-white border border-orange-200 rounded-lg shadow-lg max-h-48 sm:max-h-64 overflow-y-auto"
+            className="absolute z-50 w-full mt-1 sm:mt-2 bg-white border border-primary-200 rounded-lg shadow-lg max-h-48 sm:max-h-64 overflow-y-auto"
         >
             {isLoading ? (
-                <div className="p-3 sm:p-4 text-center text-amber-700">
-                    <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-orange-300 border-t-orange-600 mx-auto"></div>
+                <div className="p-3 sm:p-4 text-center text-slate-600">
+                    <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-primary-300 border-t-primary-600 mx-auto"></div>
                     <p className="mt-2 text-xs sm:text-sm">Searching...</p>
                 </div>
             ) : results.length === 0 && displayValue.length >= 3 ? (
-                <div className="p-3 sm:p-4 text-center text-amber-700">
+                <div className="p-3 sm:p-4 text-center text-slate-600">
                     <p className="text-xs sm:text-sm">No addresses found</p>
                 </div>
             ) : (
-                <ul className="divide-y divide-orange-100">
+                <ul className="divide-y divide-primary-100">
                     {results.map((place) => (
                         <li
                             key={place.place_id}
                             onClick={() => onSelect(place)}
-                            className="p-2.5 sm:p-3 hover:bg-orange-50 cursor-pointer transition-colors"
+                            className="p-2.5 sm:p-3 hover:bg-primary-50 cursor-pointer transition-colors"
                         >
                             <div className="flex items-start gap-2 sm:gap-3">
                                 <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 mt-0.5 flex-shrink-0"
+                                    className="w-4 h-4 sm:w-5 sm:h-5 text-primary-600 mt-0.5 flex-shrink-0"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -60,19 +62,8 @@ export default function AddressResults({
                                 </svg>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">
-                                        {place.display_name}
+                                        {formatAddress(place)}
                                     </p>
-                                    {place.address && (
-                                        <p className="text-[10px] sm:text-xs text-amber-600 mt-0.5 sm:mt-1">
-                                            {[
-                                                place.address.city,
-                                                place.address.state,
-                                                place.address.country,
-                                            ]
-                                                .filter(Boolean)
-                                                .join(', ')}
-                                        </p>
-                                    )}
                                 </div>
                             </div>
                         </li>

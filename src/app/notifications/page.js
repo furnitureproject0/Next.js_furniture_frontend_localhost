@@ -180,16 +180,16 @@ export default function NotificationsPage() {
 	}
 
 	return (
-		<div className={`min-h-screen bg-gradient-to-br from-orange-50/30 via-amber-50/20 to-orange-50/30 p-4 sm:p-6 lg:p-8 ${isRTL ? 'rtl' : 'ltr'}`}>
+		<div className={`min-h-screen bg-gradient-to-br from-primary-50/30 via-primary-50/20 to-primary-50/30 p-4 sm:p-6 lg:p-8 ${isRTL ? 'rtl' : 'ltr'}`}>
 			<div className="max-w-4xl mx-auto">
 				{/* Header */}
-				<div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-orange-200/60 p-6 mb-6">
+				<div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-primary-200/60 p-6 mb-6">
 					<div className={`flex items-center justify-between flex-wrap gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
 						<div>
-							<h1 className={`text-2xl sm:text-3xl font-bold text-amber-900 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
+							<h1 className={`text-2xl sm:text-3xl font-bold text-slate-800 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
 								{t("notifications.title")}
 							</h1>
-							<p className={`text-sm text-amber-700/70 ${isRTL ? 'text-right' : 'text-left'}`}>
+							<p className={`text-sm text-slate-600/70 ${isRTL ? 'text-right' : 'text-left'}`}>
 								{unreadCount > 0
 									? unreadCount === 1
 										? t("notifications.unreadMessages", { count: unreadCount })
@@ -202,7 +202,7 @@ export default function NotificationsPage() {
 								<button
 									onClick={handleMarkAllAsRead}
 									disabled={isLoading}
-									className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-sm hover:shadow-md transform hover:scale-105"
+									className="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-500 hover:from-primary-600 hover:to-primary-600 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-sm hover:shadow-md transform hover:scale-105"
 								>
 									{t("notifications.markAllRead")}
 								</button>
@@ -222,16 +222,16 @@ export default function NotificationsPage() {
 
 				{/* Notifications List */}
 				{displayNotifications.length === 0 ? (
-					<div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-orange-200/60 p-12 text-center">
-						<div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-							<svg className="w-10 h-10 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-primary-200/60 p-12 text-center">
+						<div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+							<svg className="w-10 h-10 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-5 5v-5zM9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 							</svg>
 						</div>
-						<h3 className="text-xl font-semibold text-amber-900 mb-2">
+						<h3 className="text-xl font-semibold text-slate-800 mb-2">
 							{t("notifications.allCaughtUpTitle")}
 						</h3>
-						<p className="text-amber-700/70">
+						<p className="text-slate-600/70">
 							{t("notifications.allCaughtUpMessage")}
 						</p>
 					</div>
@@ -245,8 +245,8 @@ export default function NotificationsPage() {
 									key={notification.id}
 									className={`bg-white/80 backdrop-blur-sm rounded-xl border transition-all duration-300 hover:shadow-lg group cursor-pointer ${
 										isUnread
-											? "bg-orange-50/80 border-orange-300/60 shadow-md"
-											: "border-orange-100/40"
+											? "bg-primary-50/80 border-primary-300/60 shadow-md"
+											: "border-primary-100/40"
 									}`}
 									style={{
 										animationDelay: `${index * 50}ms`,
@@ -259,18 +259,18 @@ export default function NotificationsPage() {
 											<div className="flex-1 min-w-0">
 												<div className={`flex items-start justify-between mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
 													<div className="flex-1">
-														<h3 className={`text-base sm:text-lg font-semibold text-amber-900 mb-1 ${isRTL ? 'text-right' : 'text-left'}`}>
+														<h3 className={`text-base sm:text-lg font-semibold text-slate-800 mb-1 ${isRTL ? 'text-right' : 'text-left'}`}>
 															{notification.title || t("notifications.title")}
 														</h3>
-														<p className={`text-sm text-amber-800/80 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
+														<p className={`text-sm text-slate-700/80 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
 															{notification.message || ""}
 														</p>
 													</div>
 													<div className={`flex items-center gap-2 flex-shrink-0 ${isRTL ? 'ml-0 mr-2' : 'ml-2'}`}>
 														{isUnread && (
 															<div className="relative">
-																<div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
-																<div className="absolute inset-0 w-3 h-3 bg-orange-400 rounded-full animate-ping opacity-75"></div>
+																<div className="w-3 h-3 bg-primary-500 rounded-full animate-pulse"></div>
+																<div className="absolute inset-0 w-3 h-3 bg-primary-400 rounded-full animate-ping opacity-75"></div>
 															</div>
 														)}
 														<button
@@ -278,22 +278,22 @@ export default function NotificationsPage() {
 																e.stopPropagation();
 																handleHideNotification(notification.id);
 															}}
-															className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-orange-100 rounded-lg"
+															className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-primary-100 rounded-lg"
 															title={t("notifications.hide")}
 														>
-															<svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 																<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 															</svg>
 														</button>
 													</div>
 												</div>
-												<div className={`flex items-center justify-between mt-3 pt-3 border-t border-orange-100/50 ${isRTL ? 'flex-row-reverse' : ''}`}>
+												<div className={`flex items-center justify-between mt-3 pt-3 border-t border-primary-100/50 ${isRTL ? 'flex-row-reverse' : ''}`}>
 													<div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-														<span className="text-xs text-amber-600/60">
+														<span className="text-xs text-primary-600/60">
 															{formatTime(notification.createdAt || notification.timestamp)}
 														</span>
 														{notification.type && (
-															<span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">
+															<span className="text-xs px-2 py-1 bg-primary-100 text-primary-700 rounded-full">
 																{notification.type}
 															</span>
 														)}
@@ -305,7 +305,7 @@ export default function NotificationsPage() {
 																	e.stopPropagation();
 																	handleOpenOrder(notification);
 																}}
-																className="text-xs px-3 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-lg transition-all duration-200 font-medium shadow-sm hover:shadow-md transform hover:scale-105"
+																className="text-xs px-3 py-1.5 bg-gradient-to-r from-primary-500 to-primary-500 hover:from-primary-600 hover:to-primary-600 text-white rounded-lg transition-all duration-200 font-medium shadow-sm hover:shadow-md transform hover:scale-105"
 															>
 																{t("notifications.viewOrder") || "View Order"}
 															</button>

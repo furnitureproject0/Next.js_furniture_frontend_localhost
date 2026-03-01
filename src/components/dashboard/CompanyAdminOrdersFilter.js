@@ -149,7 +149,7 @@ export default function CompanyAdminOrdersFilter({
 						value={filters.search}
 						onChange={(e) => updateFilter("search", e.target.value)}
 						placeholder={t("companyAdmin.filters.searchPlaceholder") || "Search by order ID, customer, or address..."}
-						className="w-full pl-10 pr-4 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white/80"
+						className="w-full pl-10 pr-4 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white/80"
 					/>
 					{filters.search && (
 						<button
@@ -166,8 +166,8 @@ export default function CompanyAdminOrdersFilter({
 					onClick={() => setShowAdvanced(!showAdvanced)}
 					className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
 						showAdvanced 
-							? "bg-orange-500 text-white" 
-							: "bg-white border border-orange-200 text-amber-700 hover:bg-orange-50"
+							? "bg-primary-500 text-white" 
+							: "bg-white border border-primary-200 text-slate-600 hover:bg-primary-50"
 					}`}
 				>
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,13 +191,13 @@ export default function CompanyAdminOrdersFilter({
 			{/* Status Dropdowns (Always visible) */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 				<div>
-					<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+					<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 						{t("companyAdmin.filters.orderStatus") || "Order Status"}
 					</label>
 					<select
 						value={filters.orderStatus}
 						onChange={(e) => updateFilter("orderStatus", e.target.value)}
-						className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+						className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 					>
 						<option value="all">
 							{t("companyAdmin.filters.allStatuses") || "All Statuses"} ({orderStatusCounts.all})
@@ -221,13 +221,13 @@ export default function CompanyAdminOrdersFilter({
 				</div>
 
 				<div>
-					<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+					<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 						{t("companyAdmin.filters.offerStatus") || "Offer Status"}
 					</label>
 					<select
 						value={filters.offerStatus}
 						onChange={(e) => updateFilter("offerStatus", e.target.value)}
-						className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+						className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 					>
 						<option value="all">
 							{t("companyAdmin.filters.allOfferStatuses") || "All Offer Statuses"} ({offerStatusCounts.all})
@@ -247,16 +247,16 @@ export default function CompanyAdminOrdersFilter({
 
 			{/* Advanced Filters */}
 			{showAdvanced && (
-				<div className="p-4 bg-orange-50/50 rounded-lg border border-orange-200/50 space-y-4">
+				<div className="p-4 bg-primary-50/50 rounded-lg border border-primary-200/50 space-y-4">
 					{/* Team Assignment Filter */}
 					<div>
-						<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+						<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 							{t("companyAdmin.filters.teamAssignment") || "Team Assignment"}
 						</label>
 						<select
 							value={filters.teamAssigned}
 							onChange={(e) => updateFilter("teamAssigned", e.target.value)}
-							className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+							className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 						>
 							<option value="all">
 								{t("companyAdmin.filters.allOrders") || "All Orders"} ({teamAssignmentCounts.all})
@@ -273,13 +273,13 @@ export default function CompanyAdminOrdersFilter({
 					{/* Service Type Filter */}
 					{serviceTypes.length > 0 && (
 						<div>
-							<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+							<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 								{t("companyAdmin.filters.serviceType") || "Service Type"}
 							</label>
 							<select
 								value={filters.serviceType}
 								onChange={(e) => updateFilter("serviceType", e.target.value)}
-								className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+								className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 							>
 								<option value="all">
 									{t("companyAdmin.filters.allServices") || "All Services"}
@@ -296,50 +296,50 @@ export default function CompanyAdminOrdersFilter({
 					{/* Date Filters */}
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 						<div>
-							<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+							<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 								{t("companyAdmin.filters.createdFrom") || "Created From"}
 							</label>
 							<input
 								type="date"
 								value={filters.dateFrom}
 								onChange={(e) => updateFilter("dateFrom", e.target.value)}
-								className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+								className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 							/>
 						</div>
 						<div>
-							<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+							<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 								{t("companyAdmin.filters.createdTo") || "Created To"}
 							</label>
 							<input
 								type="date"
 								value={filters.dateTo}
 								onChange={(e) => updateFilter("dateTo", e.target.value)}
-								className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+								className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 							/>
 						</div>
 					</div>
 
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 						<div>
-							<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+							<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 								{t("companyAdmin.filters.serviceFrom") || "Service Date From"}
 							</label>
 							<input
 								type="date"
 								value={filters.preferredDateFrom}
 								onChange={(e) => updateFilter("preferredDateFrom", e.target.value)}
-								className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+								className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 							/>
 						</div>
 						<div>
-							<label className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2 block">
+							<label className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2 block">
 								{t("companyAdmin.filters.serviceTo") || "Service Date To"}
 							</label>
 							<input
 								type="date"
 								value={filters.preferredDateTo}
 								onChange={(e) => updateFilter("preferredDateTo", e.target.value)}
-								className="w-full px-3 py-2 text-sm border border-orange-200/60 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white"
+								className="w-full px-3 py-2 text-sm border border-primary-200/60 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent bg-white"
 							/>
 						</div>
 					</div>

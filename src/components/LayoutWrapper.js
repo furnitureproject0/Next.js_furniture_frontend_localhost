@@ -61,7 +61,7 @@ export default function LayoutWrapper({ children }) {
 	if (isLoading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center p-4">
-				<div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-b-2 border-orange-500"></div>
+				<div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-b-2 border-primary-500"></div>
 			</div>
 		);
 	}
@@ -82,21 +82,21 @@ export default function LayoutWrapper({ children }) {
 	return (
 		<div className={`min-h-screen flex flex-col lg:grid ${gridCols} gap-0`} dir={isRTL ? "rtl" : "ltr"}>
 			{/* Mobile Header */}
-			<header className="lg:hidden sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-orange-200/40 shadow-sm">
+			<header className="lg:hidden sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-primary-200/40 shadow-sm">
 				<div className="flex items-center justify-between p-4">
 					<button
 						onClick={() => setSidebarOpen(true)}
-						className="p-2 rounded-lg text-amber-700 hover:bg-orange-50 transition-colors"
+						className="p-2 rounded-lg text-slate-600 hover:bg-primary-50 transition-colors"
 						aria-label="Open menu"
 					>
 						<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
 						</svg>
 					</button>
-					<h1 className="text-lg font-semibold text-amber-900">Dashboard</h1>
+					<h1 className="text-lg font-semibold text-slate-800">Dashboard</h1>
 					<button
 						onClick={() => setNotificationsOpen(true)}
-						className="p-2 rounded-lg text-amber-700 hover:bg-orange-50 transition-colors relative"
+						className="p-2 rounded-lg text-slate-600 hover:bg-primary-50 transition-colors relative"
 						aria-label="Open notifications"
 					>
 						<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

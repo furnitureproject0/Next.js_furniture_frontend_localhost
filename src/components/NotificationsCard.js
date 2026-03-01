@@ -125,18 +125,18 @@ export default function NotificationsCard() {
 	};
 
 	return (
-		<div className="fixed right-2 sm:right-4 lg:right-6 top-2 sm:top-4 lg:top-6 bottom-2 sm:bottom-4 lg:bottom-6 w-[calc(100vw-1rem)] sm:w-72 lg:w-80 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl border border-orange-200/60 z-20 flex flex-col">
+		<div className="fixed right-2 sm:right-4 lg:right-6 top-2 sm:top-4 lg:top-6 bottom-2 sm:bottom-4 lg:bottom-6 w-[calc(100vw-1rem)] sm:w-72 lg:w-80 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl border border-primary-200/60 z-20 flex flex-col">
 			{/* Header */}
-			<div className="p-3 sm:p-4 border-b border-orange-100/50 flex-shrink-0">
+			<div className="p-3 sm:p-4 border-b border-primary-100/50 flex-shrink-0">
 				<div className="flex items-center justify-between">
-					<h3 className="text-sm sm:text-base font-semibold text-amber-900">
+					<h3 className="text-sm sm:text-base font-semibold text-slate-800">
 						{t("notificationsCard.title")}
 					</h3>
 					<div className="flex items-center gap-1.5 sm:gap-2">
-						<span className="bg-orange-500 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
+						<span className="bg-primary-500 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
 							{notifications.filter((n) => n.unread).length}
 						</span>
-						<button className="text-amber-600/60 hover:text-amber-700 transition-colors p-1">
+						<button className="text-primary-600/60 hover:text-slate-600 transition-colors p-1">
 							<svg
 								className="w-3.5 h-3.5 sm:w-4 sm:h-4"
 								fill="none"
@@ -160,8 +160,8 @@ export default function NotificationsCard() {
 				{notifications.map((notification) => (
 					<div
 						key={notification.id}
-						className={`p-3 sm:p-4 border-b border-orange-50/60 hover:bg-orange-50/60 transition-colors cursor-pointer ${
-							notification.unread ? "bg-orange-50/40" : ""
+						className={`p-3 sm:p-4 border-b border-primary-50/60 hover:bg-primary-50/60 transition-colors cursor-pointer ${
+							notification.unread ? "bg-primary-50/40" : ""
 						}`}
 					>
 						<div className="flex items-start gap-2 sm:gap-3">
@@ -170,17 +170,17 @@ export default function NotificationsCard() {
 							</div>
 							<div className="flex-1 min-w-0">
 								<div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
-									<h4 className="text-xs sm:text-sm font-medium text-amber-900 truncate">
+									<h4 className="text-xs sm:text-sm font-medium text-slate-800 truncate">
 										{notification.title}
 									</h4>
 									{notification.unread && (
-										<div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full flex-shrink-0"></div>
+										<div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary-500 rounded-full flex-shrink-0"></div>
 									)}
 								</div>
-								<p className="text-[10px] sm:text-xs text-amber-800/80 mb-0.5 sm:mb-1">
+								<p className="text-[10px] sm:text-xs text-slate-700/80 mb-0.5 sm:mb-1">
 									{notification.message}
 								</p>
-								<p className="text-[10px] sm:text-xs text-amber-600/60">
+								<p className="text-[10px] sm:text-xs text-primary-600/60">
 									{notification.time}
 								</p>
 							</div>
@@ -190,8 +190,8 @@ export default function NotificationsCard() {
 			</div>
 
 			{/* Footer */}
-			<div className="p-3 sm:p-4 border-t border-orange-100/50 flex-shrink-0">
-				<button className="w-full text-center text-xs sm:text-sm text-orange-600 hover:text-orange-700 transition-colors">
+			<div className="p-3 sm:p-4 border-t border-primary-100/50 flex-shrink-0">
+				<button className="w-full text-center text-xs sm:text-sm text-primary-600 hover:text-primary-700 transition-colors">
 					{t("notificationsCard.viewAll")}
 				</button>
 			</div>

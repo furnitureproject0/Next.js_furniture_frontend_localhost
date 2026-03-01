@@ -10,11 +10,11 @@ export default function ModalFooter({
 	t 
 }) {
 	return (
-		<div className="flex-shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-0 p-4 sm:p-5 lg:p-6 border-t border-orange-100 bg-orange-50/30">
+		<div className="flex-shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-0 p-4 sm:p-5 lg:p-6 border-t border-primary-100 bg-primary-50/30">
 			<button
 				onClick={onBack}
 				disabled={currentStep === 1}
-				className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-amber-700 hover:text-amber-900 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer"
+				className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-slate-600 hover:text-slate-800 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer"
 			>
 				<svg
 					className="w-4 h-4 sm:w-5 sm:h-5"
@@ -35,7 +35,7 @@ export default function ModalFooter({
 			<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
 				<button
 					onClick={onCancel}
-					className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-amber-700 hover:text-amber-900 font-medium transition-colors cursor-pointer"
+					className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-slate-600 hover:text-slate-800 font-medium transition-colors cursor-pointer"
 				>
 					{t("common.buttons.cancel")}
 				</button>

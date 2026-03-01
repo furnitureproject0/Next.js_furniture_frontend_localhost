@@ -1,71 +1,69 @@
 "use client";
 
-import NewCompanyAdminOrderModal from "@/components/company-admin/NewCompanyAdminOrderModal";
-import OrdersList from "@/components/dashboard/OrdersList";
-import StatsCards from "@/components/dashboard/StatsCards";
+import CompanyAdminOrdersList from "@/components/company-admin/CompanyAdminOrdersList";
+import CompanyAdminStatsCards from "@/components/company-admin/CompanyAdminStatsCards";
+import CompanyAdminDayStriker from "@/components/company-admin/CompanyAdminDayStriker";
+import CompanyAdminNewOrdersFilter from "@/components/company-admin/CompanyAdminNewOrdersFilter";
+import CalendarDatePicker from "@/components/site-admin/CalendarDatePicker";
 import PricingModal from "@/components/modals/PricingModal";
 import TeamAssignmentModal from "@/components/modals/TeamAssignmentModal";
+import NewCompanyAdminOrderModal from "@/components/company-admin/NewCompanyAdminOrderModal";
 import { useGlobalToast } from "@/hooks/useGlobalToast";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { selectCompanyOrders, selectDisplayEmployees, selectUser } from "@/store/selectors";
-import { createCompanyAdminOrder, fetchCompanyAdminOrders, sendOffer, sendOrderServiceOffer, updateOrder } from "@/store/slices/ordersSlice";
-import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { selectUser, selectCompanyOrders, selectDisplayEmployees } from "@/store/selectors";
+import { fetchCompanyAdminOrders, sendOffer, sendOrderServiceOffer, updateOrder } from "@/store/slices/ordersSlice";
+import { useState, useMemo, useEffect, useRef } from "react";
 
 export default function CompanyAdminDashboard() {
-	const { t } = useTranslation();
+	const { t, currentLanguage } = useTranslation();
 	const { toast } = useGlobalToast();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(selectUser);
 	const employees = useAppSelector(selectDisplayEmployees);
-	const companyOrders = useAppSelector((state) =>
-		selectCompanyOrders(user?.company_id)(state),
-	);
-	
-	
-	const fetchedCompanyId = useRef(null); // Ref to track which company's orders have been fetched
+	const memoizedSelectCompanyOrders = useMemo(() => {
+		return user?.company_id ? selectCompanyOrders(user.company_id) : () => [];
+	}, [user?.company_id]);
 
-	// Fetch company admin orders on component mount, after login, or when company_id changes
+	const companyOrders = useAppSelector(memoizedSelectCompanyOrders);
+	const router = useRouter();
+
+	const fetchedCompanyId = useRef(null);
+
+	// Fetch company admin orders on component mount
 	useEffect(() => {
-		// Also check if user is loaded (not just company_id)
 		if (user && user.company_id) {
-			// Fetch if we haven't fetched for this company yet, or if company_id changed
 			if (user.company_id !== fetchedCompanyId.current) {
 				dispatch(fetchCompanyAdminOrders({ company_id: user.company_id }));
-				fetchedCompanyId.current = user.company_id; // Store the fetched company ID
+				fetchedCompanyId.current = user.company_id;
 			}
 		}
 	}, [user, user?.company_id, dispatch]);
-
-	const searchParams = useSearchParams();
 	
-	// Check for openOrder query parameter
-	useEffect(() => {
-		const orderIdParam = searchParams.get('openOrder');
-		if (orderIdParam) {
-			const orderId = parseInt(orderIdParam, 10);
-			if (orderId && companyOrders.length > 0) {
-				// Check if order exists in the list
-				const order = companyOrders.find(o => o.id === orderId);
-				if (order && openOrderId !== orderId) {
-					setOpenOrderId(orderId);
-					// Remove query parameter from URL without reload
-					window.history.replaceState({}, '', '/company-admin/dashboard');
-				}
-			}
-		} else if (openOrderId !== null) {
-			// Clear openOrderId if query parameter is removed
-			setOpenOrderId(null);
-		}
-	}, [searchParams]);
 	const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
 	const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
 	const [isNewOrderModalOpen, setIsNewOrderModalOpen] = useState(false);
-	const [selectedOrderForPricing, setSelectedOrderForPricing] =
-		useState(null);
+	const [selectedOrderForPricing, setSelectedOrderForPricing] = useState(null);
 	const [selectedOrderForTeam, setSelectedOrderForTeam] = useState(null);
-	const [openOrderId, setOpenOrderId] = useState(null);
+	const [refreshTrigger, setRefreshTrigger] = useState(0);
+	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+	const [filters, setFilters] = useState({
+		status: "all", 
+		search: "",
+		selectedDate: null,
+		service_id: "all",
+	});
+
+	const busyDates = useMemo(() => {
+		if (!companyOrders) return [];
+		return companyOrders.map(o => o.preferred_date).filter(Boolean);
+	}, [companyOrders]);
+
+	const handleDateSelect = (date) => {
+		setFilters(prev => ({ ...prev, selectedDate: date }));
+	};
 
 	const handleSetPrice = (order, orderServiceId) => {
 		setSelectedOrderForPricing({ order, orderServiceId });
@@ -79,7 +77,6 @@ export default function CompanyAdminDashboard() {
 
 	const handlePricingSubmit = async (pricingData) => {
 		if (selectedOrderForPricing?.orderServiceId) {
-			// Use sendOrderServiceOffer if orderServiceId is provided
 			try {
 				const result = await dispatch(
 					sendOrderServiceOffer({
@@ -90,7 +87,6 @@ export default function CompanyAdminDashboard() {
 				).unwrap();
 				const message = result?.message || t("notifications.offerSent") || "Offer sent successfully";
 				toast.success(message);
-				// Refresh orders to get updated offer data
 				if (user?.company_id) {
 					dispatch(fetchCompanyAdminOrders({ company_id: user.company_id }));
 				}
@@ -100,7 +96,6 @@ export default function CompanyAdminDashboard() {
 				toast.error(errorMessage);
 			}
 		} else {
-			// Use old sendOffer for backward compatibility
 			await dispatch(
 				sendOffer({
 					orderId: selectedOrderForPricing.order.id,
@@ -117,7 +112,6 @@ export default function CompanyAdminDashboard() {
 		const driver = employees.find((emp) => emp.role === "Driver");
 		const workers = employees.filter((emp) => emp.role === "Mover");
 
-		// Create teamMembers array with all team members
 		const teamMembers = employees.map((emp) => ({
 			id: emp.id,
 			name: emp.name,
@@ -137,7 +131,7 @@ export default function CompanyAdminDashboard() {
 						name: teamLeader.name,
 						role: teamLeader.role,
 					} : null,
-					teamMembers: teamMembers, // Add the full team members array
+					teamMembers: teamMembers,
 				},
 			}),
 		);
@@ -146,50 +140,93 @@ export default function CompanyAdminDashboard() {
 	};
 
 	return (
-		<div className="min-h-screen" style={{ background: "#FFF8F3" }}>
-			<div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
+		<div className="min-h-screen" style={{ background: "#FFFFFF" }}>
+			<div className="p-4 sm:p-6 lg:p-8 space-y-6">
 				{/* Page Header */}
-				<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6 lg:mb-8">
-					<div className="flex-1 min-w-0">
-						<h1 className="text-2xl sm:text-3xl font-bold text-amber-900 mb-1 sm:mb-2">
+				<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+					<div>
+						<h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">
 							{t("dashboards.companyAdmin.title")}
 						</h1>
-						<p className="text-sm sm:text-base text-amber-700/70">
+						<p className="text-sm text-slate-600/70">
 							{t("dashboards.companyAdmin.subtitle")}
 						</p>
 					</div>
-					<button
-						onClick={() => setIsNewOrderModalOpen(true)}
-						className="w-full sm:w-auto btn-primary px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer"
-					>
-						<svg
-							className="w-4 h-4 sm:w-5 sm:h-5"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
+					<div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+						{/* Create Order — Green */}
+						<button
+							onClick={() => router.push("/company-admin/create-order")}
+							className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 bg-gradient-to-r from-emerald-500 to-green-600"
 						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M12 4v16m8-8H4"
-							/>
-						</svg>
-						<span className="whitespace-nowrap">{t("orders.newOrder")}</span>
-					</button>
+							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+							</svg>
+							<span className="whitespace-nowrap">{t("siteAdmin.dashboard.createOrder") || "Create Order"}</span>
+						</button>
+						{/* Create Offer — Orange */}
+						<button
+							onClick={() => router.push("/company-admin/create-offer")}
+							className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 bg-gradient-to-r from-orange-500 to-amber-600"
+						>
+							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+							</svg>
+							<span className="whitespace-nowrap">{t("siteAdmin.dashboard.createOffer") || "Create Offer"}</span>
+						</button>
+						{/* Create Appointment — Blue */}
+						<button
+							onClick={() => router.push("/company-admin/create-appointment")}
+							className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 bg-gradient-to-r from-blue-500 to-indigo-600"
+						>
+							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+							</svg>
+							<span className="whitespace-nowrap">{t("siteAdmin.dashboard.createAppointment") || "Create Appointment"}</span>
+						</button>
+					</div>
 				</div>
 
-				{/* Stats Cards */}
-				<StatsCards />
+				{/* 1. Filters & Search */}
+				<div className="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-primary-100 shadow-sm">
+					<CompanyAdminNewOrdersFilter 
+						filters={filters}
+						onFilterChange={setFilters}
+					/>
+				</div>
 
-				{/* Orders List */}
-				<OrdersList
-					onSetPrice={handleSetPrice}
-					onAssignTeam={handleAssignTeam}
-					openOrderId={openOrderId}
-					onOrderModalClose={() => {
-						setOpenOrderId(null);
-					}}
+				{/* 2. Horizontal Day Striker */}
+				<div className="bg-white p-2 rounded-2xl">
+					<CompanyAdminDayStriker 
+						selectedDate={filters.selectedDate}
+						onDateSelect={handleDateSelect}
+						busyDates={busyDates}
+						onOpenCalendar={() => setIsCalendarOpen(!isCalendarOpen)}
+					/>
+				</div>
+
+				{/* Collapsible Calendar (Full) */}
+				<div className={`overflow-hidden transition-all duration-500 ease-in-out ${isCalendarOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0 pointer-events-none"}`}>
+					<div className="max-w-md mx-auto">
+						<CalendarDatePicker
+							selectedDate={filters.selectedDate}
+							onDateSelect={(date) => {
+								handleDateSelect(date);
+								setIsCalendarOpen(false);
+							}}
+							busyDates={busyDates}
+						/>
+					</div>
+				</div>
+
+				{/* 3. Stats Cards */}
+				<CompanyAdminStatsCards selectedDate={filters.selectedDate} />
+
+				{/* 4. Orders, Offers, Appointments Grid */}
+				{/* 4. Orders List Table (Single Column) */}
+				<CompanyAdminOrdersList
+					refreshTrigger={refreshTrigger}
+					filters={filters}
+					onFilterChange={setFilters}
 				/>
 			</div>
 
@@ -217,14 +254,11 @@ export default function CompanyAdminDashboard() {
 				isOpen={isNewOrderModalOpen}
 				onClose={() => {
 					setIsNewOrderModalOpen(false);
-					// Refresh orders list after creating a new order
 					if (user?.company_id) {
 						dispatch(fetchCompanyAdminOrders({ company_id: user.company_id }));
 					}
 				}}
 				onOrderCreated={(orderData) => {
-					// Order is already created by the modal, just refresh the list
-					// No need to call createCompanyAdminOrder again - it's already done!
 					if (user?.company_id) {
 						dispatch(fetchCompanyAdminOrders({ company_id: user.company_id }));
 					}

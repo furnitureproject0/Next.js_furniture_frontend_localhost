@@ -1,21 +1,13 @@
 // API configuration and utilities
-// Use Next.js proxy in development (localhost) to avoid CORS issues
-// Next.js will proxy /api/* to http://localhost:5000/api/* in development
-// Use direct URL in production
-// Use environment variable for consistent server/client behavior
+// Backend API: http://localhost:5000/api
+// All requests route through this single endpoint
 const getApiBaseUrl = () => {
-	// Use environment variable if available (consistent for SSR)
+	// Use environment variable if available
 	if (process.env.NEXT_PUBLIC_API_BASE_URL) {
 		return process.env.NEXT_PUBLIC_API_BASE_URL;
 	}
-	// Fallback: check window only on client side
-	if (typeof window !== "undefined") {
-		return window.location.hostname === 'localhost'
-			? '/api'  // Use Next.js proxy in development (proxies to localhost:5000)
-			: "https://backend-production-3bcd.up.railway.app/api";  // Direct URL in production
-	}
-	// Server-side: default to production URL (will be overridden by client)
-	return "https://backend-production-3bcd.up.railway.app/api";
+	// Always use backend API
+	return "http://localhost:5000/api";
 };
 
 class ApiError extends Error {
@@ -58,7 +50,9 @@ const apiRequest = async (endpoint, options = {}) => {
 	delete config.token;
 
 	// Helper to check if an object contains any File instances
+	// Helper to check if an object contains any File instances (SSR safe)
 	const hasFile = (obj) => {
+		if (typeof window === 'undefined' || typeof File === 'undefined') return false;
 		if (obj instanceof File) {
 			return true;
 		}
@@ -71,19 +65,19 @@ const apiRequest = async (endpoint, options = {}) => {
 		return false;
 	};
 
-	// Helper to recursively build FormData for nested objects/arrays
+	// Helper to recursively build FormData for nested objects/arrays (SSR safe)
 	const buildFormData = (formData, data, parentKey = "") => {
-		if (data && typeof data === "object" && !(data instanceof File)) {
+		if (data && typeof data === "object" && (typeof File === 'undefined' || !(data instanceof File))) {
 			Object.keys(data).forEach((key) => {
 				const value = data[key];
 				// Use bracket notation for nested objects/arrays in FormData
 				const formKey = parentKey ? `${parentKey}[${key}]` : key;
 
-				if (value instanceof File) {
+				if (typeof File !== 'undefined' && value instanceof File) {
 					formData.append(formKey, value, value.name);
 				} else if (Array.isArray(value)) {
 					value.forEach((item, index) => {
-						if (item instanceof File) {
+						if (typeof File !== 'undefined' && item instanceof File) {
 							formData.append(`${formKey}[${index}]`, item, item.name);
 						} else if (typeof item === "object" && item !== null) {
 							// Stringify complex objects within arrays
@@ -100,7 +94,7 @@ const apiRequest = async (endpoint, options = {}) => {
 					formData.append(formKey, value);
 				}
 			});
-		} else if (data instanceof File) {
+		} else if (typeof File !== 'undefined' && data instanceof File) {
 			formData.append(parentKey, data, data.name);
 		} else if (data !== undefined && data !== null) {
 			formData.append(parentKey, data);
@@ -108,22 +102,22 @@ const apiRequest = async (endpoint, options = {}) => {
 	};
 
 	// Check if this is the create order endpoint - must use multipart/form-data
-	const isCreateOrderEndpoint = url.includes('/orders') && options.method === 'POST' && !url.includes('/orders/');
+	const isCreateOrderEndpoint = (url.includes('/orders') || url.includes('/offers') || url.includes('/appointments')) && options.method === 'POST' && !url.includes('/orders/') && !url.includes('-v2');
 
 	// Handle multipart/form-data for file uploads OR create order endpoint
-	if (options.body && options.method !== "GET" && (hasFile(options.body) || isCreateOrderEndpoint)) {
+	if (options.body && options.method !== "GET" && (hasFile(options.body) || isCreateOrderEndpoint) && typeof FormData !== 'undefined') {
 		const formData = new FormData();
 
 		// Handle image files separately - backend expects them in req.files, not req.body
 		// Check if images array contains File objects
 		const images = options.body.images;
-		const imageFiles = options.body._imageFiles || (images && Array.isArray(images) ? images.filter(img => img instanceof File) : []);
+		const imageFiles = options.body._imageFiles || (images && Array.isArray(images) ? images.filter(img => typeof File !== 'undefined' && img instanceof File) : []);
 
 		if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
 			// Add each image file with the key 'images' (not 'images[]') - backend expects req.files['images']
 			// According to FRONTEND_INTEGRATION_GUIDE.md, field name should be 'images' (plural)
 			imageFiles.forEach((file) => {
-				if (file instanceof File) {
+				if (typeof File !== 'undefined' && file instanceof File) {
 					formData.append('images', file, file.name);
 				}
 			});
@@ -135,15 +129,21 @@ const apiRequest = async (endpoint, options = {}) => {
 		delete bodyForFormData._imageFiles;
 		delete bodyForFormData.images; // Remove images completely - backend validation rejects it
 
-		// For create order endpoint, stringify JSON objects (location, destination_location, services)
+		// For create order endpoint, stringify JSON objects (location fields, services)
 		if (isCreateOrderEndpoint) {
-			// Stringify location if it exists
+			// Stringify location fields (old naming)
 			if (bodyForFormData.location && typeof bodyForFormData.location === 'object') {
 				bodyForFormData.location = JSON.stringify(bodyForFormData.location);
 			}
-			// Stringify destination_location if it exists
 			if (bodyForFormData.destination_location && typeof bodyForFormData.destination_location === 'object') {
 				bodyForFormData.destination_location = JSON.stringify(bodyForFormData.destination_location);
+			}
+			// Stringify location fields (v2 naming)
+			if (bodyForFormData.primary_location && typeof bodyForFormData.primary_location === 'object') {
+				bodyForFormData.primary_location = JSON.stringify(bodyForFormData.primary_location);
+			}
+			if (bodyForFormData.secondary_location && typeof bodyForFormData.secondary_location === 'object') {
+				bodyForFormData.secondary_location = JSON.stringify(bodyForFormData.secondary_location);
 			}
 			// Stringify services if it exists
 			if (bodyForFormData.services && Array.isArray(bodyForFormData.services)) {
@@ -301,18 +301,91 @@ export const authApi = {
 		apiRequest("/auth/me", {
 			method: "GET",
 		}),
+
+	verifyEmail: (otp) =>
+		apiRequest("/auth/verify-email", {
+			method: "POST",
+			body: { otp },
+		}),
+
+	resendVerification: () =>
+		apiRequest("/auth/resend-verification", {
+			method: "POST",
+		}),
+
+	forgotPassword: (email) =>
+		apiRequest("/auth/forgot-password", {
+			method: "POST",
+			body: { email },
+		}),
+
+	resetPassword: (data) =>
+		apiRequest("/auth/reset-password", {
+			method: "POST",
+			body: data,
+		}),
 };
 
 // Services API endpoints
 export const servicesApi = {
-	getServices: () =>
-		apiRequest("/services", {
+	getServices: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.search) queryParams.append("search", filters.search);
+		const queryString = queryParams.toString();
+		return apiRequest(`/services${queryString ? `?${queryString}` : ""}`, {
 			method: "GET",
+		});
+	},
+
+	getServiceById: (serviceId) =>
+		apiRequest(`/services/${serviceId}`, {
+			method: "GET",
+		}),
+
+	createService: (serviceData) =>
+		apiRequest("/services", {
+			method: "POST",
+			body: serviceData,
+		}),
+
+	updateService: (serviceId, serviceData) =>
+		apiRequest(`/services/${serviceId}`, {
+			method: "PATCH",
+			body: serviceData,
 		}),
 
 	getAdditionById: (additionId) =>
 		apiRequest(`/additions/${additionId}`, {
 			method: "GET",
+		}),
+};
+
+// Additions API endpoints
+export const additionsApi = {
+	getAdditions: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.search) queryParams.append("search", filters.search);
+		const queryString = queryParams.toString();
+		return apiRequest(`/additions${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+
+	getAdditionById: (additionId) =>
+		apiRequest(`/additions/${additionId}`, {
+			method: "GET",
+		}),
+
+	createAddition: (additionData) =>
+		apiRequest("/additions", {
+			method: "POST",
+			body: additionData,
+		}),
+
+	updateAddition: (additionId, additionData) =>
+		apiRequest(`/additions/${additionId}`, {
+			method: "PATCH",
+			body: additionData,
 		}),
 };
 
@@ -326,6 +399,63 @@ export const companiesApi = {
 	getCompanyById: (companyId) =>
 		apiRequest(`/companies/${companyId}`, {
 			method: "GET",
+		}),
+
+	createCompany: (companyData) =>
+		apiRequest("/companies", {
+			method: "POST",
+			body: companyData,
+		}),
+
+	updateCompany: (companyId, companyData) =>
+		apiRequest(`/companies/${companyId}`, {
+			method: "PATCH",
+			body: companyData,
+		}),
+
+	activateCompany: (companyId) =>
+		apiRequest(`/companies/${companyId}/activate`, {
+			method: "PATCH",
+		}),
+
+	suspendCompany: (companyId) =>
+		apiRequest(`/companies/${companyId}/suspend`, {
+			method: "PATCH",
+		}),
+
+	searchCompanies: (searchQuery = "") =>
+		apiRequest(`/companies?search=${encodeURIComponent(searchQuery)}`, {
+			method: "GET",
+		}),
+
+	getCompanyDashboard: (companyId) =>
+		apiRequest(`/companies/${companyId}/dashboard`, {
+			method: "GET",
+		}),
+
+	// Company Admin management
+	getCompanyAdmin: (companyId) =>
+		apiRequest(`/companies/${companyId}/admin`, {
+			method: "GET",
+		}),
+
+	createCompanyAdmin: (companyId, adminData) =>
+		apiRequest(`/companies/${companyId}/admin`, {
+			method: "POST",
+			body: adminData,
+		}),
+
+	updateCompanyAdmin: (companyId, adminData) =>
+		apiRequest(`/companies/${companyId}/admin`, {
+			method: "PATCH",
+			body: adminData,
+		}),
+
+	// Company Clients
+	createCompanyClient: (companyId, clientData) =>
+		apiRequest(`/companies/${companyId}/clients`, {
+			method: "POST",
+			body: clientData,
 		}),
 };
 
@@ -420,16 +550,45 @@ export const companyAdminApi = {
 			body: { email },
 		}),
 
+	searchClient: (params) => {
+		const queryParams = new URLSearchParams();
+
+		if (params.search) queryParams.append("search", params.search);
+		if (params.limit) queryParams.append("limit", params.limit);
+		if (params.page) queryParams.append("page", params.page);
+
+		const queryString = queryParams.toString();
+
+		return apiRequest(
+			`/admin/site-admin/search-clients${queryString ? `?${queryString}` : ""}`,
+			{
+			method: "GET",
+			}
+		);
+		},
+
 	createClient: (companyId, clientData) =>
-		apiRequest(`/companies/${companyId}/clients`, {
+		apiRequest("/admin/site-admin/add-client", {
 			method: "POST",
 			body: clientData,
 		}),
 
 	createOrder: (companyId, orderData) =>
-		apiRequest(`/companies/${companyId}/orders`, {
+		apiRequest("/orders-v2/admin-create-order", {
 			method: "POST",
-			body: orderData,
+			body: { ...orderData, company_id: companyId },
+		}),
+
+	createOffer: (companyId, orderData) =>
+		apiRequest("/offers-v2/admin-create-offer", {
+			method: "POST",
+			body: { ...orderData, company_id: companyId },
+		}),
+
+	createAppointment: (companyId, orderData) =>
+		apiRequest("/orders-v2/admin-create-order", {
+			method: "POST",
+			body: { ...orderData, company_id: companyId, order_type: 'appointment' },
 		}),
 
 	acceptOrderService: (orderId, orderServiceId) =>
@@ -513,6 +672,11 @@ export const companyAdminApi = {
 
 	makeEmployeeLeader: (offerId, employeeId) =>
 		apiRequest(`/offers/${offerId}/employees/${employeeId}/make-leader`, {
+			method: "PATCH",
+		}),
+
+	convertToOrder: (orderId) =>
+		apiRequest(`/site-admin/company-orders/${orderId}/convert-to-order`, {
 			method: "PATCH",
 		}),
 };
@@ -629,44 +793,304 @@ export const employeeApi = {
 
 // Site Admin API endpoints
 export const siteAdminApi = {
+	getClient: (clientId) =>
+		apiRequest(`/admin/site-admin/get-client/${clientId}`, {
+			method: "GET",
+		}),
+
+	// Orders v2 endpoints
+	// NOTE: Minimal parameters to avoid backend schema issues (Order.type error)
+	// Frontend handles pagination, filtering, and sorting to reduce backend dependency
 	getOrders: (filters = {}) => {
 		const queryParams = new URLSearchParams();
-		if (filters.status) {
+		
+		if (filters.status && filters.status !== "undefined" && filters.status !== "all") {
 			queryParams.append("status", filters.status);
 		}
-		if (filters.page) {
-			queryParams.append("page", filters.page);
+		
+		if (filters.search && filters.search !== "undefined" && filters.search.trim()) {
+			queryParams.append("search", filters.search.trim());
 		}
-		if (filters.limit) {
-			queryParams.append("limit", filters.limit);
-		}
-		if (filters.search) {
-			queryParams.append("search", filters.search);
-		}
-		if (filters.date) {
-			queryParams.append("date", filters.date);
-		}
-		if (filters.service_id) {
+
+		if (filters.service_id && filters.service_id !== "all") {
 			queryParams.append("service_id", filters.service_id);
 		}
+
+		if (filters.date) {
+			queryParams.append("execution_date", filters.date);
+		}
+
+		if (filters.type && filters.type !== "all") {
+			queryParams.append("type", filters.type);
+		}
+
 		const queryString = queryParams.toString();
-		return apiRequest(`/orders${queryString ? `?${queryString}` : ""}`, {
+		return apiRequest(`/orders-v2${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+
+	getSiteAdminOrders: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.status && filters.status !== "all") queryParams.append("status", filters.status);
+		if (filters.page) queryParams.append("page", filters.page);
+		if (filters.limit) queryParams.append("limit", filters.limit);
+		if (filters.search) queryParams.append("search", filters.search);
+		if (filters.client_id) queryParams.append("client_id", filters.client_id);
+		const queryString = queryParams.toString();
+		return apiRequest(`/orders-v2${queryString ? `?${queryString}` : ""}`, {
 			method: "GET",
 		});
 	},
 
 	createOrder: (orderData) =>
-		apiRequest("/site-admin/orders", {
+		apiRequest("/orders-v2/admin-create-order", {
 			method: "POST",
 			body: orderData,
 		}),
 
+	createOffer: (orderData) =>
+		apiRequest("/offers-v2/admin-create-offer", {
+			method: "POST",
+			body: orderData,
+		}),
+
+	createAppointment: (orderData) =>
+		apiRequest("/orders-v2/admin-create-order", {
+			method: "POST",
+			body: { ...orderData, order_type: 'appointment' },
+		}),
+
+	updateOrder: (orderId, orderData) =>
+		apiRequest(`/orders-v2/admin-update-order/${orderId}`, {
+			method: "PATCH",
+			body: orderData,
+		}),
+
+	updateOffer: (offerId, offerData) =>
+		apiRequest(`/offers-v2/admin-update-offer/${offerId}`, {
+			method: "PATCH",
+			body: offerData,
+		}),
+
 	cancelOrder: (orderId, reason) =>
-		apiRequest(`/orders/${orderId}/cancel`, {
+		apiRequest(`/orders-v2/${orderId}/cancel`, {
 			method: "PATCH",
 			body: { reason },
 		}),
+
+	cancelOffer: (offerId, reason) =>
+		apiRequest(`/offers-v2/${offerId}/cancel`, {
+			method: "PATCH",
+			body: { reason },
+		}),
+
+	convertToOrder: (orderId) =>
+		apiRequest(`/orders-v2/admin-update-order/${orderId}`, {
+			method: "PATCH",
+			body: { type: 'order' },
+		}),
+
+	getOrder: (orderId) =>
+		apiRequest(`/orders-v2/${orderId}`, {
+			method: "GET",
+		}),
+
+	// Offers v2 endpoints
+	getOffers: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.search) queryParams.append("search", filters.search);
+		if (filters.limit) queryParams.append("limit", filters.limit);
+		if (filters.page) queryParams.append("page", filters.page);
+		if (filters.status) queryParams.append("status", filters.status);
+		const queryString = queryParams.toString();
+		return apiRequest(`/offers-v2${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+
+	// Client management (admin routes)
+	searchClients: (params) => {
+		const queryParams = new URLSearchParams();
+		if (params.search) queryParams.append("search", params.search);
+		if (params.limit) queryParams.append("limit", params.limit);
+		if (params.page) queryParams.append("page", params.page);
+		const queryString = queryParams.toString();
+		return apiRequest(`/admin/site-admin/search-clients${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+
+	addClient: (clientData) =>
+		apiRequest("/admin/site-admin/add-client", {
+			method: "POST",
+			body: clientData,
+		}),
+
+	updateClient: (clientId, clientData) =>
+		apiRequest(`/admin/site-admin/update-client/${clientId}`, {
+			method: "PATCH",
+			body: clientData,
+		}),
+
+	deleteClient: (clientId) =>
+		apiRequest(`/admin/site-admin/delete-client/${clientId}`, {
+			method: "DELETE",
+		}),
 };
 
-export { ApiError };
+// Services V2 API endpoints (Super Admin)
+export const servicesV2Api = {
+	getServices: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.search) queryParams.append("search", filters.search);
+		if (filters.limit) queryParams.append("limit", filters.limit);
+		const queryString = queryParams.toString();
+		return apiRequest(`/services-v2${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
 
+	createService: (serviceData) =>
+		apiRequest("/services-v2", {
+			method: "POST",
+			body: serviceData,
+		}),
+
+	updateService: (serviceId, serviceData) =>
+		apiRequest(`/services-v2/${serviceId}`, {
+			method: "PATCH",
+			body: serviceData,
+		}),
+
+	activateService: (serviceId) =>
+		apiRequest(`/services-v2/active/${serviceId}`, {
+			method: "GET",
+		}),
+
+	deactivateService: (serviceId) =>
+		apiRequest(`/services-v2/de-active/${serviceId}`, {
+			method: "GET",
+		}),
+
+	trashService: (serviceId) =>
+		apiRequest(`/services-v2/trash/${serviceId}`, {
+			method: "GET",
+		}),
+
+	retrieveService: (serviceId) =>
+		apiRequest(`/services-v2/retrieve/${serviceId}`, {
+			method: "GET",
+		}),
+
+	deleteService: (serviceId) =>
+		apiRequest(`/services-v2/${serviceId}`, {
+			method: "DELETE",
+		}),
+};
+
+// Additions V2 API endpoints (Super Admin)
+export const additionsV2Api = {
+	getAdditions: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.search) queryParams.append("search", filters.search);
+		const queryString = queryParams.toString();
+		return apiRequest(`/additions-v2${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+
+	createAddition: (additionData) =>
+		apiRequest("/additions-v2", {
+			method: "POST",
+			body: additionData,
+		}),
+
+	updateAddition: (additionId, additionData) =>
+		apiRequest(`/additions-v2/${additionId}`, {
+			method: "PATCH",
+			body: additionData,
+		}),
+};
+
+// Vehicles API endpoints
+export const vehiclesApi = {
+	searchVehicles: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.search) queryParams.append("search", filters.search);
+		const queryString = queryParams.toString();
+		return apiRequest(`/vehicles/search${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+
+	addVehicle: (vehicleData) =>
+		apiRequest("/vehicles/add", {
+			method: "POST",
+			body: vehicleData,
+		}),
+
+	editVehicle: (vehicleId, vehicleData) =>
+		apiRequest(`/vehicles/edit/${vehicleId}`, {
+			method: "PATCH",
+			body: vehicleData,
+		}),
+
+	deleteVehicle: (vehicleId) =>
+		apiRequest(`/vehicles/delete/${vehicleId}`, {
+			method: "DELETE",
+		}),
+};
+
+// Users V2 API endpoints (Super Admin)
+export const usersV2Api = {
+	getUsers: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.search) queryParams.append("search", filters.search);
+		if (filters.limit) queryParams.append("limit", filters.limit);
+		if (filters.page) queryParams.append("page", filters.page);
+		const queryString = queryParams.toString();
+		return apiRequest(`/users-v2/admin/get-users${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+
+	getAdmins: () =>
+		apiRequest("/users-v2/super-admin/get-admins", {
+			method: "GET",
+		}),
+
+	createUser: (userData) =>
+		apiRequest("/users-v2/admin/create-user", {
+			method: "POST",
+			body: userData,
+		}),
+
+	updateUser: (userId, userData) =>
+		apiRequest(`/users-v2/admin/update-user/${userId}`, {
+			method: "PATCH",
+			body: userData,
+		}),
+
+	deleteUser: (userId) =>
+		apiRequest(`/users-v2/admin/delete-user/${userId}`, {
+			method: "DELETE",
+		}),
+};
+
+// Admin Companies V2 API endpoints (Super Admin)
+export const adminCompaniesV2Api = {
+	assignCompanies: (userId, assignmentData) =>
+		apiRequest(`/admin-companies-v2/assign-companies/${userId}`, {
+			method: "POST",
+			body: assignmentData,
+		}),
+
+	updateCompanyAssignments: (userId, assignmentData) =>
+		apiRequest(`/admin-companies-v2/assign-companies/${userId}`, {
+			method: "PATCH",
+			body: assignmentData,
+		}),
+};
+
+export { ApiError, apiRequest };

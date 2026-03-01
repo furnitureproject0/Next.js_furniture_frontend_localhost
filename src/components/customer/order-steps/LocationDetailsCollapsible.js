@@ -163,11 +163,11 @@ export default function LocationDetailsCollapsible({
 	if (!locationType) return null;
 
 	return (
-		<div className="pt-2 sm:pt-3 border-t border-orange-200">
+		<div className="pt-2 sm:pt-3 border-t border-primary-200">
 			<button
 				type="button"
 				onClick={() => setIsOpen(!isOpen)}
-				className="w-full flex items-center justify-between text-xs sm:text-sm font-medium text-amber-800 hover:text-amber-900 transition-colors cursor-pointer"
+				className="w-full flex items-center justify-between text-xs sm:text-sm font-medium text-slate-700 hover:text-slate-800 transition-colors cursor-pointer"
 			>
 				<span>{t("orderSteps.locationDetails")}</span>
 				<svg
@@ -185,7 +185,7 @@ export default function LocationDetailsCollapsible({
 					{/* Show Floor Number for Apartment/Office */}
 					{showFloorNumber && (
 						<div>
-							<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+							<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 								{t("orderSteps.floorNumber")} {required && <span className="text-red-500">*</span>}
 							</label>
 							<input
@@ -200,7 +200,7 @@ export default function LocationDetailsCollapsible({
 									)
 								}
 								placeholder={t("orderSteps.floorPlaceholder")}
-								className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${errors?.floor ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+								className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${errors?.floor ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 									}`}
 							/>
 							{errors?.floor && (
@@ -214,7 +214,7 @@ export default function LocationDetailsCollapsible({
 					{/* Show Number of Floors for Warehouse/House/Building */}
 					{showNumberOfFloors && (
 						<div>
-							<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+							<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 								{t("orderSteps.numberOfFloors")} {required && <span className="text-red-500">*</span>}
 							</label>
 							<input
@@ -229,7 +229,7 @@ export default function LocationDetailsCollapsible({
 									)
 								}
 								placeholder={t("orderSteps.floorsPlaceholder")}
-								className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${errors?.numberOfFloors ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+								className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${errors?.numberOfFloors ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 									}`}
 							/>
 							{errors?.numberOfFloors && (
@@ -242,7 +242,7 @@ export default function LocationDetailsCollapsible({
 
 					{/* Number of Rooms - Always shown */}
 					<div>
-						<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+						<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 							{t("orderSteps.numberOfRooms")} {required && <span className="text-red-500">*</span>}
 						</label>
 						<input
@@ -258,7 +258,7 @@ export default function LocationDetailsCollapsible({
 								)
 							}
 							placeholder={t("orderSteps.roomsPlaceholder")}
-							className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${errors?.numberOfRooms ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+							className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${errors?.numberOfRooms ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 								}`}
 						/>
 						{errors?.numberOfRooms && (
@@ -270,7 +270,7 @@ export default function LocationDetailsCollapsible({
 
 					{/* Area - Always shown */}
 					<div>
-						<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+						<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 							{t("orderSteps.areaM2")} {required && <span className="text-red-500">*</span>}
 						</label>
 						<input
@@ -286,7 +286,7 @@ export default function LocationDetailsCollapsible({
 								)
 							}
 							placeholder={t("orderSteps.areaPlaceholder")}
-							className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${errors?.area ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+							className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${errors?.area ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 								}`}
 						/>
 						{errors?.area && (
@@ -309,9 +309,9 @@ export default function LocationDetailsCollapsible({
 										e.target.checked,
 									)
 								}
-								className="w-4 h-4 text-orange-600 border-orange-300 rounded focus:ring-orange-500 flex-shrink-0"
+								className="w-4 h-4 text-primary-600 border-primary-300 rounded focus:ring-primary-500 flex-shrink-0"
 							/>
-							<span className="text-xs sm:text-sm text-amber-800">
+							<span className="text-xs sm:text-sm text-slate-700">
 								{t("orderSteps.hasElevator")}
 							</span>
 						</label>
@@ -319,7 +319,7 @@ export default function LocationDetailsCollapsible({
 
 					{/* Notes field - Always shown, optional */}
 					<div>
-						<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+						<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 							{t("orderSteps.additionalNotes")}
 						</label>
 						<textarea
@@ -329,14 +329,14 @@ export default function LocationDetailsCollapsible({
 							}
 							placeholder={t("orderSteps.additionalInfoPlaceholder")}
 							rows="2"
-							className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 resize-none"
+							className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 resize-none"
 						/>
 					</div>
 
 					{/* Room Configuration Section */}
 					{expectedRoomCount > 0 && (
-						<div className="pt-3 border-t border-orange-200/60">
-							<h5 className="text-xs sm:text-sm font-semibold text-amber-900 mb-2">
+						<div className="pt-3 border-t border-primary-200/60">
+							<h5 className="text-xs sm:text-sm font-semibold text-slate-800 mb-2">
 								{t("orderSteps.roomConfiguration")}
 							</h5>
 
@@ -355,14 +355,14 @@ export default function LocationDetailsCollapsible({
 										return (
 											<div
 												key={index}
-												className="flex flex-col sm:flex-row gap-2 items-start sm:items-center p-2.5 sm:p-3 bg-white border border-orange-100 rounded-lg"
+												className="flex flex-col sm:flex-row gap-2 items-start sm:items-center p-2.5 sm:p-3 bg-white border border-primary-100 rounded-lg"
 											>
 												{/* Room Type Dropdown */}
 												<div className="flex-1 w-full sm:w-auto min-w-0">
 													<select
 														value={room.roomType || ""}
 														onChange={(e) => handleRoomTypeChange(index, e.target.value)}
-														className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white cursor-pointer"
+														className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-primary-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white cursor-pointer"
 													>
 														<option value="">{t("orderSteps.selectRoomType") || "Select room type..."}</option>
 														{ROOM_TYPES.map((type) => (
@@ -379,18 +379,18 @@ export default function LocationDetailsCollapsible({
 														type="button"
 														onClick={() => handleQuantityChange(index, -1)}
 														disabled={room.quantity <= 1}
-														className="w-7 h-7 flex items-center justify-center border border-orange-300 rounded-md bg-white hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-orange-600 font-semibold text-sm"
+														className="w-7 h-7 flex items-center justify-center border border-primary-300 rounded-md bg-white hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-primary-600 font-semibold text-sm"
 													>
 														−
 													</button>
-													<span className="w-8 text-center text-xs sm:text-sm font-medium text-amber-900">
+													<span className="w-8 text-center text-xs sm:text-sm font-medium text-slate-800">
 														{room.quantity || 1}
 													</span>
 													<button
 														type="button"
 														onClick={() => handleQuantityChange(index, 1)}
 														disabled={isAtLimit || !canIncrement}
-														className="w-7 h-7 flex items-center justify-center border border-orange-300 rounded-md bg-white hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-orange-600 font-semibold text-sm"
+														className="w-7 h-7 flex items-center justify-center border border-primary-300 rounded-md bg-white hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-primary-600 font-semibold text-sm"
 													>
 														+
 													</button>
@@ -419,7 +419,7 @@ export default function LocationDetailsCollapsible({
 									type="button"
 									onClick={handleAddRoom}
 									disabled={totalConfiguredRooms >= expectedRoomCount}
-									className="w-full px-3 py-2 text-xs sm:text-sm text-orange-600 hover:text-orange-700 hover:bg-orange-50 border-2 border-dashed border-orange-300 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+									className="w-full px-3 py-2 text-xs sm:text-sm text-primary-600 hover:text-primary-700 hover:bg-primary-50 border-2 border-dashed border-primary-300 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
 								>
 									<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -440,12 +440,12 @@ export default function LocationDetailsCollapsible({
 					)}
 
 					{/* Image Upload Section */}
-					<div className="pt-3 border-t border-orange-200/60">
-						<label className="block text-xs sm:text-sm font-semibold text-amber-900 mb-2">
+					<div className="pt-3 border-t border-primary-200/60">
+						<label className="block text-xs sm:text-sm font-semibold text-slate-800 mb-2">
 							{t("orderSteps.uploadImages") || "Upload Images (Optional)"}
 						</label>
 
-						<div className="border-2 border-dashed border-orange-300 rounded-lg p-3 sm:p-4 text-center hover:border-orange-400 transition-colors">
+						<div className="border-2 border-dashed border-primary-300 rounded-lg p-3 sm:p-4 text-center hover:border-primary-400 transition-colors">
 							<input
 								ref={fileInputRef}
 								type="file"
@@ -460,7 +460,7 @@ export default function LocationDetailsCollapsible({
 								className="cursor-pointer flex flex-col items-center"
 							>
 								<svg
-									className="w-8 h-8 sm:w-10 sm:h-10 text-orange-500 mb-2"
+									className="w-8 h-8 sm:w-10 sm:h-10 text-primary-500 mb-2"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -472,10 +472,10 @@ export default function LocationDetailsCollapsible({
 										d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
 									/>
 								</svg>
-								<span className="text-[10px] sm:text-xs font-medium text-amber-900 mb-1">
+								<span className="text-[10px] sm:text-xs font-medium text-slate-800 mb-1">
 									{t("orderSteps.clickToUpload") || "Click to upload images"}
 								</span>
-								<span className="text-[9px] sm:text-[10px] text-amber-600/70">
+								<span className="text-[9px] sm:text-[10px] text-primary-600/70">
 									{(address.images?.length || 0)} / 10 {t("orderSteps.images") || "images"}
 								</span>
 							</label>
@@ -490,14 +490,14 @@ export default function LocationDetailsCollapsible({
 						{/* Image Preview */}
 						{address.images && address.images.length > 0 && (
 							<div className="mt-3">
-								<h6 className="text-[10px] sm:text-xs font-medium text-amber-800 mb-2">
+								<h6 className="text-[10px] sm:text-xs font-medium text-slate-700 mb-2">
 									{t("orderSteps.uploadedImages") || "Uploaded Images"}
 								</h6>
 								<div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
 									{address.images.map((image) => (
 										<div
 											key={image.id}
-											className="relative group rounded-lg overflow-hidden border border-orange-200"
+											className="relative group rounded-lg overflow-hidden border border-primary-200"
 										>
 											<img
 												src={image.url}

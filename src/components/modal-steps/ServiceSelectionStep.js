@@ -48,7 +48,7 @@ export function ServiceSelectionStep({ formData, setFormData }) {
 							key={service.id}
 							className={`cursor-pointer transition-all duration-200 border-2 rounded-lg p-3 sm:p-4 ${
 								isSelected
-									? "ring-2 ring-orange-500 bg-orange-50 border-orange-200"
+									? "ring-2 ring-primary-500 bg-primary-50 border-primary-200"
 									: "hover:bg-gray-50 border-gray-200"
 							}`}
 							onClick={() => handleServiceToggle(service.id)}
@@ -63,7 +63,7 @@ export function ServiceSelectionStep({ formData, setFormData }) {
 									</p>
 								</div>
 								{isSelected && (
-									<div className="ml-2 sm:ml-4 p-1 sm:p-1.5 bg-orange-500 rounded-full flex-shrink-0">
+									<div className="ml-2 sm:ml-4 p-1 sm:p-1.5 bg-primary-500 rounded-full flex-shrink-0">
 										<Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
 									</div>
 								)}
@@ -74,8 +74,8 @@ export function ServiceSelectionStep({ formData, setFormData }) {
 			</div>
 
 			{formData.services.length > 0 && (
-				<div className="bg-orange-50 border border-orange-200 rounded-lg p-3 sm:p-4">
-					<h4 className="text-sm sm:text-base font-medium text-orange-900 mb-1.5 sm:mb-2">
+				<div className="bg-primary-50 border border-primary-200 rounded-lg p-3 sm:p-4">
+					<h4 className="text-sm sm:text-base font-medium text-primary-900 mb-1.5 sm:mb-2">
 						{t("modalSteps.serviceSelection.selectedServices")}:
 					</h4>
 					<div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -86,7 +86,7 @@ export function ServiceSelectionStep({ formData, setFormData }) {
 							return (
 								<span
 									key={serviceId}
-									className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-orange-100 text-orange-800 rounded-full text-xs sm:text-sm font-medium"
+									className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-primary-100 text-primary-800 rounded-full text-xs sm:text-sm font-medium"
 								>
 									{service?.name}
 								</span>

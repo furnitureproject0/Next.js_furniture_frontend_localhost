@@ -3,16 +3,16 @@
 import { useTranslation } from "@/hooks/useTranslation";
 
 const StatCard = ({ title, value, icon, bgColor }) => (
-	<div className="bg-white/80 backdrop-blur-sm rounded-xl border border-orange-200/60 shadow-lg p-4 sm:p-5 lg:p-6">
-		<div className="flex items-center justify-between gap-3">
-			<div className="flex-1 min-w-0">
-				<p className="text-xs sm:text-sm font-medium text-orange-600/70 mb-1">
+	<div className="bg-white/80 backdrop-blur-sm rounded-xl border border-primary-200/60 shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300">
+		<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+			<div className="flex-1 mb-3 sm:mb-0">
+				<p className="text-xs sm:text-sm font-semibold text-primary-600/70 mb-2">
 					{title}
 				</p>
-				<p className="text-2xl sm:text-3xl font-bold text-amber-900">{value}</p>
+				<p className="text-2xl sm:text-3xl font-bold text-slate-800">{value}</p>
 			</div>
 			<div
-				className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 ${bgColor} rounded-full flex items-center justify-center shadow-md flex-shrink-0`}
+				className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 ${bgColor} rounded-lg flex items-center justify-center shadow-md flex-shrink-0`}
 			>
 				{icon}
 			</div>
@@ -34,10 +34,10 @@ export default function WorkerStatsCards({ assignments = [] }) {
 			<StatCard
 				title={t("worker.stats.totalAssignments") || "Total Assignments"}
 				value={stats.totalAssignments}
-				bgColor="bg-gradient-to-br from-orange-50 to-orange-100"
+				bgColor="bg-gradient-to-br from-primary-50 to-primary-100"
 				icon={
 					<svg
-						className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-orange-600"
+						className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-primary-600"
 						fill="none"
 						stroke="currentColor"
 						viewBox="0 0 24 24"

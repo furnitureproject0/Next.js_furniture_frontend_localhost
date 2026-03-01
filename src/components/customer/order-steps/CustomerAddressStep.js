@@ -95,8 +95,8 @@ function AddressSection({
 	}, [addressType, updateAddress]);
 
 	return (
-		<div className="space-y-3 sm:space-y-4 p-3 sm:p-4 lg:p-5 bg-orange-50/30 rounded-lg border border-orange-200/50">
-			<h4 className="text-sm sm:text-base font-semibold text-amber-900">
+		<div className="space-y-3 sm:space-y-4 p-3 sm:p-4 lg:p-5 bg-primary-50/30 rounded-lg border border-primary-200/50">
+			<h4 className="text-sm sm:text-base font-semibold text-slate-800">
 				{title} {required && <span className="text-red-500">*</span>}
 			</h4>
 
@@ -104,7 +104,7 @@ function AddressSection({
 				{/* Address Autocomplete Search */}
 				{!showManualAddress && (
 					<div>
-						<label className="block text-xs sm:text-sm font-medium text-amber-800 mb-1">
+						<label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
 							{t("orderSteps.searchAddress") || "Search Address"} {required && <span className="text-red-500">*</span>}
 						</label>
 						<AddressInput
@@ -121,13 +121,13 @@ function AddressSection({
 						)}
 						{!errors?.fullAddress && !errors?.coordinates && (
 							<div className="mt-1 flex items-center gap-2">
-								<p className="text-[10px] sm:text-xs text-amber-600/70 flex-1">
+								<p className="text-[10px] sm:text-xs text-primary-600/70 flex-1">
 									{t("orderSteps.addressSearchHint")}
 								</p>
 								<button
 									type="button"
 									onClick={handleShowManualAddress}
-									className="text-[10px] sm:text-xs text-orange-600 hover:text-orange-700 underline"
+									className="text-[10px] sm:text-xs text-primary-600 hover:text-primary-700 underline"
 								>
 									{t("orderSteps.useManualAddress") || "Enter manually"}
 								</button>
@@ -140,7 +140,7 @@ function AddressSection({
 				{showManualAddress && (
 					<div className="space-y-2.5 sm:space-y-3 p-3 bg-blue-50/50 border border-blue-200 rounded-lg">
 						<div className="flex items-center justify-between mb-2">
-							<label className="block text-xs sm:text-sm font-medium text-amber-800">
+							<label className="block text-xs sm:text-sm font-medium text-slate-700">
 								{t("orderSteps.manualAddress") || "Manual Address Entry"} {required && <span className="text-red-500">*</span>}
 							</label>
 							<button
@@ -149,14 +149,14 @@ function AddressSection({
 									setShowManualAddress(false);
 									updateAddress(addressType, "useManualAddress", false);
 								}}
-								className="text-[10px] sm:text-xs text-orange-600 hover:text-orange-700 underline"
+								className="text-[10px] sm:text-xs text-primary-600 hover:text-primary-700 underline"
 							>
 								{t("orderSteps.useSearch") || "Use search instead"}
 							</button>
 						</div>
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
 							<div>
-								<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+								<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 									{t("orderSteps.buildingNumber") || "Building Number"} {required && <span className="text-red-500">*</span>}
 								</label>
 								<input
@@ -164,8 +164,8 @@ function AddressSection({
 									value={address.buildingNumber || ""}
 									onChange={(e) => handleManualFieldChange("buildingNumber", e.target.value)}
 									placeholder={t("orderSteps.buildingNumberPlaceholder") || "e.g., 123"}
-									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${
-										errors?.buildingNumber ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${
+										errors?.buildingNumber ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 									}`}
 								/>
 								{errors?.buildingNumber && (
@@ -175,7 +175,7 @@ function AddressSection({
 								)}
 							</div>
 							<div>
-								<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+								<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 									{t("orderSteps.streetName") || "Street Name"} {required && <span className="text-red-500">*</span>}
 								</label>
 								<input
@@ -183,8 +183,8 @@ function AddressSection({
 									value={address.streetName || ""}
 									onChange={(e) => handleManualFieldChange("streetName", e.target.value)}
 									placeholder={t("orderSteps.streetNamePlaceholder") || "e.g., Main Street"}
-									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${
-										errors?.streetName ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${
+										errors?.streetName ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 									}`}
 								/>
 								{errors?.streetName && (
@@ -194,7 +194,7 @@ function AddressSection({
 								)}
 							</div>
 							<div>
-								<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+								<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 									{t("orderSteps.city") || "City"} {required && <span className="text-red-500">*</span>}
 								</label>
 								<input
@@ -202,8 +202,8 @@ function AddressSection({
 									value={address.city || ""}
 									onChange={(e) => handleManualFieldChange("city", e.target.value)}
 									placeholder={t("orderSteps.cityPlaceholder") || "e.g., Zürich"}
-									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${
-										errors?.city ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${
+										errors?.city ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 									}`}
 								/>
 								{errors?.city && (
@@ -213,7 +213,7 @@ function AddressSection({
 								)}
 							</div>
 							<div>
-								<label className="block text-xs sm:text-sm text-amber-700 mb-1">
+								<label className="block text-xs sm:text-sm text-slate-600 mb-1">
 									{t("orderSteps.country") || "Country"} {required && <span className="text-red-500">*</span>}
 								</label>
 								<input
@@ -221,8 +221,8 @@ function AddressSection({
 									value={address.country || ""}
 									onChange={(e) => handleManualFieldChange("country", e.target.value)}
 									placeholder={t("orderSteps.countryPlaceholder") || "e.g., Switzerland"}
-									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 ${
-										errors?.country ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+									className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 ${
+										errors?.country ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 									}`}
 								/>
 								{errors?.country && (
@@ -237,7 +237,7 @@ function AddressSection({
 				
 				{/* Location Type Selection */}
 				<div>
-					<label className="block text-xs sm:text-sm font-medium text-amber-800 mb-1">
+					<label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
 						{t("orderSteps.locationType")} {required && <span className="text-red-500">*</span>}
 					</label>
 					<select
@@ -245,8 +245,8 @@ function AddressSection({
 						onChange={(e) =>
 							updateAddress(addressType, "locationType", e.target.value)
 						}
-						className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 bg-white cursor-pointer ${
-							errors?.locationType ? "border-red-500 focus:ring-red-500" : "border-orange-200 focus:ring-orange-400"
+						className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 bg-white cursor-pointer ${
+							errors?.locationType ? "border-red-500 focus:ring-red-500" : "border-primary-200 focus:ring-primary-400"
 						}`}
 					>
 						<option value="">{t("orderSteps.selectLocationType")}</option>
@@ -297,8 +297,11 @@ export default function CustomerAddressStep({ formData, setFormData, validationE
 	// Check if furniture_moving service is selected
 	const hasFurnitureMoving = formData.services?.some(serviceId => {
 		const metadata = formData.servicesMetadata?.[serviceId];
+		// Check by internalId, name, or fallback ID (1 for Moving)
 		return metadata?.internalId === "furniture_moving" || 
-			metadata?.name === "Moving";
+			metadata?.name === "Moving" ||
+			serviceId === "furniture_moving" ||
+			serviceId === 1; // Fallback ID for Moving
 	}) || false;
 
 	// Extract errors for each address section
@@ -325,10 +328,10 @@ export default function CustomerAddressStep({ formData, setFormData, validationE
 	return (
 		<div className="space-y-4 sm:space-y-5 lg:space-y-6">
 			<div>
-				<h3 className="text-base sm:text-lg font-semibold text-amber-900 mb-1.5 sm:mb-2">
+				<h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-1.5 sm:mb-2">
 					{t("orderSteps.enterAddressDetails")}
 				</h3>
-				<p className="text-xs sm:text-sm text-amber-700/70">
+				<p className="text-xs sm:text-sm text-slate-600/70">
 					{hasFurnitureMoving 
 						? t("orderSteps.providePickupDelivery") 
 						: t("orderSteps.provideServiceLocation")}

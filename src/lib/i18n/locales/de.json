@@ -81,7 +81,10 @@
 			"perHour": "pro Stunde",
 			"assigning": "Wird zugewiesen...",
 			"min": "Min",
-			"max": "Max"
+			"max": "Max",
+			"hourlyRate": "Stundensatz",
+			"actions": "Aktionen",
+			"employee": "Mitarbeiter"
 		},
 		"messages": {
 			"loading": "Lädt...",
@@ -94,7 +97,9 @@
 			"noOrdersFound": "Keine Aufträge gefunden",
 			"noOrdersYet": "Noch keine Aufträge",
 			"allCaughtUp": "Alles erledigt",
-			"allCaughtUpMessage": "Derzeit keine neuen Benachrichtigungen. Wir informieren Sie, wenn etwas Wichtiges passiert."
+			"allCaughtUpMessage": "Derzeit keine neuen Benachrichtigungen. Wir informieren Sie, wenn etwas Wichtiges passiert.",
+			"confirmConversionTitle": "In Angebot umwandeln?",
+			"confirmConversionBody": "Sind Sie sicher, dass Sie diesen Termin in ein Angebot umwandeln möchten? Vorhandene Daten werden vorausgefüllt, um Ihnen beim Ausfüllen des Angebots zu helfen."
 		},
 		"nA": "N/A",
 		"unknown": "Unbekannt",
@@ -109,7 +114,8 @@
 		},
 		"confirmClose": "Schließen bestätigen",
 		"unsavedChanges": "Sie haben ungespeicherte Änderungen. Möchten Sie wirklich schließen?",
-		"closeAnyway": "Trotzdem schließen"
+		"closeAnyway": "Trotzdem schließen",
+		"search": "Suchen nach Name oder E-Mail..."
 	},
 	"ui": {
 		"sidebarToggle": {
@@ -161,6 +167,7 @@
 	},
 	"orders": {
 		"title": "Aufträge",
+		"createSuccess": "Auftrag erfolgreich erstellt",
 		"newOrder": "Neuer Auftrag",
 		"allOrders": "Alle Aufträge",
 		"assignedOrders": "Zugewiesene Aufträge",
@@ -178,6 +185,7 @@
 		"whenAssignedOrders": "Wenn Sie zugewiesene Aufträge haben, erscheinen sie hier.",
 		"tryAdjustingSearch": "Versuchen Sie, Ihre Suche oder Filter anzupassen",
 		"createFirstOrder": "Erstellen Sie Ihren ersten Auftrag, um zu beginnen",
+		"empty": "Keine Aufträge zum Anzeigen",
 		"status": {
 			"pending": "Ausstehend",
 			"assigned": "Firma zugewiesen",
@@ -208,7 +216,7 @@
 		"pendingOffers": "Ausstehende Angebote",
 		"activeOrders": "Aktive Aufträge",
 		"inProgress": "In Bearbeitung",
-		"completed": "Abgeschlossen"
+		"completed": "Abgeschlossene Aufträge"
 	},
 	"dashboards": {
 		"customer": {
@@ -217,7 +225,17 @@
 		},
 		"companyAdmin": {
 			"title": "Firmen-Dashboard",
-			"subtitle": "Verwalten Sie Ihre zugewiesenen Aufträge und Teamoperationen"
+			"subtitle": "Verwalten Sie Ihre zugewiesenen Aufträge und Teamoperationen",
+			"staff": {
+				"title": "Team Members",
+				"subtitle": "Manage your company team and employees",
+				"addEmployee": "+ Add Employee",
+				"noEmployees": "No employees yet",
+				"addFirst": "Add your first team member to get started",
+				"totalEmployees": "Total Employees",
+				"ratesSet": "Rates Set",
+				"avgRate": "Avg. Rate (CHF/hr)"
+			}
 		},
 		"superAdmin": {
 			"title": "Super Admin Dashboard",
@@ -517,6 +535,10 @@
 			"tryAdjustingFilters": "Versuchen Sie, Ihre Filter oder Suchkriterien anzupassen",
 			"orders": "Aufträge",
 			"offers": "Angebote"
+		},
+		"orders": {
+			"title": "Aufträge",
+			"subtitle": "Verwalten und verfolgen Sie alle Aufträge"
 		}
 	},
 	"calendar": {
@@ -775,6 +797,7 @@
 		"acceptOffer": "Angebot annehmen",
 		"rejectOffer": "Angebot ablehnen",
 		"noServices": "Keine Dienste",
+		"images": "Bilder",
 		"rejectionReason": "Grund für Ablehnung",
 		"rejectionReasonPlaceholder": "Bitte geben Sie einen Grund an...",
 		"cancelConfirmMessage": "Sind Sie sicher, dass Sie diese Bestellung stornieren möchten? Diese Aktion kann nicht rückgängig gemacht werden.",

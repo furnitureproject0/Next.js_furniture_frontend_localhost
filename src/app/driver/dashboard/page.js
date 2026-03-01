@@ -49,14 +49,14 @@ export default function DriverDashboard() {
 	}
 
 	return (
-		<div className="min-h-screen" style={{ background: "#FFF8F3" }}>
+		<div className="min-h-screen" style={{ background: "#FFFFFF" }}>
 			<div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
 				{/* Page Header */}
 				<div className="mb-4 sm:mb-6 lg:mb-8">
-					<h1 className="text-2xl sm:text-3xl font-bold text-amber-900 mb-1 sm:mb-2">
+					<h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
 						{t("dashboards.driver.title") || "Driver Dashboard"}
 					</h1>
-					<p className="text-sm sm:text-base text-amber-700/70">
+					<p className="text-sm sm:text-base text-slate-600/70">
 						{t("dashboards.driver.subtitle") || "Manage your delivery assignments and tasks"}
 					</p>
 				</div>
@@ -66,7 +66,7 @@ export default function DriverDashboard() {
 
 				{/* Assignments List */}
 				<div>
-					<h2 className="text-lg sm:text-xl font-semibold text-amber-900 mb-3 sm:mb-4">
+					<h2 className="text-lg sm:text-xl font-semibold text-slate-800 mb-3 sm:mb-4">
 						{t("employee.assignments.title") || "My Assignments"}
 					</h2>
 					<AssignmentsList

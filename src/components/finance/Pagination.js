@@ -14,9 +14,9 @@ export default function Pagination({
 	const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
 	return (
-		<div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-orange-100/50 bg-gradient-to-r from-orange-50/30 to-amber-50/20">
+		<div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-primary-100/50 bg-gradient-to-r from-primary-50/30 to-primary-50/20">
 			<div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
-				<div className="text-xs sm:text-sm text-amber-700/70 text-center sm:text-left">
+				<div className="text-xs sm:text-sm text-slate-600/70 text-center sm:text-left">
 					{t("finance.pagination.showing", { start: startItem, end: endItem, total: totalItems })}
 				</div>
 				<div className="flex items-center gap-1.5 sm:gap-2">
@@ -25,7 +25,7 @@ export default function Pagination({
 							onPageChange(Math.max(currentPage - 1, 1))
 						}
 						disabled={currentPage === 1}
-						className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-amber-700 bg-white/80 border border-orange-200 rounded-lg hover:bg-orange-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer"
+						className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-600 bg-white/80 border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer"
 					>
 						<span className="hidden sm:inline">{t("finance.pagination.previous")}</span>
 						<span className="sm:hidden">Prev</span>
@@ -42,8 +42,8 @@ export default function Pagination({
 										onClick={() => onPageChange(pageNum)}
 										className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
 											currentPage === pageNum
-												? "bg-orange-100 text-orange-700 border border-orange-300"
-												: "text-amber-700/70 hover:bg-orange-50/50"
+												? "bg-primary-100 text-primary-700 border border-primary-300"
+												: "text-slate-600/70 hover:bg-primary-50/50"
 										}`}
 									>
 										{pageNum}
@@ -53,13 +53,13 @@ export default function Pagination({
 						)}
 						{totalPages > 5 && (
 							<>
-								<span className="text-amber-700/50 px-1">...</span>
+								<span className="text-slate-600/50 px-1">...</span>
 								<button
 									onClick={() => onPageChange(totalPages)}
 									className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
 										currentPage === totalPages
-											? "bg-orange-100 text-orange-700 border border-orange-300"
-											: "text-amber-700/70 hover:bg-orange-50/50"
+											? "bg-primary-100 text-primary-700 border border-primary-300"
+											: "text-slate-600/70 hover:bg-primary-50/50"
 									}`}
 								>
 									{totalPages}
@@ -73,7 +73,7 @@ export default function Pagination({
 							onPageChange(Math.min(currentPage + 1, totalPages))
 						}
 						disabled={currentPage === totalPages}
-						className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-amber-700 bg-white/80 border border-orange-200 rounded-lg hover:bg-orange-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer"
+						className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-600 bg-white/80 border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer"
 					>
 						<span className="hidden sm:inline">{t("finance.pagination.next")}</span>
 						<span className="sm:hidden">Next</span>

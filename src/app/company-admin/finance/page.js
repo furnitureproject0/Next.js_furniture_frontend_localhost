@@ -99,14 +99,14 @@ export default function FinancePage() {
 	};
 
 	return (
-		<div className="min-h-screen" style={{ background: "#FFF8F3" }}>
+		<div className="min-h-screen" style={{ background: "#FFFFFF" }}>
 			<div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
 				{/* Page Header */}
 				<div className="mb-4 sm:mb-6 lg:mb-8">
-					<h1 className="text-2xl sm:text-3xl font-bold text-amber-900 mb-1 sm:mb-2">
+					<h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
 						{t("companyAdmin.finance.title")}
 					</h1>
-					<p className="text-sm sm:text-base text-amber-700/70">
+					<p className="text-sm sm:text-base text-slate-600/70">
 						{t("companyAdmin.finance.subtitle")}
 					</p>
 				</div>
@@ -134,16 +134,16 @@ export default function FinancePage() {
 				</div>
 
 				{/* Transactions Section */}
-				<div className="bg-white/80 backdrop-blur-sm rounded-xl border border-orange-200/60 shadow-lg">
-					<div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-orange-100/50">
+				<div className="bg-white/80 backdrop-blur-sm rounded-xl border border-primary-200/60 shadow-lg">
+					<div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-primary-100/50">
 						<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-							<h3 className="text-base sm:text-lg font-semibold text-amber-900">
+							<h3 className="text-base sm:text-lg font-semibold text-slate-800">
 								{t("companyAdmin.finance.transactions")} ({filteredTransactions.length})
 							</h3>
 							<div className="flex items-center flex-wrap gap-2 sm:gap-3">
 								<button
 									onClick={() => setShowAddExpenseModal(true)}
-									className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-orange-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-orange-700 transition-colors shadow-sm cursor-pointer"
+									className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-primary-700 transition-colors shadow-sm cursor-pointer"
 								>
 									<svg
 										className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2"
@@ -183,8 +183,8 @@ export default function FinancePage() {
 									onClick={() => setShowFilters(!showFilters)}
 									className={`inline-flex items-center px-2.5 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
 										showFilters
-											? "border-orange-300 bg-orange-100 text-orange-700"
-											: "border-orange-200 bg-white/50 text-amber-700 hover:bg-orange-50"
+											? "border-primary-300 bg-primary-100 text-primary-700"
+											: "border-primary-200 bg-white/50 text-slate-600 hover:bg-primary-50"
 									}`}
 								>
 									<svg

@@ -282,7 +282,7 @@ export default function NotificationBell({ role }) {
 			{/* Bell Icon Button */}
 			<button
 				onClick={() => setIsOpen(!isOpen)}
-				className="relative p-1.5 sm:p-2 text-amber-700 hover:text-amber-900 hover:bg-orange-50 rounded-lg transition-colors"
+				className="relative p-1.5 sm:p-2 text-slate-600 hover:text-slate-800 hover:bg-primary-50 rounded-lg transition-colors"
 			>
 				<svg
 					className="w-5 h-5 sm:w-6 sm:h-6"
@@ -306,16 +306,16 @@ export default function NotificationBell({ role }) {
 
 			{/* Dropdown */}
 			{isOpen && (
-				<div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 lg:w-96 bg-white rounded-lg sm:rounded-xl shadow-2xl border border-orange-200/60 z-50 max-h-[32rem] flex flex-col">
+				<div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 lg:w-96 bg-white rounded-lg sm:rounded-xl shadow-2xl border border-primary-200/60 z-50 max-h-[32rem] flex flex-col">
 					{/* Header */}
-					<div className="flex items-center justify-between p-3 sm:p-4 border-b border-orange-100">
-						<h3 className="text-base sm:text-lg font-bold text-amber-900">
+					<div className="flex items-center justify-between p-3 sm:p-4 border-b border-primary-100">
+						<h3 className="text-base sm:text-lg font-bold text-slate-800">
 							{t("notifications.bell.title")}
 						</h3>
 						{unreadCount > 0 && (
 							<button
 								onClick={handleMarkAllAsRead}
-								className="text-[10px] sm:text-xs text-orange-600 hover:text-orange-700 font-medium"
+								className="text-[10px] sm:text-xs text-primary-600 hover:text-primary-700 font-medium"
 							>
 								{t("notifications.bell.markAllAsRead")}
 							</button>
@@ -326,9 +326,9 @@ export default function NotificationBell({ role }) {
 					<div className="flex-1 overflow-y-auto">
 						{visibleNotifications.length === 0 ? (
 							<div className="p-6 sm:p-8 text-center">
-								<div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+								<div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
 									<svg
-										className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-orange-400"
+										className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-primary-400"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -341,18 +341,18 @@ export default function NotificationBell({ role }) {
 										/>
 									</svg>
 								</div>
-								<p className="text-amber-700/70 text-xs sm:text-sm">
+								<p className="text-slate-600/70 text-xs sm:text-sm">
 									{t("notifications.bell.noNotificationsYet")}
 								</p>
 							</div>
 						) : (
-							<div className="divide-y divide-orange-100">
+							<div className="divide-y divide-primary-100">
 								{visibleNotifications.map((notification) => {
 									const isUnread = !notification.read && !notification.is_read;
 									return (
 									<div
 										key={notification.id}
-										className={`p-3 sm:p-4 hover:bg-orange-50/50 transition-colors group ${
+										className={`p-3 sm:p-4 hover:bg-primary-50/50 transition-colors group ${
 											isUnread ? "bg-blue-50/30" : ""
 										}`}
 									>
@@ -366,7 +366,7 @@ export default function NotificationBell({ role }) {
 												<div className="flex items-start justify-between mb-1">
 													<p
 														onClick={() => handleOpenOrder(notification)}
-														className={`text-xs sm:text-sm text-amber-900 cursor-pointer hover:text-orange-600 ${
+														className={`text-xs sm:text-sm text-slate-800 cursor-pointer hover:text-primary-600 ${
 															isUnread ? "font-semibold" : ""
 														}`}
 													>
@@ -374,28 +374,28 @@ export default function NotificationBell({ role }) {
 													</p>
 													<button
 														onClick={(e) => handleHideNotification(notification.id, e)}
-														className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-orange-100 rounded flex-shrink-0"
+														className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-primary-100 rounded flex-shrink-0"
 														title={t("notifications.hide")}
 													>
-														<svg className="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 														</svg>
 													</button>
 												</div>
 												{notification.title && (
-													<p className="text-xs text-amber-800/70 mb-1 line-clamp-2">
+													<p className="text-xs text-slate-700/70 mb-1 line-clamp-2">
 														{notification.message}
 													</p>
 												)}
 												<div className="flex items-center justify-between mt-1">
-													<p className="text-[10px] sm:text-xs text-amber-700/70">
+													<p className="text-[10px] sm:text-xs text-slate-600/70">
 														{formatTime(notification.createdAt)}
 													</p>
 													<div className="flex items-center gap-1">
 														{(notification.payload?.order_id || notification.payload?.orderId) && (
 															<button
 																onClick={(e) => handleOpenOrder(notification, e)}
-																className="text-[10px] px-2 py-0.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded text-xs"
+																className="text-[10px] px-2 py-0.5 bg-gradient-to-r from-primary-500 to-primary-500 hover:from-primary-600 hover:to-primary-600 text-white rounded text-xs"
 															>
 																{t("notifications.viewOrder")}
 															</button>

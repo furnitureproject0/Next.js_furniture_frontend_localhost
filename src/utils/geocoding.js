@@ -67,3 +67,28 @@ export function parseAddressFromPlace(place) {
     };
 }
 
+/**
+ * Format a Nominatim place object into a clean, space-separated string:
+ * "Street BuildingNumber Zip City Country"
+ */
+export function formatAddress(place) {
+    if (!place || !place.address) return place?.display_name || '';
+    
+    const addr = place.address;
+    const components = [
+        addr.road || addr.street || addr.pedestrian || addr.square || '',
+        addr.house_number || '',
+        addr.postcode || '',
+        addr.city || addr.town || addr.village || '',
+        addr.country || ''
+    ];
+    
+    // Filter out empty parts and join with space
+    const formatted = components
+        .map(comp => comp.trim())
+        .filter(comp => comp !== '')
+        .join(' ');
+        
+    return formatted || place.display_name;
+}
+

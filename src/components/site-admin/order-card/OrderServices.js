@@ -1,4 +1,5 @@
 import { getTranslatedServiceTypes, getTranslatedStatusLabel } from "@/utils/i18nUtils";
+import { formatDate, formatTime } from "@/utils/dateUtils";
 import OrderOfferInfo from "./OrderOfferInfo";
 
 export default function OrderServices({ order, t }) {
@@ -19,27 +20,33 @@ export default function OrderServices({ order, t }) {
 
 	const renderOrderServices = () => {
 		if (!order.orderServices || order.orderServices.length === 0) {
+			console.log('No orderServices found, falling back to legacy services. Order:', order);
 			return renderLegacyServices();
 		}
+
+		console.log('Rendering orderServices:', order.orderServices);
 
 		return (
 			<div className="space-y-2">
 				{order.orderServices.map((orderService) => {
-					const serviceId = orderService.serviceId || orderService.service?.id || orderService.service_id;
+					const serviceId = orderService.serviceId || orderService.service_id || orderService.service?.id;
 					const serviceName = orderService.serviceName 
 						|| orderService.service?.name 
 						|| (serviceId && TRANSLATED_SERVICE_TYPES.find(s => s.id === serviceId)?.name) 
 						|| `Service ${serviceId}`;
 
+					console.log(`Service ${serviceName} - Date: ${orderService.preferred_date}, Time: ${orderService.preferred_time}`);
+					console.log('Full orderService object:', orderService);
+
 					return (
-						<div key={orderService.id} className="border border-orange-200/60 rounded-lg p-3 bg-orange-50/30 flex flex-col gap-2">
+						<div key={orderService.id} className="border border-primary-200/60 rounded-lg p-3 bg-primary-50/30 flex flex-col gap-2">
 							<div className="flex items-center justify-between">
-								<span className="px-2.5 py-1 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200/50">
+								<span className="px-2.5 py-1 bg-primary-50 text-primary-700 rounded-lg text-xs font-medium border border-primary-200/50">
 									{serviceName}
 								</span>
 								<div className="flex items-center gap-2">
 									{orderService.company && (
-										<span className="text-xs text-amber-700">
+										<span className="text-xs text-slate-600">
 											{orderService.company.name}
 										</span>
 									)}
@@ -48,9 +55,23 @@ export default function OrderServices({ order, t }) {
 									</span>
 								</div>
 							</div>
+
+							{(orderService.preferred_date || orderService.preferred_time) && (
+								<div className="flex items-center gap-2 text-[11px] text-slate-500 bg-white/50 px-2 py-1 rounded border border-primary-200/30">
+									<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+									<span>
+										{console.log(`Service ${serviceName} - Date: ${orderService.preferred_date}, Time: ${orderService.preferred_time}`)}
+										{orderService.preferred_date ? formatDate(orderService.preferred_date) : ""}
+										{orderService.preferred_date && orderService.preferred_time ? " at " : ""}
+										{orderService.preferred_time ? formatTime(orderService.preferred_time) : ""}
+									</span>
+								</div>
+							)}
 							
 							{orderService.offer && (
-								<div className="mt-2 pl-2 border-l-2 border-orange-200/50">
+								<div className="mt-2 pl-2 border-l-2 border-primary-200/50">
 									<OrderOfferInfo offer={orderService.offer} t={t} isEmbedded={true} />
 								</div>
 							)}
@@ -79,7 +100,7 @@ export default function OrderServices({ order, t }) {
 					return (
 						<span
 							key={idx}
-							className="px-2.5 py-1 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200/50"
+							className="px-2.5 py-1 bg-primary-50 text-primary-700 rounded-lg text-xs font-medium border border-primary-200/50"
 						>
 							{displayName}
 						</span>
@@ -100,7 +121,7 @@ export default function OrderServices({ order, t }) {
 					return (
 						<span
 							key={idx}
-							className="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-lg text-xs font-medium border border-amber-200/50 flex items-center gap-1"
+							className="px-2.5 py-1 bg-primary-100 text-slate-700 rounded-lg text-xs font-medium border border-primary-200/50 flex items-center gap-1"
 						>
 							<svg
 								className="w-3 h-3"
@@ -125,7 +146,7 @@ export default function OrderServices({ order, t }) {
 
 	return (
 		<div>
-			<p className="text-xs font-medium text-amber-600/70 uppercase tracking-wide mb-2">
+			<p className="text-xs font-medium text-primary-600/70 uppercase tracking-wide mb-2">
 				{t("orderDetails.services")}
 			</p>
 			<div className="space-y-3">

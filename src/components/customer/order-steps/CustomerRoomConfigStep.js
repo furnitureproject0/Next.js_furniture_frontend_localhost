@@ -215,14 +215,14 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 	return (
 		<div className="space-y-4 sm:space-y-5 lg:space-y-6">
 			<div>
-				<h3 className="text-base sm:text-lg font-semibold text-amber-900 mb-1.5 sm:mb-2">
+				<h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-1.5 sm:mb-2">
 					{t("orderSteps.roomConfiguration")}
 				</h3>
-				<p className="text-xs sm:text-sm text-amber-700/70">
+				<p className="text-xs sm:text-sm text-slate-600/70">
 					{t("orderSteps.roomConfigurationDesc") || "Specify the rooms that need service"}
 				</p>
 				{expectedRoomCount > 0 && (
-					<p className="text-xs sm:text-sm text-amber-600 mt-1">
+					<p className="text-xs sm:text-sm text-primary-600 mt-1">
 						{t("orderSteps.totalRoomsToConfigure", { count: expectedRoomCount }) || `Total rooms to configure: ${expectedRoomCount}`}
 					</p>
 				)}
@@ -254,20 +254,20 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 							return (
 								<div
 									key={index}
-									className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center p-4 bg-white border border-orange-200 rounded-lg"
+									className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center p-4 bg-white border border-primary-200 rounded-lg"
 								>
 									{/* Room Type Dropdown */}
 									<div className="flex-1 w-full sm:w-auto min-w-0">
-										<label className="block text-xs sm:text-sm font-medium text-amber-800 mb-1.5">
+										<label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1.5">
 											{t("orderSteps.roomType") || "Room Type"} <span className="text-red-500">*</span>
 										</label>
 										<select
 											value={room.roomType || ""}
 											onChange={(e) => handleRoomTypeChange(index, e.target.value)}
-											className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-orange-400 bg-white cursor-pointer ${
+											className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:border-primary-400 bg-white cursor-pointer ${
 												validationErrors[`roomConfigurations_${index}_roomType`] 
 													? "border-red-500 focus:ring-red-500" 
-													: "border-orange-200 focus:ring-orange-400"
+													: "border-primary-200 focus:ring-primary-400"
 											}`}
 										>
 											<option value="">{t("orderSteps.selectRoomType") || "Select room type..."}</option>
@@ -286,7 +286,7 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 
 									{/* Quantity Selector */}
 									<div className="w-full sm:w-auto">
-										<label className="block text-xs sm:text-sm font-medium text-amber-800 mb-1.5">
+										<label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1.5">
 											{t("orderSteps.quantity") || "Quantity"} <span className="text-red-500">*</span>
 										</label>
 										<div className="flex items-center gap-2">
@@ -294,7 +294,7 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 												type="button"
 												onClick={() => handleQuantityChange(index, -1)}
 												disabled={room.quantity <= 1}
-												className="w-9 h-9 flex items-center justify-center border border-orange-300 rounded-lg bg-white hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-orange-600 font-semibold text-base"
+												className="w-9 h-9 flex items-center justify-center border border-primary-300 rounded-lg bg-white hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-primary-600 font-semibold text-base"
 											>
 												−
 											</button>
@@ -304,17 +304,17 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 												max={expectedRoomCount}
 												value={room.quantity || 1}
 												onChange={(e) => handleQuantityInput(index, e.target.value)}
-												className={`w-16 sm:w-20 px-2 py-2 text-sm sm:text-base border rounded-lg text-center focus:outline-none focus:ring-2 focus:border-orange-400 ${
+												className={`w-16 sm:w-20 px-2 py-2 text-sm sm:text-base border rounded-lg text-center focus:outline-none focus:ring-2 focus:border-primary-400 ${
 													validationErrors[`roomConfigurations_${index}_quantity`] 
 														? "border-red-500 focus:ring-red-500" 
-														: "border-orange-200 focus:ring-orange-400"
+														: "border-primary-200 focus:ring-primary-400"
 												}`}
 											/>
 											<button
 												type="button"
 												onClick={() => handleQuantityChange(index, 1)}
 												disabled={isAtLimit || !canIncrement}
-												className="w-9 h-9 flex items-center justify-center border border-orange-300 rounded-lg bg-white hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-orange-600 font-semibold text-base"
+												className="w-9 h-9 flex items-center justify-center border border-primary-300 rounded-lg bg-white hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-primary-600 font-semibold text-base"
 											>
 												+
 											</button>
@@ -354,12 +354,12 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 
 					{/* Add Room Button */}
 					{totalConfiguredRooms < expectedRoomCount && (
-						<div className="pt-2 border-t border-orange-200">
+						<div className="pt-2 border-t border-primary-200">
 							<button
 								type="button"
 								onClick={handleAddRoom}
 								disabled={totalConfiguredRooms >= expectedRoomCount}
-								className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-orange-600 hover:text-orange-700 hover:bg-orange-50 border-2 border-dashed border-orange-300 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+								className="w-full sm:w-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-primary-600 hover:text-primary-700 hover:bg-primary-50 border-2 border-dashed border-primary-300 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								<svg
 									className="w-4 h-4"
@@ -412,15 +412,15 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 					)}
 
 					{/* Image Upload Section */}
-					<div className="pt-4 border-t border-orange-200">
-						<label className="block text-xs sm:text-sm font-medium text-amber-800 mb-1.5 sm:mb-2">
+					<div className="pt-4 border-t border-primary-200">
+						<label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1.5 sm:mb-2">
 							{t("orderSteps.uploadImages") || "Upload Images (Optional)"}
 						</label>
-						<p className="text-[10px] sm:text-xs text-amber-600/70 mb-2 sm:mb-3">
+						<p className="text-[10px] sm:text-xs text-primary-600/70 mb-2 sm:mb-3">
 							{t("orderSteps.uploadImagesHint") || "Upload up to 10 images (max 10MB each, jpg/png)"}
 						</p>
 
-						<div className="border-2 border-dashed border-orange-300 rounded-lg p-4 sm:p-6 text-center hover:border-orange-400 transition-colors">
+						<div className="border-2 border-dashed border-primary-300 rounded-lg p-4 sm:p-6 text-center hover:border-primary-400 transition-colors">
 							<input
 								ref={fileInputRef}
 								type="file"
@@ -435,7 +435,7 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 								className="cursor-pointer flex flex-col items-center"
 							>
 								<svg
-									className="w-10 h-10 sm:w-12 sm:h-12 text-orange-500 mb-2 sm:mb-3"
+									className="w-10 h-10 sm:w-12 sm:h-12 text-primary-500 mb-2 sm:mb-3"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -447,10 +447,10 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 										d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
 									/>
 								</svg>
-								<span className="text-xs sm:text-sm font-medium text-amber-900 mb-1">
+								<span className="text-xs sm:text-sm font-medium text-slate-800 mb-1">
 									{t("orderSteps.clickToUpload") || "Click to upload images"}
 								</span>
-								<span className="text-[10px] sm:text-xs text-amber-600/70">
+								<span className="text-[10px] sm:text-xs text-primary-600/70">
 									{t("orderSteps.imagesUploaded", { 
 										count: formData.images?.length || 0, 
 										max: 10 
@@ -468,14 +468,14 @@ export default function CustomerRoomConfigStep({ formData, setFormData, validati
 						{/* Image Preview */}
 						{formData.images && formData.images.length > 0 && (
 							<div className="mt-4">
-								<h4 className="text-xs sm:text-sm font-medium text-amber-800 mb-3">
+								<h4 className="text-xs sm:text-sm font-medium text-slate-700 mb-3">
 									{t("orderSteps.uploadedImages") || "Uploaded Images"}
 								</h4>
 								<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
 									{formData.images.map((image) => (
 										<div
 											key={image.id}
-											className="relative group rounded-lg overflow-hidden border border-orange-200"
+											className="relative group rounded-lg overflow-hidden border border-primary-200"
 										>
 											<img
 												src={image.url}

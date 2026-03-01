@@ -79,10 +79,10 @@ export default function RoomConfigurationSection({
 	return (
 		<div className="space-y-3">
 			<div className="flex items-center justify-between">
-				<label className="block text-xs sm:text-sm font-medium text-amber-800">
+				<label className="block text-xs sm:text-sm font-medium text-slate-700">
 					{t("orderSteps.roomConfiguration")}
 				</label>
-				<span className="text-xs text-amber-600">
+				<span className="text-xs text-primary-600">
 					{totalConfiguredRooms} / {expectedRoomCount}
 				</span>
 			</div>
@@ -100,13 +100,13 @@ export default function RoomConfigurationSection({
 					return (
 						<div
 							key={index}
-							className="flex gap-2 items-center p-2 bg-white border border-orange-200 rounded-lg"
+							className="flex gap-2 items-center p-2 bg-white border border-primary-200 rounded-lg"
 						>
 							{/* Room Type Dropdown */}
 							<select
 								value={room.roomType || ""}
 								onChange={(e) => handleRoomTypeChange(index, e.target.value)}
-								className="flex-1 px-2 py-1.5 text-xs border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white cursor-pointer"
+								className="flex-1 px-2 py-1.5 text-xs border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white cursor-pointer"
 							>
 								<option value="">{t("orderSteps.selectRoomType")}</option>
 								{ROOM_TYPES.map((type) => (
@@ -122,18 +122,18 @@ export default function RoomConfigurationSection({
 									type="button"
 									onClick={() => handleQuantityChange(index, -1)}
 									disabled={room.quantity <= 1}
-									className="w-7 h-7 flex items-center justify-center border border-orange-300 rounded bg-white hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-orange-600 font-semibold text-sm"
+									className="w-7 h-7 flex items-center justify-center border border-primary-300 rounded bg-white hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-primary-600 font-semibold text-sm"
 								>
 									−
 								</button>
-								<span className="w-8 text-center text-sm font-medium text-amber-900">
+								<span className="w-8 text-center text-sm font-medium text-slate-800">
 									{room.quantity || 1}
 								</span>
 								<button
 									type="button"
 									onClick={() => handleQuantityChange(index, 1)}
 									disabled={isAtLimit || !canIncrement}
-									className="w-7 h-7 flex items-center justify-center border border-orange-300 rounded bg-white hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-orange-600 font-semibold text-sm"
+									className="w-7 h-7 flex items-center justify-center border border-primary-300 rounded bg-white hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-primary-600 font-semibold text-sm"
 								>
 									+
 								</button>
@@ -159,7 +159,7 @@ export default function RoomConfigurationSection({
 				<button
 					type="button"
 					onClick={handleAddRoom}
-					className="w-full px-3 py-2 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50 border-2 border-dashed border-orange-300 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer"
+					className="w-full px-3 py-2 text-xs text-primary-600 hover:text-primary-700 hover:bg-primary-50 border-2 border-dashed border-primary-300 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer"
 				>
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

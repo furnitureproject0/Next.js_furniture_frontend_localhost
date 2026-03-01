@@ -24,7 +24,7 @@ export const getStatusColor = (status) => {
 		case "pending":
 			return "bg-yellow-100 text-yellow-800 border-yellow-200";
 		case "in_progress":
-			return "bg-orange-100 text-orange-800 border-orange-200";
+			return "bg-sky-100 text-sky-800 border-sky-200";
 		case "partially_done":
 			return "bg-blue-100 text-blue-800 border-blue-200";
 		case "completed":
@@ -55,7 +55,7 @@ export const getPriorityColor = (priority) => {
 		case "urgent":
 			return "bg-red-100 text-red-800 border-red-200";
 		case "high":
-			return "bg-orange-100 text-orange-800 border-orange-200";
+			return "bg-sky-100 text-sky-800 border-sky-200";
 		case "medium":
 			return "bg-blue-100 text-blue-800 border-blue-200";
 		case "low":

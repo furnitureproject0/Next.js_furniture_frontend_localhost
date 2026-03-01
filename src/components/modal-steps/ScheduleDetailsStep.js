@@ -50,7 +50,7 @@ export function ScheduleDetailsStep({ formData, setFormData }) {
 							handleInputChange("date", e.target.value)
 						}
 						min={getTodayString()}
-						className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+						className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
 					/>
 					{formData.date && (
 						<p className="text-[10px] sm:text-xs text-gray-600 mt-1">
@@ -68,7 +68,7 @@ export function ScheduleDetailsStep({ formData, setFormData }) {
 						onChange={(e) =>
 							handleInputChange("time", e.target.value)
 						}
-						className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+						className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base focus:ring-2 focus:ring-primary-400 focus:border-transparent"
 					>
 						<option value="">{t("modalSteps.scheduleDetails.selectTime")}</option>
 						{TIME_SLOTS.map((time) => (
@@ -94,7 +94,7 @@ export function ScheduleDetailsStep({ formData, setFormData }) {
 					onChange={(e) =>
 						handleInputChange("description", e.target.value)
 					}
-					className="mt-1 w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none"
+					className="mt-1 w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base focus:ring-2 focus:ring-primary-400 focus:border-transparent resize-none"
 					rows={3}
 				/>
 			</div>

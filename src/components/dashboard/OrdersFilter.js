@@ -10,8 +10,8 @@ const FilterButton = ({ filter, currentFilter, onClick, children }) => (
 		onClick={() => onClick(filter)}
 		className={`px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
 			currentFilter === filter
-				? "text-white bg-orange-500"
-				: "text-amber-700 hover:text-amber-900"
+				? "text-white bg-primary-500"
+				: "text-slate-600 hover:text-slate-800"
 		}`}
 	>
 		{children}
@@ -28,7 +28,7 @@ export default function OrdersFilter() {
 	};
 
 	return (
-		<div className="flex flex-wrap sm:flex-nowrap bg-orange-100/60 rounded-lg p-1 gap-1">
+		<div className="flex flex-wrap sm:flex-nowrap bg-primary-100/60 rounded-lg p-1 gap-1">
 			<FilterButton
 				filter="all"
 				currentFilter={selectedFilter}

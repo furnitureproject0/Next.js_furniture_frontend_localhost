@@ -2,19 +2,19 @@
 
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAppDispatch } from "@/store/hooks";
-import { addUser } from "@/store/slices/usersSlice";
+import { createUserThunk } from "@/store/slices/usersSlice";
 import { useState } from "react";
+import { useGlobalToast } from "@/hooks/useGlobalToast";
 
 export default function AddUserModal({ isOpen, onClose }) {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
+	const { showToast } = useGlobalToast();
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
-		phone: "",
+		password: "",
 		role: "client",
-		company: "",
-		status: "active",
 	});
 
 	const handleChange = (e) => {
@@ -22,26 +22,22 @@ export default function AddUserModal({ isOpen, onClose }) {
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const newUser = {
-			id: `user-${Date.now()}`,
-			...formData,
-			created: new Date().toLocaleDateString("en-US"),
-			lastLogin: "Never",
-		};
-
-		dispatch(addUser(newUser));
-		onClose();
-		setFormData({
-			name: "",
-			email: "",
-			phone: "",
-			role: "client",
-			company: "",
-			status: "active",
-		});
+		try {
+			await dispatch(createUserThunk(formData)).unwrap();
+			showToast(t("common.success"), "success");
+			onClose();
+			setFormData({
+				name: "",
+				email: "",
+				password: "",
+				role: "client",
+			});
+		} catch (error) {
+			showToast(error?.message || error || t("common.error"), "error");
+		}
 	};
 
 	if (!isOpen) return null;
@@ -50,17 +46,17 @@ export default function AddUserModal({ isOpen, onClose }) {
 		<div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-2 sm:p-4">
 			<div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
 				{/* Header */}
-				<div className="sticky top-0 bg-white border-b border-orange-200/40 px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6 rounded-t-xl sm:rounded-t-2xl">
+				<div className="sticky top-0 bg-white border-b border-primary-200/40 px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6 rounded-t-xl sm:rounded-t-2xl">
 					<div className="flex items-center justify-between gap-3">
-						<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-amber-900 truncate">
+						<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 truncate">
 							{t("superAdmin.modals.addUser.title")}
 						</h2>
 						<button
 							onClick={onClose}
-							className="p-1.5 sm:p-2 hover:bg-orange-50 rounded-lg transition-colors flex-shrink-0"
+							className="p-1.5 sm:p-2 hover:bg-primary-50 rounded-lg transition-colors flex-shrink-0"
 						>
 							<svg
-								className="w-5 h-5 sm:w-6 sm:h-6 text-amber-700"
+								className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -80,7 +76,7 @@ export default function AddUserModal({ isOpen, onClose }) {
 				<form onSubmit={handleSubmit} className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-5 lg:space-y-6">
 					{/* Name */}
 					<div>
-						<label className="block text-sm font-medium text-amber-900 mb-2">
+						<label className="block text-sm font-medium text-slate-800 mb-2">
 							{t("superAdmin.modals.addUser.fullName")}
 						</label>
 						<input
@@ -89,14 +85,14 @@ export default function AddUserModal({ isOpen, onClose }) {
 							value={formData.name}
 							onChange={handleChange}
 							required
-							className="w-full px-4 py-3 bg-white border border-orange-200/60 rounded-xl text-amber-900 placeholder-amber-600/40 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-300"
+							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
 							placeholder="John Doe"
 						/>
 					</div>
 
 					{/* Email */}
 					<div>
-						<label className="block text-sm font-medium text-amber-900 mb-2">
+						<label className="block text-sm font-medium text-slate-800 mb-2">
 							{t("superAdmin.modals.addUser.email")}
 						</label>
 						<input
@@ -105,29 +101,30 @@ export default function AddUserModal({ isOpen, onClose }) {
 							value={formData.email}
 							onChange={handleChange}
 							required
-							className="w-full px-4 py-3 bg-white border border-orange-200/60 rounded-xl text-amber-900 placeholder-amber-600/40 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-300"
+							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
 							placeholder="john@example.com"
 						/>
 					</div>
 
-					{/* Phone */}
+					{/* Password */}
 					<div>
-						<label className="block text-sm font-medium text-amber-900 mb-2">
-							{t("superAdmin.modals.addUser.phone")}
+						<label className="block text-sm font-medium text-slate-800 mb-2">
+							{t("superAdmin.modals.addUser.password") || "Initial Password"}
 						</label>
 						<input
-							type="tel"
-							name="phone"
-							value={formData.phone}
+							type="password"
+							name="password"
+							value={formData.password}
 							onChange={handleChange}
-							className="w-full px-4 py-3 bg-white border border-orange-200/60 rounded-xl text-amber-900 placeholder-amber-600/40 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-300"
-							placeholder="+41 XX XXX XX XX"
+							required
+							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
+							placeholder="••••••••"
 						/>
 					</div>
 
 					{/* Role */}
 					<div>
-						<label className="block text-sm font-medium text-amber-900 mb-2">
+						<label className="block text-sm font-medium text-slate-800 mb-2">
 							{t("superAdmin.modals.addUser.role")}
 						</label>
 						<select
@@ -135,7 +132,7 @@ export default function AddUserModal({ isOpen, onClose }) {
 							value={formData.role}
 							onChange={handleChange}
 							required
-							className="w-full px-4 py-3 bg-white border border-orange-200/60 rounded-xl text-amber-900 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-300"
+							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
 						>
 							<option value="client">{t("superAdmin.roles.customer")}</option>
 							<option value="super_admin">{t("superAdmin.roles.super_admin")}</option>
@@ -148,49 +145,13 @@ export default function AddUserModal({ isOpen, onClose }) {
 						</select>
 					</div>
 
-					{/* Company (conditional) */}
-					{(formData.role === "company_admin" ||
-						formData.role === "driver" ||
-						formData.role === "worker") && (
-						<div>
-							<label className="block text-sm font-medium text-amber-900 mb-2">
-								{t("superAdmin.modals.addUser.company")}
-							</label>
-							<input
-								type="text"
-								name="company"
-								value={formData.company}
-								onChange={handleChange}
-								className="w-full px-4 py-3 bg-white border border-orange-200/60 rounded-xl text-amber-900 placeholder-amber-600/40 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-300"
-								placeholder={t("superAdmin.modals.addUser.company")}
-							/>
-						</div>
-					)}
-
-					{/* Status */}
-					<div>
-						<label className="block text-sm font-medium text-amber-900 mb-2">
-							{t("superAdmin.modals.addUser.status")}
-						</label>
-						<select
-							name="status"
-							value={formData.status}
-							onChange={handleChange}
-							required
-							className="w-full px-4 py-3 bg-white border border-orange-200/60 rounded-xl text-amber-900 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-300"
-						>
-							<option value="active">{t("superAdmin.status.active")}</option>
-							<option value="inactive">{t("superAdmin.status.inactive")}</option>
-							<option value="available">{t("superAdmin.status.available")}</option>
-						</select>
-					</div>
 
 					{/* Actions */}
 					<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 sm:pt-4">
 						<button
 							type="button"
 							onClick={onClose}
-							className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm bg-white border border-orange-200/60 text-amber-900 rounded-lg sm:rounded-xl font-medium hover:bg-orange-50 transition-colors"
+							className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm bg-white border border-primary-200/60 text-slate-800 rounded-lg sm:rounded-xl font-medium hover:bg-primary-50 transition-colors"
 						>
 							{t("common.buttons.cancel")}
 						</button>

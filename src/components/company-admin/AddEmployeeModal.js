@@ -273,10 +273,10 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 	const renderChoiceScreen = () => (
 		<div className="p-6 sm:p-8 space-y-6">
 			<div className="text-center mb-6">
-				<h3 className="text-lg font-semibold text-amber-900 mb-2">
+				<h3 className="text-lg font-semibold text-slate-800 mb-2">
 					{t("users.chooseOption") || "Choose an option"}
 				</h3>
-				<p className="text-sm text-amber-700/70">
+				<p className="text-sm text-slate-600/70">
 					{t("users.chooseDescription") || "Would you like to create a new user or invite an existing one?"}
 				</p>
 			</div>
@@ -285,19 +285,19 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 				{/* Create New User */}
 				<button
 					onClick={() => setStep("create")}
-					className="p-6 border-2 border-orange-200 rounded-xl hover:border-orange-400 hover:shadow-lg transition-all duration-200 bg-white group"
+					className="p-6 border-2 border-primary-200 rounded-xl hover:border-primary-400 hover:shadow-lg transition-all duration-200 bg-white group"
 				>
 					<div className="flex flex-col items-center text-center space-y-3">
-						<div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-							<svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+							<svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
 							</svg>
 						</div>
 						<div>
-							<h4 className="font-semibold text-amber-900 mb-1">
+							<h4 className="font-semibold text-slate-800 mb-1">
 								{t("users.createNewUser") || "Create New User"}
 							</h4>
-							<p className="text-xs text-amber-700/70">
+							<p className="text-xs text-slate-600/70">
 								{t("users.createNewDescription") || "Create a brand new employee account"}
 							</p>
 						</div>
@@ -307,7 +307,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 				{/* Invite Existing User */}
 				<button
 					onClick={() => setStep("invite")}
-					className="p-6 border-2 border-orange-200 rounded-xl hover:border-orange-400 hover:shadow-lg transition-all duration-200 bg-white group"
+					className="p-6 border-2 border-primary-200 rounded-xl hover:border-primary-400 hover:shadow-lg transition-all duration-200 bg-white group"
 				>
 					<div className="flex flex-col items-center text-center space-y-3">
 						<div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -316,10 +316,10 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 							</svg>
 						</div>
 						<div>
-							<h4 className="font-semibold text-amber-900 mb-1">
+							<h4 className="font-semibold text-slate-800 mb-1">
 								{t("users.inviteExisting") || "Invite Existing User"}
 							</h4>
-							<p className="text-xs text-amber-700/70">
+							<p className="text-xs text-slate-600/70">
 								{t("users.inviteExistingDescription") || "Send an employment offer to an existing worker or driver"}
 							</p>
 						</div>
@@ -334,15 +334,15 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 		<form onSubmit={handleCreateSubmit} className="p-4 sm:p-6 space-y-4">
 			{/* Name */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.name") || "Name"} <span className="text-red-500">*</span>
 				</label>
 				<input
 					type="text"
 					value={formData.name}
 					onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-						errors.name ? "border-red-300" : "border-orange-200"
+					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+						errors.name ? "border-red-300" : "border-primary-200"
 					}`}
 					placeholder={t("users.namePlaceholder") || "John Doe"}
 				/>
@@ -351,15 +351,15 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 			{/* Email */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.email") || "Email"} <span className="text-red-500">*</span>
 				</label>
 				<input
 					type="email"
 					value={formData.email}
 					onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-						errors.email ? "border-red-300" : "border-orange-200"
+					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+						errors.email ? "border-red-300" : "border-primary-200"
 					}`}
 					placeholder="john@example.com"
 				/>
@@ -368,15 +368,15 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 			{/* Birthdate */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.birthdate") || "Birthdate"} <span className="text-red-500">*</span>
 				</label>
 				<input
 					type="date"
 					value={formData.birthdate}
 					onChange={(e) => setFormData(prev => ({ ...prev, birthdate: e.target.value }))}
-					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-						errors.birthdate ? "border-red-300" : "border-orange-200"
+					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+						errors.birthdate ? "border-red-300" : "border-primary-200"
 					}`}
 				/>
 				{errors.birthdate && <p className="mt-1 text-sm text-red-600">{errors.birthdate}</p>}
@@ -384,15 +384,15 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 			{/* Phone */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.phone") || "Phone"} <span className="text-red-500">*</span>
 				</label>
 				<input
 					type="tel"
 					value={formData.phone}
 					onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-						errors.phone ? "border-red-300" : "border-orange-200"
+					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+						errors.phone ? "border-red-300" : "border-primary-200"
 					}`}
 					placeholder="+41 XX XXX XX XX"
 				/>
@@ -401,13 +401,13 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 			{/* Role */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.role") || "Role"} <span className="text-red-500">*</span>
 				</label>
 				<select
 					value={formData.role}
 					onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value }))}
-					className="w-full px-4 py-3 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+					className="w-full px-4 py-3 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 				>
 					<option value="worker">{t("users.worker") || "Worker"}</option>
 					<option value="driver">{t("users.driver") || "Driver"}</option>
@@ -420,7 +420,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 				<>
 					{/* Hourly Rate */}
 					<div>
-						<label className="block text-sm font-medium text-amber-800 mb-2">
+						<label className="block text-sm font-medium text-slate-700 mb-2">
 							{t("users.hourlyRate") || "Hourly Rate"} <span className="text-red-500">*</span>
 						</label>
 						<div className="flex gap-2">
@@ -430,15 +430,15 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 								min="0"
 								value={formData.hourlyRate}
 								onChange={(e) => setFormData(prev => ({ ...prev, hourlyRate: e.target.value }))}
-								className={`flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-									errors.hourlyRate ? "border-red-300" : "border-orange-200"
+								className={`flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+									errors.hourlyRate ? "border-red-300" : "border-primary-200"
 								}`}
 								placeholder="25.50"
 							/>
 							<select
 								value={formData.currency}
 								onChange={(e) => setFormData(prev => ({ ...prev, currency: e.target.value }))}
-								className="px-4 py-3 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+								className="px-4 py-3 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 							>
 								<option value="CHF">CHF</option>
 								<option value="EUR">EUR</option>
@@ -450,25 +450,25 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 					{/* Start Date */}
 					<div>
-						<label className="block text-sm font-medium text-amber-800 mb-2">
+						<label className="block text-sm font-medium text-slate-700 mb-2">
 							{t("users.startDate") || "Start Date"} <span className="text-gray-500 text-xs">(Optional)</span>
 						</label>
 						<input
 							type="date"
 							value={formData.startDate}
 							onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-							className="w-full px-4 py-3 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+							className="w-full px-4 py-3 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 						/>
 					</div>
 				</>
 			)}
 
 			{/* Actions */}
-			<div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-orange-100">
+			<div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-primary-100">
 				<button
 					type="button"
 					onClick={() => setStep("choice")}
-					className="flex-1 px-4 py-2 text-sm text-amber-700 hover:text-amber-900 font-medium transition-colors"
+					className="flex-1 px-4 py-2 text-sm text-slate-600 hover:text-slate-800 font-medium transition-colors"
 				>
 					{t("common.buttons.back") || "Back"}
 				</button>
@@ -501,15 +501,15 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 			{/* Email */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.email") || "Email"} <span className="text-red-500">*</span>
 				</label>
 				<input
 					type="email"
 					value={formData.inviteEmail}
 					onChange={(e) => setFormData(prev => ({ ...prev, inviteEmail: e.target.value }))}
-					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-						errors.inviteEmail ? "border-red-300" : "border-orange-200"
+					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+						errors.inviteEmail ? "border-red-300" : "border-primary-200"
 					}`}
 					placeholder="existing-user@example.com"
 				/>
@@ -518,7 +518,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 			{/* Hourly Rate */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.hourlyRate") || "Hourly Rate"} <span className="text-red-500">*</span>
 				</label>
 				<div className="flex gap-2">
@@ -528,15 +528,15 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 						min="0"
 						value={formData.inviteHourlyRate}
 						onChange={(e) => setFormData(prev => ({ ...prev, inviteHourlyRate: e.target.value }))}
-						className={`flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 ${
-							errors.inviteHourlyRate ? "border-red-300" : "border-orange-200"
+						className={`flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+							errors.inviteHourlyRate ? "border-red-300" : "border-primary-200"
 						}`}
 						placeholder="25.50"
 					/>
 					<select
 						value={formData.inviteCurrency}
 						onChange={(e) => setFormData(prev => ({ ...prev, inviteCurrency: e.target.value }))}
-						className="px-4 py-3 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+						className="px-4 py-3 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 					>
 						<option value="CHF">CHF</option>
 						<option value="EUR">EUR</option>
@@ -548,23 +548,23 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 
 			{/* Start Date */}
 			<div>
-				<label className="block text-sm font-medium text-amber-800 mb-2">
+				<label className="block text-sm font-medium text-slate-700 mb-2">
 					{t("users.startDate") || "Start Date"} <span className="text-gray-500 text-xs">(Optional)</span>
 				</label>
 				<input
 					type="date"
 					value={formData.inviteStartDate}
 					onChange={(e) => setFormData(prev => ({ ...prev, inviteStartDate: e.target.value }))}
-					className="w-full px-4 py-3 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+					className="w-full px-4 py-3 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 				/>
 			</div>
 
 			{/* Actions */}
-			<div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-orange-100">
+			<div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-primary-100">
 				<button
 					type="button"
 					onClick={() => setStep("choice")}
-					className="flex-1 px-4 py-2 text-sm text-amber-700 hover:text-amber-900 font-medium transition-colors"
+					className="flex-1 px-4 py-2 text-sm text-slate-600 hover:text-slate-800 font-medium transition-colors"
 				>
 					{t("common.buttons.back") || "Back"}
 				</button>
@@ -583,14 +583,14 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 		<div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm">
 			<div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
 				{/* Header */}
-				<div className="flex items-center justify-between p-4 sm:p-5 lg:p-6 border-b border-orange-100">
+				<div className="flex items-center justify-between p-4 sm:p-5 lg:p-6 border-b border-primary-100">
 					<div className="flex-1 min-w-0 pr-2">
-						<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-amber-900 truncate">
+						<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 truncate">
 							{step === "choice" && (t("users.addEmployee") || "Add Employee")}
 							{step === "create" && (t("users.createNewUser") || "Create New User")}
 							{step === "invite" && (t("users.inviteExisting") || "Invite Existing User")}
 						</h2>
-						<p className="text-xs sm:text-sm text-amber-700/70 mt-0.5 sm:mt-1 truncate">
+						<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
 							{step === "choice" && (t("users.addEmployeeSubtitle") || "Add a new employee to your company")}
 							{step === "create" && (t("users.createNewSubtitle") || "Create a brand new employee account")}
 							{step === "invite" && (t("users.inviteExistingSubtitle") || "Send an employment offer to an existing user")}
@@ -598,10 +598,10 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 					</div>
 					<button
 						onClick={handleClose}
-						className="p-1.5 sm:p-2 hover:bg-orange-50 rounded-lg transition-colors flex-shrink-0"
+						className="p-1.5 sm:p-2 hover:bg-primary-50 rounded-lg transition-colors flex-shrink-0"
 					>
 						<svg
-							className="w-5 h-5 sm:w-6 sm:h-6 text-amber-900"
+							className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"

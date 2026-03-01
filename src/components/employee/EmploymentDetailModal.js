@@ -80,17 +80,17 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 	};
 
 	const themeColors = {
-		primaryText: "text-amber-900",
-		primaryBorder: "border-orange-200/40",
-		secondaryText: "text-amber-700",
-		hoverBg: "hover:bg-orange-50",
+		primaryText: "text-slate-800",
+		primaryBorder: "border-primary-200/40",
+		secondaryText: "text-slate-600",
+		hoverBg: "hover:bg-primary-50",
 	};
 
 	return (
 		<div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
 			<div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
 				{/* Header */}
-				<div className="sticky top-0 bg-white border-b border-orange-200/40 px-6 sm:px-8 py-4 sm:py-6 rounded-t-2xl flex items-center justify-between">
+				<div className="sticky top-0 bg-white border-b border-primary-200/40 px-6 sm:px-8 py-4 sm:py-6 rounded-t-2xl flex items-center justify-between">
 					<h2 className={`text-xl sm:text-2xl font-bold ${themeColors.primaryText}`}>
 						{t("employee.employments.employment")} #{employment.id}
 					</h2>
@@ -99,7 +99,7 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 						className={`p-2 ${themeColors.hoverBg} rounded-lg transition-colors`}
 					>
 						<svg
-							className="w-5 h-5 sm:w-6 sm:h-6 text-amber-700"
+							className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -131,10 +131,10 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 						{/* Company */}
 						{employment.company && (
-							<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+							<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 								<div className="flex items-center gap-2 mb-2">
 									<svg
-										className="w-5 h-5 text-orange-600"
+										className="w-5 h-5 text-primary-600"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -158,10 +158,10 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 
 						{/* Hourly Rate */}
 						{employment.hourly_rate && (
-							<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+							<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 								<div className="flex items-center gap-2 mb-2">
 									<svg
-										className="w-5 h-5 text-orange-600"
+										className="w-5 h-5 text-primary-600"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -188,10 +188,10 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 						{/* Start Date */}
 						{employment.start_date && (
-							<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+							<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 								<div className="flex items-center gap-2 mb-2">
 									<svg
-										className="w-5 h-5 text-orange-600"
+										className="w-5 h-5 text-primary-600"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -215,10 +215,10 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 
 						{/* End Date */}
 						{employment.end_date && (
-							<div className="bg-orange-50 rounded-xl p-4 border border-orange-200/60">
+							<div className="bg-primary-50 rounded-xl p-4 border border-primary-200/60">
 								<div className="flex items-center gap-2 mb-2">
 									<svg
-										className="w-5 h-5 text-orange-600"
+										className="w-5 h-5 text-primary-600"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -269,13 +269,13 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 				</div>
 
 				{/* Footer with Accept/Reject buttons for pending employments */}
-				<div className="sticky bottom-0 bg-white border-t border-orange-200/40 px-6 sm:px-8 py-4 rounded-b-2xl flex gap-3 justify-end">
+				<div className="sticky bottom-0 bg-white border-t border-primary-200/40 px-6 sm:px-8 py-4 rounded-b-2xl flex gap-3 justify-end">
 					{employment.status === "pending" && (
 						<>
 							<button
 								onClick={handleAccept}
 								disabled={isProcessing}
-								className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+								className="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg text-sm font-medium hover:from-primary-600 hover:to-slate-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								{isProcessing ? (
 									<span className="flex items-center justify-center gap-2">
@@ -311,7 +311,7 @@ export default function EmploymentDetailModal({ isOpen, onClose, employment, rol
 					{employment.status !== "pending" && (
 						<button
 							onClick={onClose}
-							className={`px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-amber-700 transition-all`}
+							className={`px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg text-sm font-medium hover:from-primary-600 hover:to-slate-600 transition-all`}
 						>
 							{t("common.buttons.close") || "Close"}
 						</button>

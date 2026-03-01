@@ -29,8 +29,8 @@ export default function CustomerStatsCards({ orders = [] }) {
 					/>
 				</svg>
 			),
-			color: "from-orange-500 to-amber-600",
-			bgColor: "bg-orange-50",
+			color: "from-primary-500 to-primary-600",
+			bgColor: "bg-primary-50",
 		},
 		{
 			title: t("stats.pendingOffers"),
@@ -102,19 +102,19 @@ export default function CustomerStatsCards({ orders = [] }) {
 			{stats.map((stat, index) => (
 				<div
 					key={index}
-					className="bg-white/60 backdrop-blur-sm border border-orange-200/60 rounded-xl p-4 sm:p-5 lg:p-6 hover:shadow-lg transition-all duration-200"
+					className="bg-white/60 backdrop-blur-sm border border-primary-200/60 rounded-xl p-5 sm:p-6 lg:p-7 hover:shadow-lg transition-all duration-300"
 				>
-					<div className="flex items-center justify-between gap-3">
-						<div className="flex-1 min-w-0">
-							<p className="text-xs sm:text-sm font-medium text-amber-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
+					<div className="flex items-start justify-between gap-4 sm:gap-5">
+						<div className="flex-1">
+							<p className="text-sm sm:text-base font-semibold text-primary-600/80 uppercase tracking-wide mb-2 sm:mb-3 break-words whitespace-normal leading-snug">
 								{stat.title}
 							</p>
-							<p className="text-2xl sm:text-3xl font-bold text-amber-900">
+							<p className="text-2xl sm:text-3xl font-bold text-slate-800">
 								{stat.value}
 							</p>
 						</div>
 						<div
-							className={`w-12 h-12 sm:w-14 sm:h-14 ${stat.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}
+							className={`w-12 h-12 sm:w-14 sm:h-14 ${stat.bgColor} rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm`}
 						>
 							<div
 								className={`text-transparent bg-clip-text bg-gradient-to-br ${stat.color}`}

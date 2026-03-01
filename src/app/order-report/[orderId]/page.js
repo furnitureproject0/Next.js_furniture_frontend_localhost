@@ -133,12 +133,12 @@ export default function OrderReportPage() {
 	}
 
 	return (
-		<div className="min-h-screen" style={{ background: "#FFF8F3" }}>
+		<div className="min-h-screen" style={{ background: "#FFFFFF" }}>
 			<div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
 				{/* Back Button */}
 				<button
 					onClick={() => router.back()}
-					className="flex items-center gap-2 text-orange-600 hover:text-orange-700 mb-4 sm:mb-6 text-sm sm:text-base font-medium"
+					className="flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-4 sm:mb-6 text-sm sm:text-base font-medium"
 				>
 					<svg
 						className="w-4 h-4 sm:w-5 sm:h-5"
@@ -158,10 +158,10 @@ export default function OrderReportPage() {
 
 				{/* Header */}
 				<div className="mb-4 sm:mb-6 lg:mb-8">
-					<h1 className="text-2xl sm:text-3xl font-bold text-amber-900 mb-1 sm:mb-2">
+					<h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
 						{t("orderReport.title")}
 					</h1>
-					<p className="text-sm sm:text-base text-amber-700/70">
+					<p className="text-sm sm:text-base text-slate-600/70">
 						{t("orderReport.subtitle", { orderId: order.id })}
 					</p>
 				</div>
@@ -197,16 +197,16 @@ export default function OrderReportPage() {
 				</div>
 
 				{/* Client Payment */}
-				<div className="bg-white rounded-xl border border-orange-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
+				<div className="bg-white rounded-xl border border-primary-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
 					<div className="flex items-center gap-2 mb-3 sm:mb-4">
 						<span className="text-xl sm:text-2xl">💰</span>
-						<h2 className="text-lg sm:text-xl font-semibold text-amber-900">
+						<h2 className="text-lg sm:text-xl font-semibold text-slate-800">
 							{t("orderReport.clientPayment.title")}
 						</h2>
 					</div>
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
 						<div>
-							<label className="block text-sm font-medium text-amber-800 mb-2">
+							<label className="block text-sm font-medium text-slate-700 mb-2">
 								{t("orderReport.clientPayment.amountPaid")}
 							</label>
 							<input
@@ -219,13 +219,13 @@ export default function OrderReportPage() {
 											parseFloat(e.target.value) || 0,
 									}))
 								}
-								className="w-full px-4 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+								className="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 								placeholder="0.00"
 								step="0.01"
 							/>
 						</div>
 						<div>
-							<label className="block text-sm font-medium text-amber-800 mb-2">
+							<label className="block text-sm font-medium text-slate-700 mb-2">
 								{t("orderReport.clientPayment.expectedAmount")}
 							</label>
 							<input
@@ -239,27 +239,27 @@ export default function OrderReportPage() {
 				</div>
 
 				{/* Worker Hours */}
-				<div className="bg-white rounded-xl border border-orange-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
+				<div className="bg-white rounded-xl border border-primary-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
 					<div className="flex items-center gap-2 mb-3 sm:mb-4">
 						<span className="text-xl sm:text-2xl">⏱️</span>
-						<h2 className="text-lg sm:text-xl font-semibold text-amber-900">
+						<h2 className="text-lg sm:text-xl font-semibold text-slate-800">
 							{t("orderReport.workerHours.title")}
 						</h2>
 					</div>
 					<div className="overflow-x-auto -mx-4 sm:mx-0">
 						<table className="w-full min-w-[600px] sm:min-w-0">
 							<thead>
-								<tr className="border-b border-orange-100">
-									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-amber-800">
+								<tr className="border-b border-primary-100">
+									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-slate-700">
 										{t("orderReport.workerHours.worker")}
 									</th>
-									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-amber-800">
+									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-slate-700">
 										{t("orderReport.workerHours.hoursWorked")}
 									</th>
-									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-amber-800">
+									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-slate-700">
 										{t("orderReport.workerHours.basePay")}
 									</th>
-									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-amber-800">
+									<th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-slate-700">
 										{t("orderReport.workerHours.totalPay")}
 									</th>
 								</tr>
@@ -269,14 +269,14 @@ export default function OrderReportPage() {
 									(worker, index) => (
 										<tr
 											key={index}
-											className="border-b border-orange-50"
+											className="border-b border-primary-50"
 										>
-											<td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm text-amber-900">
+											<td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm text-slate-800">
 												<div>
 													<p className="font-medium">
 														{worker.name}
 													</p>
-													<p className="text-xs text-amber-600">
+													<p className="text-xs text-primary-600">
 														{worker.role}
 													</p>
 												</div>
@@ -291,12 +291,12 @@ export default function OrderReportPage() {
 															e.target.value,
 														)
 													}
-													className="w-20 sm:w-24 px-2 sm:px-3 py-1 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs sm:text-sm"
+													className="w-20 sm:w-24 px-2 sm:px-3 py-1 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-xs sm:text-sm"
 													placeholder="0.0"
 													step="0.5"
 												/>
 											</td>
-											<td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm text-amber-900">
+											<td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm text-slate-800">
 												CHF {worker.basePay.toFixed(2)}
 											</td>
 											<td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-green-700">
@@ -313,9 +313,9 @@ export default function OrderReportPage() {
 							</tbody>
 						</table>
 					</div>
-					<div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-orange-100 flex justify-end px-4 sm:px-0">
+					<div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-primary-100 flex justify-end px-4 sm:px-0">
 						<div className="text-right">
-							<p className="text-xs sm:text-sm text-amber-600 mb-1">
+							<p className="text-xs sm:text-sm text-primary-600 mb-1">
 								{t("orderReport.workerHours.totalWorkerPay")}:
 							</p>
 							<p className="text-lg sm:text-xl font-bold text-green-700">
@@ -326,10 +326,10 @@ export default function OrderReportPage() {
 				</div>
 
 				{/* Payment Method */}
-				<div className="bg-white rounded-xl border border-orange-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
+				<div className="bg-white rounded-xl border border-primary-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
 					<div className="flex items-center gap-2 mb-3 sm:mb-4">
 						<span className="text-xl sm:text-2xl">💳</span>
-						<h2 className="text-lg sm:text-xl font-semibold text-amber-900">
+						<h2 className="text-lg sm:text-xl font-semibold text-slate-800">
 							{t("orderReport.paymentMethod.title")}
 						</h2>
 					</div>
@@ -348,11 +348,11 @@ export default function OrderReportPage() {
 										paymentMethod: e.target.value,
 									}))
 								}
-								className="w-5 h-5 text-orange-600"
+								className="w-5 h-5 text-primary-600"
 							/>
 							<div className="flex items-center gap-2">
 								<span className="text-xl">💵</span>
-								<span className="font-medium text-amber-900">
+								<span className="font-medium text-slate-800">
 									{t("orderReport.paymentMethod.cash")}
 								</span>
 							</div>
@@ -371,11 +371,11 @@ export default function OrderReportPage() {
 										paymentMethod: e.target.value,
 									}))
 								}
-								className="w-5 h-5 text-orange-600"
+								className="w-5 h-5 text-primary-600"
 							/>
 							<div className="flex items-center gap-2">
 								<span className="text-xl">📱</span>
-								<span className="font-medium text-amber-900">
+								<span className="font-medium text-slate-800">
 									{t("orderReport.paymentMethod.twint")}
 								</span>
 							</div>
@@ -384,17 +384,17 @@ export default function OrderReportPage() {
 				</div>
 
 				{/* Additional Expenses */}
-				<div className="bg-white rounded-xl border border-orange-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
+				<div className="bg-white rounded-xl border border-primary-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
 					<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-3 sm:mb-4">
 						<div className="flex items-center gap-2">
 							<span className="text-xl sm:text-2xl">💰</span>
-							<h2 className="text-lg sm:text-xl font-semibold text-amber-900">
+							<h2 className="text-lg sm:text-xl font-semibold text-slate-800">
 								{t("orderReport.additionalExpenses.title")}
 							</h2>
 						</div>
 						<button
 							onClick={handleAddExpense}
-							className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white border border-orange-300 text-orange-600 rounded-lg text-xs sm:text-sm font-medium hover:bg-orange-50 transition-colors flex items-center justify-center gap-1.5 sm:gap-2"
+							className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white border border-primary-300 text-primary-600 rounded-lg text-xs sm:text-sm font-medium hover:bg-primary-50 transition-colors flex items-center justify-center gap-1.5 sm:gap-2"
 						>
 							<svg
 								className="w-3.5 h-3.5 sm:w-4 sm:h-4"
@@ -452,7 +452,7 @@ export default function OrderReportPage() {
 												e.target.value,
 											)
 										}
-										className="flex-1 px-4 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+										className="flex-1 px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 										placeholder={t("orderReport.additionalExpenses.description")}
 									/>
 									<input
@@ -465,7 +465,7 @@ export default function OrderReportPage() {
 												e.target.value,
 											)
 										}
-										className="w-32 px-4 py-2 border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+										className="w-32 px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 										placeholder="0.00"
 										step="0.01"
 									/>
@@ -496,14 +496,14 @@ export default function OrderReportPage() {
 				</div>
 
 				{/* Additional Notes */}
-				<div className="bg-white rounded-xl border border-orange-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
+				<div className="bg-white rounded-xl border border-primary-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
 					<div className="flex items-center gap-2 mb-3 sm:mb-4">
 						<span className="text-xl sm:text-2xl">📝</span>
-						<h2 className="text-lg sm:text-xl font-semibold text-amber-900">
+						<h2 className="text-lg sm:text-xl font-semibold text-slate-800">
 							{t("orderReport.additionalNotes.title")}
 						</h2>
 					</div>
-					<p className="text-xs sm:text-sm text-amber-600 mb-2 sm:mb-3">
+					<p className="text-xs sm:text-sm text-primary-600 mb-2 sm:mb-3">
 						{t("orderReport.additionalNotes.hint")}
 					</p>
 					<textarea
@@ -514,17 +514,17 @@ export default function OrderReportPage() {
 								notes: e.target.value,
 							}))
 						}
-						className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+						className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
 						rows="4"
 						placeholder={t("orderReport.additionalNotes.placeholder")}
 					/>
 				</div>
 
 				{/* Report Summary */}
-				<div className="bg-white rounded-xl border border-orange-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
+				<div className="bg-white rounded-xl border border-primary-200/60 p-4 sm:p-5 lg:p-6 mb-4 sm:mb-6">
 					<div className="flex items-center gap-2 mb-3 sm:mb-4">
 						<span className="text-xl sm:text-2xl">📊</span>
-						<h2 className="text-lg sm:text-xl font-semibold text-amber-900">
+						<h2 className="text-lg sm:text-xl font-semibold text-slate-800">
 							{t("orderReport.reportSummary.title")}
 						</h2>
 					</div>
@@ -553,14 +553,14 @@ export default function OrderReportPage() {
 								{reportData.workerHours.length} {t("orderReport.reportSummary.workers")}
 							</p>
 						</div>
-						<div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
-							<p className="text-sm text-orange-600 mb-1">
+						<div className="bg-primary-50 rounded-lg p-4 border border-primary-200">
+							<p className="text-sm text-primary-600 mb-1">
 								{t("orderReport.reportSummary.totalExpenses")}
 							</p>
-							<p className="text-2xl font-bold text-orange-700">
+							<p className="text-2xl font-bold text-primary-700">
 								CHF {calculateTotalExpenses().toFixed(2)}
 							</p>
-							<p className="text-xs text-orange-600 mt-1">
+							<p className="text-xs text-primary-600 mt-1">
 								{reportData.additionalExpenses.length} {t("orderReport.reportSummary.items")}
 							</p>
 						</div>
@@ -571,7 +571,7 @@ export default function OrderReportPage() {
 				<div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
 					<button
 						onClick={() => router.back()}
-						className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-white border border-orange-200 text-amber-900 rounded-xl text-sm sm:text-base font-medium hover:bg-orange-50 transition-colors"
+						className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-white border border-primary-200 text-slate-800 rounded-xl text-sm sm:text-base font-medium hover:bg-primary-50 transition-colors"
 					>
 						{t("orderReport.actions.cancel")}
 					</button>
