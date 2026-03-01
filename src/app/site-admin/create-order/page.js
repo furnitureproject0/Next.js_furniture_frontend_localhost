@@ -15,7 +15,6 @@ import {
 
 // Step Components
 import SiteAdminCompanySelectionStep from "@/components/site-admin/order-steps/SiteAdminCompanySelectionStep";
-import SiteAdminServiceStep from "@/components/site-admin/order-steps/SiteAdminServiceStep";
 import SiteAdminAddressStep from "@/components/site-admin/order-steps/SiteAdminAddressStep";
 import CustomerScheduleStep from "@/components/customer/order-steps/CustomerScheduleStep";
 import CustomerEmailStep from "@/components/company-admin/order-steps/CustomerEmailStep";
@@ -30,6 +29,10 @@ export default function CreateOrderPage() {
     const orderIdToConvert = searchParams.get("orderId");
     const emailParam = searchParams.get("email");
     const topRef = useRef(null);
+
+    // Fetch Available Services State
+    const [availableServices, setAvailableServices] = useState([]);
+    const [isLoadingServices, setIsLoadingServices] = useState(false);
 
     // Pre-fill client from email param
     useEffect(() => {
@@ -56,6 +59,33 @@ export default function CreateOrderPage() {
         }
     }, [emailParam, orderIdToConvert]);
 
+    // Fetch Services (استخدام الكوكيز عبر credentials: "include")
+    useEffect(() => {
+        const fetchServices = async () => {
+            setIsLoadingServices(true);
+            try {
+                const res = await fetch("http://localhost:5000/api/services-v2/?search=&limit=100", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include" // السماح بإرسال الكوكيز التي تحتوي على التوكن
+                });
+                const data = await res.json();
+                if (res.ok && data?.success) {
+                    setAvailableServices(data.data?.services || []);
+                } else {
+                    console.error("Failed to fetch services:", data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch services", err);
+            } finally {
+                setIsLoadingServices(false);
+            }
+        };
+        fetchServices();
+    }, []);
+
     const [formData, setFormData] = useState({
         ...INITIAL_FORM_DATA,
         servicePricing: {},
@@ -63,6 +93,7 @@ export default function CreateOrderPage() {
         customerId: null,
         customerName: "",
         clientInfo: null,
+        vehicles: []
     });
 
     const [companyScope, setCompanyScope] = useState("internal");
@@ -89,7 +120,6 @@ export default function CreateOrderPage() {
     // Auto-select first company when companies load or scope changes
     useEffect(() => {
         if (availableCompanies && availableCompanies.length > 0) {
-            // Only auto-select if nothing is selected or if switching scope
             setSelectedCompanyId(availableCompanies[0].id);
         } else {
             setSelectedCompanyId(null);
@@ -109,7 +139,7 @@ export default function CreateOrderPage() {
         );
     }, [formData, selectedCompanyId]);
 
-    // --- Navigation Guard: browser beforeunload ---
+    // --- Navigation Guards ---
     useEffect(() => {
         const handleBeforeUnload = (e) => {
             if (hasUnsavedData()) {
@@ -121,7 +151,6 @@ export default function CreateOrderPage() {
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
     }, [hasUnsavedData]);
 
-    // --- Navigation Guard: browser back/forward (popstate) ---
     useEffect(() => {
         window.history.pushState({ guard: true }, "");
         const handlePopState = () => {
@@ -137,119 +166,14 @@ export default function CreateOrderPage() {
         return () => window.removeEventListener("popstate", handlePopState);
     }, [hasUnsavedData, router]);
 
-    // Validation
     const isCompanyValid = selectedCompanyId !== null;
     const isCustomerValid = !!formData.customerId && !!formData.customerEmail?.trim();
-    const isServicesValid = (() => {
-        if (!formData.services || formData.services.length === 0) return false;
-        for (const serviceId of formData.services) {
-            const pricing = formData.servicePricing?.[serviceId];
-            
-            // Check pricing if internal
-            if (companyScope === "internal") {
-                if (!pricing || !pricing.minHours || !pricing.maxHours || !pricing.pricePerHour) return false;
-                if (parseFloat(pricing.minHours) <= 0 || parseFloat(pricing.maxHours) < parseFloat(pricing.minHours) || parseFloat(pricing.pricePerHour) <= 0) return false;
-            }
-
-            // Check date/time for each service
-            if (!pricing?.scheduledDate || !pricing?.scheduledTime) return false;
-        }
-        return true;
-    })();
+    const isServicesValid = formData.services && formData.services.length > 0;
     const isAddressValid = validateOrderStep(2, formData);
-    const isScheduleValid = true; // Global date/time no longer mandatory here, now part of services
+    const isScheduleValid = true; 
     const canSubmit = isCompanyValid && isCustomerValid && isServicesValid && isAddressValid && isScheduleValid;
 
     const completedCount = [isCompanyValid, isCustomerValid, isServicesValid, isAddressValid, isScheduleValid].filter(Boolean).length;
-
-    // Sync global company to service-level company if not already set
-    useEffect(() => {
-        if (selectedCompanyId) {
-            setFormData(prev => {
-                const newPricing = { ...prev.servicePricing };
-                let changed = false;
-                
-                prev.services?.forEach(serviceId => {
-                    if (!newPricing[serviceId]) {
-                        newPricing[serviceId] = { assignedCompanyId: selectedCompanyId };
-                        changed = true;
-                    } else if (!newPricing[serviceId].assignedCompanyId) {
-                        newPricing[serviceId].assignedCompanyId = selectedCompanyId;
-                        changed = true;
-                    }
-                });
-                
-                return changed ? { ...prev, servicePricing: newPricing } : prev;
-            });
-        }
-    }, [selectedCompanyId]);
-
-    // Fetch existing order if orderId is provided
-    useEffect(() => {
-        if (orderIdToConvert) {
-            const fetchOrder = async () => {
-                try {
-                    const { siteAdminApi } = await import("@/lib/api");
-                    const response = await siteAdminApi.getOrder(orderIdToConvert);
-                    if (response?.success && response.data) {
-                        const order = response.data;
-                        
-                        // Map shared fields
-                        setFormData(prev => ({
-                            ...prev,
-                            services: order.orderServices?.map(s => s.serviceId) || [],
-                            customerEmail: order.client?.email || "",
-                            customerId: order.clientId,
-                            customerName: order.client?.name || "",
-                            clientInfo: order.client,
-                            notes: order.notes || "",
-                            fromAddress: {
-                                fullAddress: order.location?.address || "",
-                                floor: order.location?.floor || 0,
-                                hasElevator: order.location?.has_elevator || false,
-                                locationType: order.location?.type || "",
-                                area: order.location?.area || 0,
-                                numberOfRooms: order.number_of_rooms || 0,
-                                roomConfigurations: order.rooms?.map(r => ({ 
-                                    roomType: r.room_type, 
-                                    quantity: r.quantity 
-                                })) || []
-                            },
-                            toAddress: order.destination_location ? {
-                                fullAddress: order.destination_location.address || "",
-                                floor: order.destination_location.floor || 0,
-                                hasElevator: order.destination_location.has_elevator || false,
-                                locationType: order.destination_location.type || ""
-                            } : prev.toAddress,
-                            scheduledDate: order.preferred_date ? order.preferred_date.split('T')[0] : "",
-                            scheduledTime: order.preferred_time || "09:00",
-                            servicePricing: order.orderServices?.reduce((acc, s) => {
-                                acc[s.serviceId] = {
-                                    assignedCompanyId: s.company_id,
-                                    scheduledDate: s.preferred_date ? s.preferred_date.split('T')[0] : (order.preferred_date ? order.preferred_date.split('T')[0] : ""),
-                                    scheduledTime: s.preferred_time || order.preferred_time || "09:00",
-                                    minHours: s.offer?.min_hours || "",
-                                    maxHours: s.offer?.max_hours || "",
-                                    pricePerHour: s.offer?.hourly_rate || "",
-                                    notes: s.offer?.notes || ""
-                                };
-                                return acc;
-                            }, {}) || {}
-                        }));
-
-                        // Set company if global
-                        if (order.company_id) {
-                            setSelectedCompanyId(order.company_id);
-                        }
-                    }
-                } catch (err) {
-                    console.error("Error fetching order:", err);
-                    toast.error("Failed to load order data");
-                }
-            };
-            fetchOrder();
-        }
-    }, [orderIdToConvert]);
 
     const handleEmailValid = (user) => {
         setFormData((prev) => ({ ...prev, customerEmail: user.email, customerId: user.id, customerName: user.name, clientInfo: user }));
@@ -284,107 +208,97 @@ export default function CreateOrderPage() {
         setError(null);
         setIsSubmitting(true);
         try {
+            // Mapping Locations
             const primary_location = {
                 address: formData.fromAddress?.fullAddress || "",
+                type: formData.fromAddress?.locationType || "apartment",
                 floor: Number(formData.fromAddress?.floor) || 0,
-                has_elevator: !!formData.fromAddress?.hasElevator,
-                type: formData.fromAddress?.locationType || "",
-                area: Number(formData.fromAddress?.area) || 0,
                 latitude: formData.fromAddress?.lat || null,
                 longitude: formData.fromAddress?.lon || null
             };
+
             const secondary_location = {
                 address: formData.toAddress?.fullAddress || "",
-                floor: Number(formData.toAddress?.floor) || 0,
-                has_elevator: !!formData.toAddress?.hasElevator,
-                type: formData.toAddress?.locationType || "",
+                type: formData.toAddress?.locationType || "apartment",
                 latitude: formData.toAddress?.lat || null,
                 longitude: formData.toAddress?.lon || null
             };
 
-            // Format helper for time
+            // Formatting Time to HH:mm:ss
             const formatTime = (timeStr) => {
-                let time = timeStr || "09:00";
+                let time = timeStr || "09:00:00";
                 if (time.includes("-")) time = time.split("-")[0].trim();
-                if (time === "flexible") time = "09:00";
+                if (time === "flexible") time = "09:00:00";
                 if (time.length === 5) time += ":00";
                 return time;
             };
 
-            const services = (formData.services || []).map(serviceId => {
-                const pricing = formData.servicePricing?.[serviceId] || {};
-                
-                // Map frontend pricing types to backend expectations
-                let backendPricingType = pricing.pricingType || "per_hour";
-                if (backendPricingType === "hourly") backendPricingType = "per_hour";
-                
-                const unitPrice = backendPricingType === "flat_rate" 
-                    ? (parseFloat(pricing.flatRatePrice) || 0)
-                    : (parseFloat(pricing.pricePerHour) || 0);
+            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
+            const globalDate = formData.scheduledDate || firstServicePricing?.scheduledDate || new Date().toISOString().split('T')[0];
+            const globalTime = formatTime(formData.scheduledTime || firstServicePricing?.scheduledTime);
 
-                const serviceObj = {
-                    service_id: serviceId,
-                    pricing_type: backendPricingType,
-                    price_per_unit: unitPrice,
-                    min_units: Number(pricing.minHours) || 0,
-                    max_units: Number(pricing.maxHours) || 0,
-                    minimum_charge: parseFloat(pricing.minimumCharge) || 0,
-                    additions: []
-                };
+            // Mapping Services matching exact body structure
+            const payloadServices = (formData.services || []).map(serviceId => {
+                const pricing = formData.servicePricing?.[serviceId] || {};
+                const actualService = availableServices.find(s => s.id === parseInt(serviceId));
                 
-                // Extract addition pricing from servicePricing
+                const additions = [];
                 if (pricing.additions) {
                     Object.entries(pricing.additions).forEach(([additionId, additionPricing]) => {
-                        const amount = Number(additionPricing.amount) || 1;
-                        const price = Number(additionPricing.price) || 0;
-                        const total = amount * price;
-                        
-                        serviceObj.additions.push({
-                            addition_id: parseInt(additionId),
-                            pricing_type: "flat_rate",
-                            fixed_price: total,
-                            total_price: total
-                        });
+                        if (additionPricing.selected) {
+                            const price = Number(additionPricing.price) || 0;
+                            additions.push({
+                                addition_id: parseInt(additionId),
+                                pricing_type: additionPricing.pricingType || "flat_rate",
+                                fixed_price: price,
+                                total_price: price
+                            });
+                        }
                     });
                 }
-                
-                return serviceObj;
-            });
 
-            // Use first service's date/time as global fallback
-            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
-            const globalDate = firstServicePricing?.scheduledDate || "";
-            const globalTime = formatTime(firstServicePricing?.scheduledTime);
+                return {
+                    service_id: parseInt(serviceId),
+                    pricing_type: pricing.pricingType || actualService?.pricing_type || "per_hour",
+                    price_per_unit: Number(pricing.pricePerHour) || Number(actualService?.price_per_unit) || 0,
+                    min_units: Number(pricing.minHours) || Number(actualService?.min_units) || 0,
+                    max_units: Number(pricing.maxHours) || Number(actualService?.max_units) || 0,
+                    minimum_charge: Number(pricing.minimumCharge) || Number(actualService?.minimum_charge) || 0,
+                    additions: additions
+                };
+            });
 
             const requestBody = {
                 email: formData.customerEmail.trim(),
                 company_id: selectedCompanyId,
                 execution_date: globalDate,
                 execution_time: globalTime,
+                notes: formData.notes || "Admin created order",
                 primary_location,
                 secondary_location,
-                services,
-                notes: formData.notes || '',
-                _imageFiles: formData.images || [],
-                type: orderType,
+                services: payloadServices,
+                vehicles: formData.vehicles ? formData.vehicles.map(v => ({ id: parseInt(v.id || v) })) : [],
                 timelineMessage: formData.timelineMessage || "Order initiated by Admin for the client",
                 timelineStatus: formData.timelineStatus || "pending"
             };
 
-            const { siteAdminApi } = await import("@/lib/api");
-            
-            let response;
-            if (orderType === 'offer') {
-                response = await siteAdminApi.createOffer(requestBody);
-            } else {
-                response = await siteAdminApi.createOrder(requestBody);
-            }
+            // إرسال الطلب باستخدام الكوكيز بدلاً من التوكن اليدوي
+            const response = await fetch("http://localhost:5000/api/orders-v2/admin-create-order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include", // إرسال الكوكيز للصلاحيات
+                body: JSON.stringify(requestBody)
+            });
 
-            if (response && response.success) {
+            const data = await response.json();
+
+            if (response.ok && data.success) {
                 toast.success(t("orders.createSuccess") || "Order created successfully");
                 router.push("/site-admin/orders");
             } else {
-                throw new Error(response?.message || "Failed to create order");
+                throw new Error(data?.message || "Failed to create order");
             }
         } catch (err) {
             console.error("Submission error:", err);
@@ -471,12 +385,154 @@ export default function CreateOrderPage() {
                         />
                     </div>
 
-                    {/* Row 3: Services */}
+                    {/* Row 3: Services (Inline Selection) */}
                     <div className="py-4">
                         <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
                             3. {t("orderSteps.selectServices") || "Services"}
                         </h2>
-                        <SiteAdminServiceStep {...stepProps} />
+                        
+                        {isLoadingServices ? (
+                            <div className="text-xs text-gray-400 p-4 text-center border border-dashed border-gray-200 rounded-lg">
+                                جاري تحميل الخدمات...
+                            </div>
+                        ) : availableServices.length === 0 ? (
+                            <div className="text-xs text-red-500 p-4 text-center border border-dashed border-red-200 rounded-lg bg-red-50">
+                                تعذر العثور على خدمات. يرجى التأكد من تشغيل السيرفر وصلاحية تسجيل الدخول.
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {availableServices.map(service => {
+                                    const isSelected = formData.services?.includes(service.id);
+                                    const pricing = formData.servicePricing?.[service.id] || {};
+
+                                    return (
+                                        <div key={service.id} className={`p-3 border rounded-lg transition-colors ${isSelected ? 'border-gray-800 bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                                            <label className="flex items-start gap-2 cursor-pointer mb-2">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="mt-1"
+                                                    checked={isSelected}
+                                                    onChange={(e) => {
+                                                        const checked = e.target.checked;
+                                                        setFormData(prev => {
+                                                            const newServices = checked 
+                                                                ? [...(prev.services || []), service.id]
+                                                                : (prev.services || []).filter(id => id !== service.id);
+                                                            
+                                                            const newPricing = { ...prev.servicePricing };
+                                                            if (checked && !newPricing[service.id]) {
+                                                                newPricing[service.id] = {
+                                                                    pricingType: service.pricing_type || 'per_hour',
+                                                                    pricePerHour: service.price_per_unit || 0,
+                                                                    minHours: service.min_units || 0,
+                                                                    maxHours: service.max_units || 0,
+                                                                    minimumCharge: service.minimum_charge || 0,
+                                                                    additions: {}
+                                                                };
+                                                            }
+                                                            return { ...prev, services: newServices, servicePricing: newPricing };
+                                                        });
+                                                    }}
+                                                />
+                                                <div>
+                                                    <span className="text-sm font-medium text-gray-800">{service.name}</span>
+                                                    <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">{service.description}</p>
+                                                </div>
+                                            </label>
+
+                                            {isSelected && (
+                                                <div className="ml-6 mt-3 space-y-3 p-3 bg-white border border-gray-100 rounded shadow-sm">
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase text-gray-500 mb-1">Price per unit</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-gray-400 outline-none"
+                                                                value={pricing.pricePerHour || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, pricePerHour: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase text-gray-500 mb-1">Min Units</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-gray-400 outline-none"
+                                                                value={pricing.minHours || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, minHours: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase text-gray-500 mb-1">Max Units</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-gray-400 outline-none"
+                                                                value={pricing.maxHours || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, maxHours: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase text-gray-500 mb-1">Min Charge</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-gray-400 outline-none"
+                                                                value={pricing.minimumCharge || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, minimumCharge: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Additions List for the service */}
+                                                    {service.additions?.length > 0 && (
+                                                        <div className="pt-2 border-t border-gray-100">
+                                                            <h4 className="text-[11px] font-semibold text-gray-600 mb-2">Additions</h4>
+                                                            <div className="space-y-2">
+                                                                {service.additions.map(addition => {
+                                                                    const addState = pricing.additions?.[addition.id] || {};
+                                                                    const isAddSelected = !!addState.selected;
+
+                                                                    return (
+                                                                        <label key={addition.id} className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+                                                                            <input type="checkbox"
+                                                                                checked={isAddSelected}
+                                                                                onChange={(e) => {
+                                                                                    const checked = e.target.checked;
+                                                                                    setFormData(prev => ({
+                                                                                        ...prev, 
+                                                                                        servicePricing: { 
+                                                                                            ...prev.servicePricing, 
+                                                                                            [service.id]: { 
+                                                                                                ...pricing, 
+                                                                                                additions: { 
+                                                                                                    ...(pricing.additions || {}), 
+                                                                                                    [addition.id]: { 
+                                                                                                        selected: checked, 
+                                                                                                        price: addition.price_per_unit || addition.fixed_price || 0,
+                                                                                                        pricingType: addition.pricing_type || 'flat_rate'
+                                                                                                    } 
+                                                                                                } 
+                                                                                            } 
+                                                                                        }
+                                                                                    }))
+                                                                                }}
+                                                                            />
+                                                                            <span>{addition.name}</span>
+                                                                        </label>
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Row 4: Address */}

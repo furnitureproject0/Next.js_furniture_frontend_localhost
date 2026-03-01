@@ -16,7 +16,6 @@ import {
 
 // Step Components
 import SiteAdminCompanySelectionStep from "@/components/site-admin/order-steps/SiteAdminCompanySelectionStep";
-import SiteAdminServiceStep from "@/components/site-admin/order-steps/SiteAdminServiceStep";
 import SiteAdminAddressStep from "@/components/site-admin/order-steps/SiteAdminAddressStep";
 import CustomerScheduleStep from "@/components/customer/order-steps/CustomerScheduleStep";
 import CustomerEmailStep from "@/components/company-admin/order-steps/CustomerEmailStep";
@@ -31,6 +30,10 @@ export default function CreateOfferPage() {
     const orderIdToConvert = searchParams.get("orderId");
     const topRef = useRef(null);
 
+    // Fetch Available Services State
+    const [availableServices, setAvailableServices] = useState([]);
+    const [isLoadingServices, setIsLoadingServices] = useState(false);
+
     const [formData, setFormData] = useState({
         ...INITIAL_FORM_DATA,
         servicePricing: {},
@@ -40,7 +43,7 @@ export default function CreateOfferPage() {
         clientInfo: null,
     });
 
-    // Extra offer fields
+    // Extra offer fields (موجودين في الـ UI بس مش بيتبعتوا للباك)
     const [clientPhone, setClientPhone] = useState("");
     const [clientAddress, setClientAddress] = useState("");
     const [numberOfWorkers, setNumberOfWorkers] = useState("");
@@ -69,6 +72,33 @@ export default function CreateOfferPage() {
     useEffect(() => {
         setSelectedCompanyId(null);
     }, [companyScope]);
+
+    // Fetch Services
+    useEffect(() => {
+        const fetchServices = async () => {
+            setIsLoadingServices(true);
+            try {
+                const res = await fetch("http://localhost:5000/api/services-v2/?search=&limit=100", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include"
+                });
+                const data = await res.json();
+                if (res.ok && data?.success) {
+                    setAvailableServices(data.data?.services || []);
+                } else {
+                    console.error("Failed to fetch services:", data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch services", err);
+            } finally {
+                setIsLoadingServices(false);
+            }
+        };
+        fetchServices();
+    }, []);
 
     // --- Check if form has unsaved data ---
     const hasUnsavedData = useCallback(() => {
@@ -144,43 +174,15 @@ export default function CreateOfferPage() {
     // Validation
     const isCompanyValid = selectedCompanyId !== null;
     const isCustomerValid = !!formData.customerId && !!formData.customerEmail?.trim();
-    const isServicesValid = (() => {
-        if (!formData.services || formData.services.length === 0) return false;
-        
-        for (const serviceId of formData.services) {
-            const pricing = formData.servicePricing?.[serviceId];
-            if (!pricing) return false;
-            
-            // Check pricing if internal
-            if (companyScope === "internal") {
-                const type = pricing.pricingType || 'hourly';
-                if (type === 'hourly') {
-                    if (pricing.minHours === undefined || pricing.minHours === null || pricing.minHours === "" || isNaN(parseFloat(pricing.minHours))) return false;
-                    if (pricing.maxHours === undefined || pricing.maxHours === null || pricing.maxHours === "" || isNaN(parseFloat(pricing.maxHours))) return false;
-                    if (pricing.pricePerHour === undefined || pricing.pricePerHour === null || pricing.pricePerHour === "" || isNaN(parseFloat(pricing.pricePerHour))) return false;
-                } else if (type === 'flat_rate') {
-                    if (!pricing.flatRatePrice && pricing.flatRatePrice !== 0) return false;
-                } else if (type === 'max_price') {
-                    if (!pricing.maxPrice && pricing.maxPrice !== 0) return false;
-                } else if (type === 'pro_m3') {
-                    if (!pricing.priceProM3 && pricing.priceProM3 !== 0) return false;
-                    if (!pricing.meters && pricing.meters !== 0) return false;
-                }
-            }
-
-            // Check date/time for each service
-            if (!pricing.scheduledDate || !pricing.scheduledTime) return false;
-        }
-        return true;
-    })();
+    const isServicesValid = formData.services && formData.services.length > 0;
     const isAddressValid = validateOrderStep(2, formData);
-    const isScheduleValid = true; // Global date/time no longer mandatory here, now part of services
+    const isScheduleValid = true; 
     const isExtraFieldsValid = !!clientPhone?.toString().trim() && !!clientAddress?.toString().trim();
     const canSubmit = isCompanyValid && isCustomerValid && isServicesValid && isAddressValid && isScheduleValid && isExtraFieldsValid;
 
     const completedCount = [isCompanyValid, isCustomerValid, isServicesValid, isAddressValid, isScheduleValid, isExtraFieldsValid].filter(Boolean).length;
 
-    // Sync global company to service-level
+    // Sync global company to service-level if not set
     useEffect(() => {
         if (selectedCompanyId) {
             setFormData(prev => {
@@ -188,17 +190,18 @@ export default function CreateOfferPage() {
                 let changed = false;
                 prev.services?.forEach(serviceId => {
                     if (!newPricing[serviceId]) {
-                        newPricing[serviceId] = { assignedCompanyId: selectedCompanyId };
+                        newPricing[serviceId] = { companyId: selectedCompanyId, companyScope: companyScope };
                         changed = true;
-                    } else if (!newPricing[serviceId].assignedCompanyId) {
-                        newPricing[serviceId].assignedCompanyId = selectedCompanyId;
+                    } else if (!newPricing[serviceId].companyId) {
+                        newPricing[serviceId].companyId = selectedCompanyId;
+                        newPricing[serviceId].companyScope = companyScope;
                         changed = true;
                     }
                 });
                 return changed ? { ...prev, servicePricing: newPricing } : prev;
             });
         }
-    }, [selectedCompanyId]);
+    }, [selectedCompanyId, companyScope]);
 
     // Fetch existing order if orderId is provided
     useEffect(() => {
@@ -210,7 +213,6 @@ export default function CreateOfferPage() {
                     if (response?.success && response.data) {
                         const order = response.data;
                         
-                        // Map shared fields
                         setFormData(prev => ({
                             ...prev,
                             services: order.orderServices?.map(s => s.serviceId) || [],
@@ -226,10 +228,6 @@ export default function CreateOfferPage() {
                                 locationType: order.location?.type || "",
                                 area: order.location?.area || 0,
                                 numberOfRooms: order.number_of_rooms || 0,
-                                roomConfigurations: order.rooms?.map(r => ({ 
-                                    roomType: r.room_type, 
-                                    quantity: r.quantity 
-                                })) || []
                             },
                             toAddress: order.destination_location ? {
                                 fullAddress: order.destination_location.address || "",
@@ -241,27 +239,26 @@ export default function CreateOfferPage() {
                             scheduledTime: order.preferred_time || "09:00",
                             servicePricing: order.orderServices?.reduce((acc, s) => {
                                 acc[s.serviceId] = {
-                                    assignedCompanyId: s.company_id,
-                                    scheduledDate: s.preferred_date ? s.preferred_date.split('T')[0] : (order.preferred_date ? order.preferred_date.split('T')[0] : ""),
-                                    scheduledTime: s.preferred_time || order.preferred_time || "09:00",
-                                    minHours: s.offer?.min_hours || "",
-                                    maxHours: s.offer?.max_hours || "",
-                                    pricePerHour: s.offer?.hourly_rate || "",
+                                    companyScope: "internal", 
+                                    companyId: s.company_id,
+                                    pricingType: s.pricing_type || "per_hour",
+                                    pricePerUnit: s.price_per_unit || s.offer?.hourly_rate || "",
+                                    minUnits: s.min_units || s.offer?.min_hours || "",
+                                    maxUnits: s.max_units || s.offer?.max_hours || "",
+                                    minimumCharge: s.minimum_charge || "",
+                                    scheduledDate: s.preferred_date ? s.preferred_date.split('T')[0] : "",
+                                    scheduledTime: s.preferred_time || "09:00",
                                     notes: s.offer?.notes || ""
                                 };
                                 return acc;
                             }, {}) || {}
                         }));
 
-                        // Set extra offer fields
                         setClientPhone(order.client_phone || order.client?.phone || "");
                         setClientAddress(order.client_address || order.location?.address || "");
                         setNumberOfWorkers(order.number_of_workers || "");
                         
-                        // Set company if global
-                        if (order.company_id) {
-                            setSelectedCompanyId(order.company_id);
-                        }
+                        if (order.company_id) setSelectedCompanyId(order.company_id);
                     }
                 } catch (err) {
                     console.error("Error fetching order:", err);
@@ -272,10 +269,9 @@ export default function CreateOfferPage() {
         }
     }, [orderIdToConvert]);
 
-    // Auto-fill phone/address from client info
     useEffect(() => {
         if (formData.clientInfo) {
-            if (formData.clientInfo.phone && !clientPhone) setClientPhone(formData.clientInfo.phone);
+            if (formData.clientInfo.phones?.[0]?.phone && !clientPhone) setClientPhone(formData.clientInfo.phones[0].phone);
             if (formData.clientInfo.address && !clientAddress) setClientAddress(formData.clientInfo.address);
         }
     }, [formData.clientInfo]);
@@ -315,84 +311,92 @@ export default function CreateOfferPage() {
         try {
             const primary_location = {
                 address: formData.fromAddress?.fullAddress || "",
+                type: formData.fromAddress?.locationType || "apartment",
                 floor: Number(formData.fromAddress?.floor) || 0,
-                has_elevator: !!formData.fromAddress?.hasElevator,
-                type: formData.fromAddress?.locationType || "",
-                area: Number(formData.fromAddress?.area) || 0
+                latitude: formData.fromAddress?.lat || null,
+                longitude: formData.fromAddress?.lon || null
             };
+
             const secondary_location = {
                 address: formData.toAddress?.fullAddress || "",
-                floor: Number(formData.toAddress?.floor) || 0,
-                has_elevator: !!formData.toAddress?.hasElevator,
-                type: formData.toAddress?.locationType || ""
+                type: formData.toAddress?.locationType || "apartment",
+                latitude: formData.toAddress?.lat || null,
+                longitude: formData.toAddress?.lon || null
             };
-            // Format helper for time
+
             const formatTime = (timeStr) => {
-                let time = timeStr || "09:00";
+                let time = timeStr || "09:00:00";
                 if (time.includes("-")) time = time.split("-")[0].trim();
-                if (time === "flexible") time = "09:00";
+                if (time === "flexible") time = "09:00:00";
                 if (time.length === 5) time += ":00";
                 return time;
             };
 
-            const services = (formData.services || []).map(serviceId => {
+            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
+            const globalDate = formData.scheduledDate || firstServicePricing?.scheduledDate || new Date().toISOString().split('T')[0];
+            const globalTime = formatTime(formData.scheduledTime || firstServicePricing?.scheduledTime);
+
+            const payloadServices = (formData.services || []).map(serviceId => {
                 const pricing = formData.servicePricing?.[serviceId] || {};
-                const selectedAdditions = formData.serviceAdditions?.[serviceId] || {};
+                const actualService = availableServices.find(s => s.id === parseInt(serviceId));
                 
-                const serviceObj = {
-                    service_id: serviceId,
-                    pricing_type: pricing.pricingType || "per_hour",
-                    price_per_unit: parseFloat(pricing.pricePerHour) || 0,
-                    min_units: Number(pricing.minHours) || 0,
-                    max_units: Number(pricing.maxHours) || 0,
-                    minimum_charge: parseFloat(pricing.minimumCharge) || 0,
-                    additions: []
+                const additions = [];
+                if (pricing.additions) {
+                    Object.entries(pricing.additions).forEach(([additionId, additionPricing]) => {
+                        if (additionPricing.selected) {
+                            const price = Number(additionPricing.price) || 0;
+                            additions.push({
+                                addition_id: parseInt(additionId),
+                                pricing_type: additionPricing.pricingType || "flat_rate",
+                                fixed_price: price,
+                                total_price: price
+                            });
+                        }
+                    });
+                }
+
+                return {
+                    service_id: parseInt(serviceId),
+                    company_id: pricing.companyId ? parseInt(pricing.companyId) : selectedCompanyId, 
+                    pricing_type: pricing.pricingType || actualService?.pricing_type || "per_hour",
+                    price_per_unit: Number(pricing.pricePerUnit) || Number(actualService?.price_per_unit) || 0,
+                    min_units: Number(pricing.minUnits) || Number(actualService?.min_units) || 0,
+                    max_units: Number(pricing.maxUnits) || Number(actualService?.max_units) || 0,
+                    minimum_charge: Number(pricing.minimumCharge) || Number(actualService?.minimum_charge) || 0,
+                    additions: additions
                 };
-                
-                Object.entries(selectedAdditions).forEach(([additionId, additionData]) => {
-                    if (additionData) {
-                        const additionPayload = {
-                            addition_id: parseInt(additionId),
-                            pricing_type: additionData.pricingType || "flat_rate",
-                            fixed_price: Number(additionData.price) || 0,
-                            total_price: Number(additionData.price) || 0
-                        };
-                        serviceObj.additions.push(additionPayload);
-                    }
-                });
-                
-                return serviceObj;
             });
 
-            // Use first service's date/time as global fallback
-            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
-            const globalDate = firstServicePricing?.scheduledDate || "";
-            const globalTime = formatTime(firstServicePricing?.scheduledTime);
-
+            // تطابق تام مع الـ Request Body المطلوب للإصدار الثاني (بدون حقول الـ extra)
             const requestBody = {
                 email: formData.customerEmail.trim(),
                 company_id: selectedCompanyId,
                 execution_date: globalDate,
                 execution_time: globalTime,
+                notes: formData.notes || "Admin created offer",
                 primary_location,
                 secondary_location,
-                services,
-                notes: formData.notes || '',
-                _imageFiles: formData.images || [],
-                type: "offer",
-                client_phone: clientPhone.trim(),
-                client_address: clientAddress.trim(),
-                number_of_workers: Number(numberOfWorkers) || 0
+                services: payloadServices,
+                timelineMessage: "Offer initiated by Admin for the client",
+                timelineStatus: "pending"
             };
 
-            const { siteAdminApi } = await import("@/lib/api");
-            const response = await siteAdminApi.createOffer(requestBody);
+            const response = await fetch("http://localhost:5000/api/offers-v2/admin-create-offer", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify(requestBody)
+            });
 
-            if (response && response.success) {
+            const data = await response.json();
+
+            if (response.ok && data.success) {
                 toast.success(t("siteAdmin.dashboard.offerCreatedSuccess") || "Offer created successfully!");
                 router.push("/site-admin/dashboard");
             } else {
-                throw new Error(response?.message || "Failed to create offer");
+                throw new Error(data?.message || "Failed to create offer");
             }
         } catch (err) {
             console.error("Submission error:", err);
@@ -485,7 +489,7 @@ export default function CreateOfferPage() {
                         />
                     </div>
 
-                    {/* Row 3: Extra Offer Fields (Phone, Address, Workers) */}
+                    {/* Row 3: Extra Offer Fields (يتم عرضها لكن لن يتم إرسالها) */}
                     <div className="py-4">
                         <h2 className="text-xs font-semibold text-orange-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -536,10 +540,252 @@ export default function CreateOfferPage() {
 
                     {/* Row 4: Services */}
                     <div className="py-4">
-                        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                            4. {t("orderSteps.selectServices") || "Services"}
+                        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                             <svg className="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            4. {t("orderSteps.selectServices") || "Services & Offer Details"}
                         </h2>
-                        <SiteAdminServiceStep {...stepProps} />
+                        
+                        {isLoadingServices ? (
+                            <div className="text-xs text-gray-400 p-4 text-center border border-dashed border-gray-200 rounded-lg">
+                                Loading services...
+                            </div>
+                        ) : availableServices.length === 0 ? (
+                            <div className="text-xs text-red-500 p-4 text-center border border-dashed border-red-200 rounded-lg bg-red-50">
+                                No services found.
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 gap-4">
+                                {availableServices.map(service => {
+                                    const isSelected = formData.services?.includes(service.id);
+                                    const pricing = formData.servicePricing?.[service.id] || {};
+
+                                    const serviceCompanyScope = pricing.companyScope || companyScope;
+                                    const serviceCompaniesList = serviceCompanyScope === 'external' ? externalCompanies : internalCompanies;
+
+                                    return (
+                                        <div key={service.id} className={`p-4 border rounded-xl transition-colors ${isSelected ? 'border-orange-500 bg-orange-50/20' : 'border-gray-200 hover:border-gray-300'}`}>
+                                            <label className="flex items-start gap-3 cursor-pointer mb-3">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="mt-1 w-4 h-4 accent-orange-500"
+                                                    checked={isSelected}
+                                                    onChange={(e) => {
+                                                        const checked = e.target.checked;
+                                                        setFormData(prev => {
+                                                            const newServices = checked 
+                                                                ? [...(prev.services || []), service.id]
+                                                                : (prev.services || []).filter(id => id !== service.id);
+                                                            
+                                                            const newPricing = { ...prev.servicePricing };
+                                                            if (checked && !newPricing[service.id]) {
+                                                                newPricing[service.id] = {
+                                                                    companyScope: companyScope,
+                                                                    companyId: selectedCompanyId || "", 
+                                                                    pricingType: service.pricing_type || 'per_hour',
+                                                                    pricePerUnit: service.price_per_unit || 0,
+                                                                    minUnits: service.min_units || 0,
+                                                                    maxUnits: service.max_units || 0,
+                                                                    minimumCharge: service.minimum_charge || 0,
+                                                                    additions: {}
+                                                                };
+                                                            }
+                                                            return { ...prev, services: newServices, servicePricing: newPricing };
+                                                        });
+                                                    }}
+                                                />
+                                                <div>
+                                                    <span className="text-sm font-bold text-gray-800">{service.name}</span>
+                                                    <p className="text-xs text-gray-500 mt-0.5">{service.description}</p>
+                                                </div>
+                                            </label>
+
+                                            {isSelected && (
+                                                <div className="ml-7 mt-3 p-4 bg-white border border-gray-100 rounded-lg shadow-sm space-y-4">
+                                                    
+                                                    {/* Service Settings Row (Scope, Company & Type) */}
+                                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pb-3 border-b border-gray-50">
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">Company Type</label>
+                                                            <select 
+                                                                className="w-full text-xs border border-gray-200 rounded-lg p-2 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 outline-none bg-gray-50/50"
+                                                                value={pricing.companyScope || 'internal'}
+                                                                onChange={(e) => {
+                                                                    const newScope = e.target.value;
+                                                                    setFormData(prev => ({
+                                                                        ...prev, 
+                                                                        servicePricing: { 
+                                                                            ...prev.servicePricing, 
+                                                                            [service.id]: { 
+                                                                                ...pricing, 
+                                                                                companyScope: newScope,
+                                                                                companyId: "" 
+                                                                            } 
+                                                                        }
+                                                                    }));
+                                                                }}
+                                                            >
+                                                                <option value="internal">Internal Company</option>
+                                                                <option value="external">External Company</option>
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">Assigned Company</label>
+                                                            <select 
+                                                                className="w-full text-xs border border-gray-200 rounded-lg p-2 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 outline-none bg-gray-50/50"
+                                                                value={pricing.companyId || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, companyId: e.target.value } }
+                                                                }))}
+                                                            >
+                                                                <option value="">-- Use Global Company --</option>
+                                                                {serviceCompaniesList?.map(comp => (
+                                                                    <option key={comp.id} value={comp.id}>{comp.name}</option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">Pricing Type</label>
+                                                            <select 
+                                                                className="w-full text-xs border border-gray-200 rounded-lg p-2 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 outline-none bg-gray-50/50"
+                                                                value={pricing.pricingType || 'per_hour'}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, pricingType: e.target.value } }
+                                                                }))}
+                                                            >
+                                                                <option value="per_hour">Per Hour</option>
+                                                                <option value="flat_rate">Flat Rate</option>
+                                                                <option value="per_quantity">Per Quantity</option>
+                                                                <option value="per_square_meter">Per Square Meter</option>
+                                                                <option value="custom">Custom</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Units & Pricing Row */}
+                                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase font-medium text-gray-500 mb-1">Price per unit</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-orange-400 outline-none"
+                                                                value={pricing.pricePerUnit || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, pricePerUnit: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase font-medium text-gray-500 mb-1">Min Units</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-orange-400 outline-none"
+                                                                value={pricing.minUnits || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, minUnits: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase font-medium text-gray-500 mb-1">Max Units</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-orange-400 outline-none"
+                                                                value={pricing.maxUnits || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, maxUnits: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] uppercase font-medium text-gray-500 mb-1">Min Charge</label>
+                                                            <input type="number" 
+                                                                className="w-full text-xs border border-gray-200 rounded p-1.5 focus:border-orange-400 outline-none"
+                                                                value={pricing.minimumCharge || ''}
+                                                                onChange={(e) => setFormData(prev => ({
+                                                                    ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, minimumCharge: e.target.value } }
+                                                                }))}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Additions List for the service */}
+                                                    {service.additions?.length > 0 && (
+                                                        <div className="pt-3 border-t border-gray-100">
+                                                            <h4 className="text-[11px] font-bold text-gray-600 mb-2 uppercase tracking-wide">Additions</h4>
+                                                            <div className="space-y-2">
+                                                                {service.additions.map(addition => {
+                                                                    const addState = pricing.additions?.[addition.id] || {};
+                                                                    const isAddSelected = !!addState.selected;
+
+                                                                    return (
+                                                                        <div key={addition.id} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-2 rounded-lg border border-gray-50 bg-gray-50/50">
+                                                                            <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer min-w-[150px]">
+                                                                                <input type="checkbox"
+                                                                                    className="accent-orange-500"
+                                                                                    checked={isAddSelected}
+                                                                                    onChange={(e) => {
+                                                                                        const checked = e.target.checked;
+                                                                                        setFormData(prev => ({
+                                                                                            ...prev, 
+                                                                                            servicePricing: { 
+                                                                                                ...prev.servicePricing, 
+                                                                                                [service.id]: { 
+                                                                                                    ...pricing, 
+                                                                                                    additions: { 
+                                                                                                        ...(pricing.additions || {}), 
+                                                                                                        [addition.id]: { 
+                                                                                                            ...addState,
+                                                                                                            selected: checked, 
+                                                                                                            price: addState.price || addition.price_per_unit || addition.fixed_price || 0,
+                                                                                                            pricingType: addState.pricingType || addition.pricing_type || 'flat_rate'
+                                                                                                        } 
+                                                                                                    } 
+                                                                                                } 
+                                                                                            }
+                                                                                        }))
+                                                                                    }}
+                                                                                />
+                                                                                <span className="font-medium">{addition.name}</span>
+                                                                            </label>
+
+                                                                            {isAddSelected && (
+                                                                                <div className="flex items-center gap-2 ml-6 sm:ml-0 flex-1">
+                                                                                    <select
+                                                                                        className="text-[11px] border border-gray-200 rounded p-1 focus:border-orange-400 outline-none w-28"
+                                                                                        value={addState.pricingType || 'flat_rate'}
+                                                                                        onChange={(e) => setFormData(prev => ({
+                                                                                            ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, additions: { ...pricing.additions, [addition.id]: { ...addState, pricingType: e.target.value } } } }
+                                                                                        }))}
+                                                                                    >
+                                                                                        <option value="flat_rate">Flat Rate</option>
+                                                                                        <option value="per_hour">Per Hour</option>
+                                                                                        <option value="per_quantity">Per Quantity</option>
+                                                                                    </select>
+                                                                                    <div className="flex items-center border border-gray-200 rounded bg-white overflow-hidden w-24">
+                                                                                        <span className="px-2 text-[10px] text-gray-400 bg-gray-50 border-r border-gray-200">Price</span>
+                                                                                        <input 
+                                                                                            type="number"
+                                                                                            className="w-full text-xs p-1 outline-none"
+                                                                                            value={addState.price || ''}
+                                                                                            onChange={(e) => setFormData(prev => ({
+                                                                                                ...prev, servicePricing: { ...prev.servicePricing, [service.id]: { ...pricing, additions: { ...pricing.additions, [addition.id]: { ...addState, price: e.target.value } } } }
+                                                                                            }))}
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Row 5: Address */}
