@@ -51,7 +51,10 @@ function SiteAdminOrdersList({ onAssignCompany, refreshTrigger, filters, onFilte
                 if (filters?.status && filters.status !== "all") queryParams.append("status", filters.status);
                 if (filters?.selectedDate) queryParams.append("date", filters.selectedDate);
 
-                const response = await fetch(`https://angebotsprofi.ch/api/orders-v2/?${queryParams.toString()}`, {
+                console.log("Token being sent in header:", token); // Debug: تحقق من وجود التوكن
+
+                // abdooooooooooooooooooooooooooo
+                const response = await fetch(`https://api.angebotsprofi.ch/api/orders-v2/?${queryParams.toString()}`, {
                     method: "GET",
                     headers: { 
                         "Content-Type": "application/json",
@@ -268,7 +271,7 @@ function SiteAdminOffersList({ onAssignCompany, refreshTrigger, filters, onFilte
                 if (filters?.status && filters.status !== "all") queryParams.append("status", filters.status);
                 if (filters?.selectedDate) queryParams.append("date", filters.selectedDate);
 
-                const response = await fetch(`https://angebotsprofi.ch/api/offers-v2/?${queryParams.toString()}`, {
+                const response = await fetch(`https://api.angebotsprofi.ch/api/offers-v2/?${queryParams.toString()}`, {
                     method: "GET",
                     headers: { 
                         "Content-Type": "application/json",

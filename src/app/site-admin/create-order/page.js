@@ -64,7 +64,7 @@ export default function CreateOrderPage() {
         const fetchServices = async () => {
             setIsLoadingServices(true);
             try {
-                const res = await fetch("https://angebotsprofi.ch/api/services-v2/?search=&limit=100", {
+                const res = await fetch("https://api.angebotsprofi.ch/api/services-v2/?search=&limit=100", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -283,7 +283,7 @@ export default function CreateOrderPage() {
             };
 
             // إرسال الطلب باستخدام الكوكيز بدلاً من التوكن اليدوي
-            const response = await fetch("https://angebotsprofi.ch/api/orders-v2/admin-create-order", {
+            const response = await fetch("https://api.angebotsprofi.ch/api/orders-v2/admin-create-order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

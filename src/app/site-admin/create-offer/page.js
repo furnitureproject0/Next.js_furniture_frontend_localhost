@@ -78,7 +78,7 @@ export default function CreateOfferPage() {
         const fetchServices = async () => {
             setIsLoadingServices(true);
             try {
-                const res = await fetch("https://angebotsprofi.ch/api/services-v2/?search=&limit=100", {
+                const res = await fetch("https://api.angebotsprofi.ch/api/services-v2/?search=&limit=100", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -381,7 +381,7 @@ export default function CreateOfferPage() {
                 timelineStatus: "pending"
             };
 
-            const response = await fetch("https://angebotsprofi.ch/api/offers-v2/admin-create-offer", {
+            const response = await fetch("https://api.angebotsprofi.ch/api/offers-v2/admin-create-offer", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
