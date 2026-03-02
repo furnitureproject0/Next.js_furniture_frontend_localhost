@@ -13,6 +13,17 @@ import { selectUser, selectAllOrders } from "@/store/selectors";
 import { useState, useMemo, useEffect } from "react";
 
 // ==========================================
+// دالة مساعدة لجلب التوكن من LocalStorage
+// ==========================================
+const getAuthToken = () => {
+    if (typeof window !== 'undefined') {
+        // تأكد من اسم المفتاح اللي بتخزن بيه التوكن (token أو accessToken)
+        return localStorage.getItem('token') || localStorage.getItem('accessToken') || '';
+    }
+    return '';
+};
+
+// ==========================================
 // 1. مكون عرض الأوردرات (SiteAdminOrdersList)
 // ==========================================
 function SiteAdminOrdersList({ onAssignCompany, refreshTrigger, filters, onFilterChange }) {
@@ -29,6 +40,8 @@ function SiteAdminOrdersList({ onAssignCompany, refreshTrigger, filters, onFilte
             setIsLoading(true);
             setError(null);
             try {
+                const token = getAuthToken(); // جلب التوكن
+                
                 const queryParams = new URLSearchParams({
                     page: meta.page,
                     limit: 10,
@@ -38,9 +51,17 @@ function SiteAdminOrdersList({ onAssignCompany, refreshTrigger, filters, onFilte
                 if (filters?.status && filters.status !== "all") queryParams.append("status", filters.status);
                 if (filters?.selectedDate) queryParams.append("date", filters.selectedDate);
 
-                const response = await fetch(`http://localhost:5000/api/orders-v2/?${queryParams.toString()}`, {
+                console.log("Token being sent in header:", token); // Debug: تحقق من وجود التوكن
+
+                // abdooooooooooooooooooooooooooo
+                const response = await fetch(`https://api.angebotsprofi.ch/api/orders-v2/?${queryParams.toString()}`, {
                     method: "GET",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        // إرسال التوكن في الهيدر كخطة بديلة (Fallback)
+                        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+                    },
+                    // إرسال الكوكيز الأساسية
                     credentials: "include" 
                 });
 
@@ -50,7 +71,7 @@ function SiteAdminOrdersList({ onAssignCompany, refreshTrigger, filters, onFilte
                     setOrders(data.data || []);
                     setMeta(data.meta || { page: 1, totalPages: 1, totalItems: 0 });
                 } else {
-                    throw new Error(data.message || "Failed to fetch orders");
+                    throw new Error(data.message || "Failed to fetch orders (Unauthorized)");
                 }
             } catch (err) {
                 console.error("Error fetching orders:", err);
@@ -239,6 +260,8 @@ function SiteAdminOffersList({ onAssignCompany, refreshTrigger, filters, onFilte
             setIsLoading(true);
             setError(null);
             try {
+                const token = getAuthToken(); // جلب التوكن
+                
                 const queryParams = new URLSearchParams({
                     page: meta.page,
                     limit: 10,
@@ -248,10 +271,14 @@ function SiteAdminOffersList({ onAssignCompany, refreshTrigger, filters, onFilte
                 if (filters?.status && filters.status !== "all") queryParams.append("status", filters.status);
                 if (filters?.selectedDate) queryParams.append("date", filters.selectedDate);
 
-                // Fetching from the offers-v2 endpoint
-                const response = await fetch(`http://localhost:5000/api/offers-v2/?${queryParams.toString()}`, {
+                const response = await fetch(`https://api.angebotsprofi.ch/api/offers-v2/?${queryParams.toString()}`, {
                     method: "GET",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        // إرسال التوكن في الهيدر كخطة بديلة (Fallback)
+                        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+                    },
+                    // إرسال الكوكيز الأساسية
                     credentials: "include"
                 });
 
@@ -261,7 +288,7 @@ function SiteAdminOffersList({ onAssignCompany, refreshTrigger, filters, onFilte
                     setOffers(data.data || []);
                     setMeta(data.meta || { page: 1, totalPages: 1, totalItems: 0 });
                 } else {
-                    throw new Error(data.message || "Failed to fetch offers");
+                    throw new Error(data.message || "Failed to fetch offers (Unauthorized)");
                 }
             } catch (err) {
                 console.error("Error fetching offers:", err);

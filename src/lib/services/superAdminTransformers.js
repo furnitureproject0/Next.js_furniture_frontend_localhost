@@ -178,17 +178,19 @@ export const extractSingleData = (response, key = 'data') => {
 	return null;
 };
 
-export default {
-	// Users
-	transformUser,
-	transformUsers,
-	// Orders
-	transformOrder,
-	transformOrders,
-	// Companies
-	transformCompany,
-	transformCompanies,
-	// Utilities
-	extractArrayData,
-	extractSingleData,
+const perAdminTransformers = {
+   // Users
+   transformUser,
+   transformUsers,
+   // Orders
+   transformOrder,
+   transformOrders,
+   // Companies
+   transformCompany,
+   transformCompanies,
+   // Utilities
+   extractArrayData,
+   extractSingleData,
 };
+
+export default perAdminTransformers;

@@ -7,7 +7,8 @@ const getApiBaseUrl = () => {
 		return process.env.NEXT_PUBLIC_API_BASE_URL;
 	}
 	// Always use backend API
-	return "http://localhost:5000/api";
+	// return "http://localhost:5000/api";
+	return "https://api.angebotsprofi.ch/api";
 };
 
 class ApiError extends Error {
