@@ -309,21 +309,6 @@ export default function CreateOfferPage() {
         setError(null);
         setIsSubmitting(true);
         try {
-            const primary_location = {
-                address: formData.fromAddress?.fullAddress || "",
-                type: formData.fromAddress?.locationType || "apartment",
-                floor: Number(formData.fromAddress?.floor) || 0,
-                latitude: formData.fromAddress?.lat || null,
-                longitude: formData.fromAddress?.lon || null
-            };
-
-            const secondary_location = {
-                address: formData.toAddress?.fullAddress || "",
-                type: formData.toAddress?.locationType || "apartment",
-                latitude: formData.toAddress?.lat || null,
-                longitude: formData.toAddress?.lon || null
-            };
-
             const formatTime = (timeStr) => {
                 let time = timeStr || "09:00:00";
                 if (time.includes("-")) time = time.split("-")[0].trim();
@@ -355,9 +340,8 @@ export default function CreateOfferPage() {
                     });
                 }
 
-                return {
+                const servicePayload = {
                     service_id: parseInt(serviceId),
-                    company_id: pricing.companyId ? parseInt(pricing.companyId) : selectedCompanyId, 
                     pricing_type: pricing.pricingType || actualService?.pricing_type || "per_hour",
                     price_per_unit: Number(pricing.pricePerUnit) || Number(actualService?.price_per_unit) || 0,
                     min_units: Number(pricing.minUnits) || Number(actualService?.min_units) || 0,
@@ -365,21 +349,58 @@ export default function CreateOfferPage() {
                     minimum_charge: Number(pricing.minimumCharge) || Number(actualService?.minimum_charge) || 0,
                     additions: additions
                 };
+
+                // إرسال company_id فقط إذا كانت له قيمة
+                const compId = pricing.companyId ? parseInt(pricing.companyId) : (selectedCompanyId ? parseInt(selectedCompanyId) : null);
+                if (compId) {
+                    servicePayload.company_id = compId;
+                }
+
+                return servicePayload;
             });
 
-            // تطابق تام مع الـ Request Body المطلوب للإصدار الثاني (بدون حقول الـ extra)
+            // بناء Primary Location وتجنب قيم null التي تسبب Validation Error
+            const primary_location = {
+                address: formData.fromAddress?.fullAddress || "",
+                type: formData.fromAddress?.locationType || "apartment",
+                floor: Number(formData.fromAddress?.floor) || 0
+            };
+            if (formData.fromAddress?.lat && formData.fromAddress?.lon) {
+                primary_location.latitude = formData.fromAddress.lat;
+                primary_location.longitude = formData.fromAddress.lon;
+            }
+
+            // بناء الـ Request Body الأساسي (خالي من أي حقول غير ضرورية)
             const requestBody = {
                 email: formData.customerEmail.trim(),
-                company_id: selectedCompanyId,
                 execution_date: globalDate,
                 execution_time: globalTime,
-                notes: formData.notes || "Admin created offer",
                 primary_location,
-                secondary_location,
-                services: payloadServices,
-                timelineMessage: "Offer initiated by Admin for the client",
-                timelineStatus: "pending"
+                services: payloadServices
             };
+
+            // إضافة الـ Company ID فقط إذا كان موجوداً
+            if (selectedCompanyId) {
+                requestBody.company_id = parseInt(selectedCompanyId);
+            }
+
+            // إضافة الملاحظات فقط إذا لم تكن فارغة
+            if (formData.notes && formData.notes.trim() !== "") {
+                requestBody.notes = formData.notes.trim();
+            }
+
+            // إضافة الـ Secondary Location فقط إذا كان المستخدم قد أدخل عنواناً
+            if (formData.toAddress?.fullAddress && formData.toAddress.fullAddress.trim() !== "") {
+                const secondary_location = {
+                    address: formData.toAddress.fullAddress.trim(),
+                    type: formData.toAddress.locationType || "apartment"
+                };
+                if (formData.toAddress?.lat && formData.toAddress?.lon) {
+                    secondary_location.latitude = formData.toAddress.lat;
+                    secondary_location.longitude = formData.toAddress.lon;
+                }
+                requestBody.secondary_location = secondary_location;
+            }
 
             const response = await fetch("https://api.angebotsprofi.ch/api/offers-v2/admin-create-offer", {
                 method: "POST",
