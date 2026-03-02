@@ -371,9 +371,9 @@ export default function CreateOfferPage() {
                                 additionPayload.max_units = Number(additionPricing.maxUnits) || 0;
                             }
 
-                            // إرسال الـ notes إذا كان اسم الإضافة custom
+                            // تعديل الاسم هنا ليصبح note بدلاً من notes بناءً على طلبك
                             if (actualAddition?.name?.toLowerCase() === 'custom') {
-                                additionPayload.notes = additionPricing.notes || "";
+                                additionPayload.note = additionPricing.notes || "";
                             }
                             
                             additions.push(additionPayload);
@@ -395,6 +395,11 @@ export default function CreateOfferPage() {
                     servicePayload.price_per_unit = Number(pricing.pricePerUnit) || Number(actualService?.price_per_unit) || 0;
                     servicePayload.min_units = Number(pricing.minUnits) || Number(actualService?.min_units) || 0;
                     servicePayload.max_units = Number(pricing.maxUnits) || Number(actualService?.max_units) || 0;
+                }
+                
+                // تعديل الاسم هنا أيضاً احتياطياً لتصبح note بدلاً من notes
+                if (srvType === 'custom') {
+                    servicePayload.note = pricing.notes || "";
                 }
 
                 const compId = pricing.companyId ? parseInt(pricing.companyId) : (selectedCompanyId ? parseInt(selectedCompanyId) : null);
@@ -429,6 +434,7 @@ export default function CreateOfferPage() {
                 requestBody.company_id = parseInt(selectedCompanyId);
             }
 
+            // الملاحظات العامة للطلب تفضل notes زي ما هي في الغالب
             if (formData.notes && formData.notes.trim() !== "") {
                 requestBody.notes = formData.notes.trim();
             }
