@@ -168,7 +168,7 @@ export default function SiteAdminOrderDetailsPage() {
                 </div>
                 <h1 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">Order Not Found</h1>
                 <p className="text-slate-500 max-w-sm mb-10 leading-relaxed font-medium">
-                    We couldn't find order #{orderId} in our records.
+                    We couldn&apos;t find order #{orderId} in our records.
                 </p>
                 <button onClick={handleBack} className="flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold shadow-xl shadow-slate-200/60 border border-slate-100 hover:bg-slate-50">
                     Go Back
