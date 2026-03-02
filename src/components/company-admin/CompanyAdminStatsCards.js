@@ -222,11 +222,12 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 				if (orderDateKey === activeDateKey) {
 					const entry = {
 						orderId: order.id,
-						serviceName: order.order_type === "offer" ? "Offer Request" : (order.order_type === "appointment" ? "Appointment" : "New Order"),
+						serviceName: order.order_type === "offer" ? "Offer Request" : (order.order_type === "appointment" ? (order.status === "pending" ? "New Appointment" : "Appointment") : (order.order_type === "order" ? (order.status === "pending" ? "New Order" : "Order") : "New Order")),
 						customerName: order.customerName || "Unknown",
 						time: order.preferred_time || null,
 						status: order.status,
 						orderType: order.order_type || order.orderType,
+						orderServices: order.orderServices || [],
 					};
 					categorizeEntry(entry, orders, offers, appointments);
 				}
@@ -243,12 +244,13 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 
 				const entry = {
 					orderId: order.id,
-					serviceName: (s.serviceName || s.name || (order.order_type === "appointment" ? "Appointment" : "New Order")),
+					serviceName: (s.serviceName || s.name || (order.order_type === "offer" ? "New Offer" : (order.order_type === "appointment" ? (order.status === "pending" ? "New Appointment" : "Appointment") : (order.order_type === "order" ? (order.status === "pending" ? "New Order" : "Order") : "New Order")))),
 					customerName: order.customerName || "Unknown",
 					// Use service-specific time if available, otherwise order time
 					time: s.preferred_time || order.preferred_time || null,
 					status: s.status || order.status,
 					orderType: order.order_type || order.orderType,
+					orderServices: order.orderServices || [],
 				};
 				categorizeEntry(entry, orders, offers, appointments);
 			});
@@ -256,30 +258,42 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 
 		function categorizeEntry(entry, orders, offers, appointments) {
 			const status = (entry.status || "").toLowerCase();
-			const orderType = (entry.orderType || "").toLowerCase();
+			const orderType = (entry.orderType || entry.order_type || entry.type || "").toLowerCase();
 			
-			// Priority 1: Explicit orderType
+			// Priority 1: Use explicit orderType if available from creation
 			if (orderType === "appointment") {
 				appointments.push(entry);
+				return;
 			} else if (orderType === "offer") {
 				offers.push(entry);
+				return;
 			} else if (orderType === "order") {
-				// For orders, if they are already scheduled/in_progress, they can also be shown as appointments
-				if (["scheduled", "in_progress", "completed", "accepted_by_company"].includes(status)) {
+				// For 'order' types, check if it's already transitioned to appointment or offer status
+				if (["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status)) {
 					appointments.push(entry);
-				} else {
-					orders.push(entry);
-				}
-			} 
-			// Priority 2: Fallback to status for legacy or ambiguous entries
-			else {
-				if (["scheduled", "in_progress", "completed", "accepted_by_company"].includes(status)) {
-					appointments.push(entry);
+					return;
 				} else if (["offer_sent", "offer_rejected", "assigned"].includes(status)) {
 					offers.push(entry);
+					return;
 				} else {
 					orders.push(entry);
+					return;
 				}
+			}
+
+			// Priority 2: Fallback to smart detection for legacy or missing type
+			const hasPricing = entry.orderServices && entry.orderServices.some(os => 
+				(os.pricing_type && os.pricing_type !== 'custom') || 
+				(os.offer && os.offer.id) ||
+				(parseFloat(os.fixed_price) > 0)
+			);
+
+			if (["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status)) {
+				appointments.push(entry);
+			} else if (hasPricing || ["offer_sent", "offer_rejected", "assigned"].includes(status)) {
+				offers.push(entry);
+			} else {
+				orders.push(entry);
 			}
 		}
 

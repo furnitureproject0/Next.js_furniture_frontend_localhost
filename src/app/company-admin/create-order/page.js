@@ -61,9 +61,20 @@ export default function CreateOrderPage() {
         companyScope === "internal" ? internalCompanies : externalCompanies,
         [companyScope, internalCompanies, externalCompanies]);
 
+    // Auto-select own company for internal scope
     useEffect(() => {
-        setSelectedCompanyId(null);
-    }, [companyScope]);
+        if (companyScope === "internal" && companyId && !selectedCompanyId) {
+            setSelectedCompanyId(companyId);
+        }
+    }, [companyScope, companyId, selectedCompanyId]);
+
+    useEffect(() => {
+        if (companyScope === "external") {
+            setSelectedCompanyId(null);
+        } else if (companyId) {
+            setSelectedCompanyId(companyId);
+        }
+    }, [companyScope, companyId]);
 
     // --- Check if form has unsaved data ---
     const hasUnsavedData = useCallback(() => {
@@ -111,20 +122,69 @@ export default function CreateOrderPage() {
     const isCustomerValid = !!formData.customerId && !!formData.customerEmail?.trim();
     const isServicesValid = (() => {
         if (!formData.services || formData.services.length === 0) return false;
-        if (companyScope === "internal") {
-            for (const serviceId of formData.services) {
-                const pricing = formData.servicePricing?.[serviceId];
-                if (!pricing || !pricing.minHours || !pricing.maxHours || !pricing.pricePerHour) return false;
-                if (parseFloat(pricing.minHours) <= 0 || parseFloat(pricing.maxHours) < parseFloat(pricing.minHours) || parseFloat(pricing.pricePerHour) <= 0) return false;
+        
+        for (const serviceId of formData.services) {
+            const pricing = formData.servicePricing?.[serviceId];
+            if (!pricing) return false;
+
+            // Check pricing for internal scope
+            if (companyScope === "internal") {
+                // For company admin, we can be more lenient or strict depending on needs.
+                // Here we ensure numbers are at least present or valid if entered.
+                const minH = parseFloat(pricing.minHours);
+                const maxH = parseFloat(pricing.maxHours);
+                const rate = parseFloat(pricing.pricePerHour);
+                
+                if (isNaN(rate) || rate < 0) return false;
+                // If hourly, check hours. If flat rate (handled by pricingType), might differ.
+                if (pricing.pricingType === 'hourly') {
+                    if (isNaN(minH) || minH <= 0) return false;
+                    if (isNaN(maxH) || maxH < minH) return false;
+                }
             }
+
+            // Check scheduling (Required for each service in admin flow)
+            if (!pricing.scheduledDate || !pricing.scheduledTime) return false;
         }
         return true;
     })();
     const isAddressValid = validateOrderStep(2, formData);
-    const isScheduleValid = validateOrderStep(4, formData);
+    const isScheduleValid = true; // Handled per service above
     const canSubmit = isCompanyValid && isCustomerValid && isServicesValid && isAddressValid && isScheduleValid;
 
     const completedCount = [isCompanyValid, isCustomerValid, isServicesValid, isAddressValid, isScheduleValid].filter(Boolean).length;
+
+    // Sync global data to service-level for admin flow (ensures fields are not empty for validation)
+    useEffect(() => {
+        if (!formData.services?.length) return;
+        
+        setFormData(prev => {
+            const newPricing = { ...prev.servicePricing };
+            let changed = false;
+            
+            prev.services.forEach(serviceId => {
+                const current = newPricing[serviceId] || {};
+                const updates = {};
+                
+                if (!current.scheduledDate && prev.scheduledDate) {
+                    updates.scheduledDate = prev.scheduledDate;
+                }
+                if (!current.scheduledTime && prev.scheduledTime) {
+                    updates.scheduledTime = prev.scheduledTime;
+                }
+                if (!current.assignedCompanyId && selectedCompanyId) {
+                    updates.assignedCompanyId = selectedCompanyId;
+                }
+                
+                if (Object.keys(updates).length > 0) {
+                    newPricing[serviceId] = { ...current, ...updates };
+                    changed = true;
+                }
+            });
+            
+            return changed ? { ...prev, servicePricing: newPricing } : prev;
+        });
+    }, [formData.services, formData.scheduledDate, formData.scheduledTime, selectedCompanyId]);
 
     const handleEmailValid = (user) => {
         setFormData((prev) => ({ ...prev, customerEmail: user.email, customerId: user.id, customerName: user.name, clientInfo: user }));
@@ -172,10 +232,14 @@ export default function CreateOrderPage() {
                 has_elevator: !!formData.toAddress?.hasElevator,
                 type: formData.toAddress?.locationType || ""
             };
-            let preferredTime = formData.scheduledTime || "09:00";
-            if (preferredTime.includes("-")) preferredTime = preferredTime.split("-")[0].trim();
-            if (preferredTime === "flexible") preferredTime = "09:00";
-            if (preferredTime.length === 5) preferredTime += ":00";
+
+            const formatTime = (timeStr) => {
+                let time = timeStr || "09:00";
+                if (time.includes("-")) time = time.split("-")[0].trim();
+                if (time === "flexible") time = "09:00";
+                if (time.length === 5) time += ":00";
+                return time;
+            };
 
             let rooms = [];
             if (formData.fromAddress?.roomConfigurations?.length > 0) {
@@ -184,49 +248,68 @@ export default function CreateOrderPage() {
                 rooms = [{ room_type: formData.roomDescription, quantity: 1 }];
             }
 
+            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
+            const globalDate = formData.scheduledDate || firstServicePricing?.scheduledDate || "";
+            const globalTime = formatTime(formData.scheduledTime || firstServicePricing?.scheduledTime);
+
             const services = (formData.services || []).map(serviceId => {
-                const serviceObj = { service_id: serviceId, additions: [] };
                 const selectedAdditions = formData.serviceAdditions?.[serviceId] || {};
+                const pricing = formData.servicePricing?.[serviceId] || {};
+                
+                const serviceObj = { 
+                    service_id: parseInt(serviceId), 
+                    additions: [],
+                    company_id: pricing.assignedCompanyId || selectedCompanyId,
+                    pricing_type: pricing.pricingType === 'hourly' ? 'per_hour' : (pricing.pricingType === 'flat_rate' ? 'flat_rate' : 'max_price'),
+                };
+                
                 Object.entries(selectedAdditions).forEach(([additionId, additionData]) => {
                     if (additionData) {
                         const additionPayload = { addition_id: parseInt(additionId), note: additionData.note || "" };
                         if (companyScope === "internal") {
-                            const additionPricing = formData.servicePricing?.[serviceId]?.additions?.[additionId];
+                            const additionPricing = pricing.additions?.[additionId];
                             if (additionPricing) {
-                                additionPayload.quantity = Number(additionPricing.amount) || 1;
-                                additionPayload.price = Number(additionPricing.price) || 0;
+                                const price = Number(additionPricing.price) || 0;
+                                const amount = Number(additionPricing.amount) || 1;
+                                additionPayload.pricing_type = additionPricing.pricingType || "flat_rate";
+                                additionPayload.fixed_price = price;
+                                additionPayload.total_price = price;
+                                additionPayload.min_units = amount;
+                                additionPayload.max_units = amount;
                             }
                         }
                         serviceObj.additions.push(additionPayload);
                     }
                 });
-                serviceObj.company_id = selectedCompanyId;
+                
                 if (companyScope === "internal") {
-                    const pricing = formData.servicePricing?.[serviceId];
-                    if (pricing) {
-                        serviceObj.offer = {
-                            hourly_rate: parseFloat(pricing.pricePerHour),
-                            currency: "CHF",
-                            min_hours: Number(pricing.minHours),
-                            max_hours: Number(pricing.maxHours),
-                            notes: pricing.notes || ""
-                        };
+                    if (serviceObj.pricing_type === 'per_hour') {
+                        serviceObj.price_per_unit = parseFloat(pricing.pricePerHour) || 0;
+                        serviceObj.min_units = Number(pricing.minHours) || 0;
+                        serviceObj.max_units = Number(pricing.maxHours) || 0;
+                    } else if (serviceObj.pricing_type === 'flat_rate') {
+                        serviceObj.fixed_price = parseFloat(pricing.flatRatePrice) || 0;
+                    } else if (serviceObj.pricing_type === 'max_price') {
+                        serviceObj.fixed_price = parseFloat(pricing.maxPrice) || 0;
+                        serviceObj.price_per_unit = parseFloat(pricing.pricePerHour) || 0;
+                        serviceObj.min_units = Number(pricing.minHours) || 0;
+                        serviceObj.max_units = Number(pricing.maxHours) || 0;
                     }
                 }
                 return serviceObj;
             });
 
             const requestBody = {
+                company_id: selectedCompanyId,
                 email: formData.customerEmail.trim(),
-                preferred_date: formData.scheduledDate,
-                preferred_time: preferredTime,
-                location,
-                destination_location,
+                execution_date: globalDate,
+                execution_time: globalTime,
+                primary_location: location,
+                secondary_location: destination_location.address ? destination_location : undefined,
                 number_of_rooms: Number(formData.fromAddress?.numberOfRooms) || 0,
                 rooms,
                 services,
                 notes: formData.notes || '',
-                _imageFiles: formData.images || [],
                 order_type: orderType
             };
 

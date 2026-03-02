@@ -51,7 +51,30 @@ export default function CompanyAdminOrdersList({
 		
 		// Type filter (Orders, Offers, Appointments)
 		if (type) {
-			result = result.filter(order => order.order_type === type);
+			result = result.filter(order => {
+				const status = (order.status || "").toLowerCase();
+				const orderType = (order.orderType || order.order_type || order.type || "").toLowerCase();
+				
+				// Same logic as StatsCards
+				const hasPricing = order.orderServices && order.orderServices.some(os => 
+					(os.pricing_type && os.pricing_type !== 'custom') || 
+					(os.offer && os.offer.id) ||
+					(parseFloat(order.fixed_price) > 0) ||
+					(parseFloat(order.min_total_price) > 0)
+				);
+
+				if (type === 'appointment') {
+					return orderType === "appointment" || ["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status);
+				} else if (type === 'offer') {
+					return orderType === "offer" || hasPricing || ["offer_sent", "offer_rejected", "assigned"].includes(status);
+				} else if (type === 'order') {
+					// Only show real pending orders that are NOT appointments or offers
+					const isAppt = orderType === "appointment" || ["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status);
+					const isOffer = orderType === "offer" || hasPricing || ["offer_sent", "offer_rejected", "assigned"].includes(status);
+					return !isAppt && !isOffer;
+				}
+				return true;
+			});
 		}
 
 		// Status filter

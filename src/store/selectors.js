@@ -133,7 +133,12 @@ export const selectCustomerOrders = (customerId) =>
 // Get orders assigned to a specific company
 export const selectCompanyOrders = (companyId) =>
 	createSelector([selectAllOrders], (orders) =>
-		orders.filter((order) => order.assignedCompanyId === companyId),
+		orders.filter((order) => 
+			order.assignedCompanyId === companyId || 
+			order.company_id === companyId ||
+			String(order.assignedCompanyId) === String(companyId) ||
+			String(order.company_id) === String(companyId)
+		),
 	);
 
 // Get unassigned orders (for site admin)

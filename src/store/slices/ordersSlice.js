@@ -1081,7 +1081,9 @@ export const createCompanyAdminOrder = createAsyncThunk(
 				// Company assignment info
 				assignedCompanyId: companyId,
 				assignedCompanyName: companyName,
-				order_type: orderData.order_type || orderData.orderType,
+				// Set type based on input or logic
+				order_type: orderInput.order_type || orderData.order_type || orderData.type || "order",
+				orderType: orderInput.order_type || orderData.order_type || orderData.type || "order",
 			};
 
 
@@ -1158,8 +1160,18 @@ export const fetchCompanyAdminOrders = createAsyncThunk(
 			const response = await companyAdminApi.getOrders({ ...filters, company_id: companyId });
 			
 			
-			// Extract orders from API response structure: { success, message, data: { orders: [...] }, pagination: {...} }
-			const ordersData = response?.data?.orders || [];
+			// Extract orders from API response structure: { success, message, data: [...orders], meta: {...} }
+			// The orders-v2 endpoint returns data as a direct array, not { orders: [...] }
+			let ordersData = [];
+			if (Array.isArray(response?.data)) {
+				ordersData = response.data;
+			} else if (response?.data?.orders) {
+				ordersData = response.data.orders;
+			} else if (Array.isArray(response)) {
+				ordersData = response;
+			}
+			console.log('[fetchCompanyAdminOrders] Raw response:', JSON.stringify(response).substring(0, 200));
+			console.log('[fetchCompanyAdminOrders] Extracted orders count:', ordersData.length);
 			
 			
 			// Collect all unique addition IDs from all orders
@@ -1291,12 +1303,12 @@ export const fetchCompanyAdminOrders = createAsyncThunk(
 						customerId: order.client_id || order.customerId,
 						customerName: order.client?.name || order.customerName || "Unknown",
 						
-						// Address fields from location objects (API uses 'location' and 'destinationLocation')
-						fromAddress: order.location?.address || order.fromAddress || "",
-						toAddress: order.destinationLocation?.address || order.destination_location?.address || order.toAddress || "",
+						// Address fields from location objects (API uses 'location' and 'destinationLocation' in v1, 'primary_location' and 'secondary_location' in v2)
+						fromAddress: order.primary_location?.address || order.location?.address || order.fromAddress || "",
+						toAddress: order.secondary_location?.address || order.destinationLocation?.address || order.destination_location?.address || order.toAddress || "",
 						addresses: {
-							from: order.location?.address || order.fromAddress || "",
-							to: order.destinationLocation?.address || order.destination_location?.address || order.toAddress || null,
+							from: order.primary_location?.address || order.location?.address || order.fromAddress || "",
+							to: order.secondary_location?.address || order.destinationLocation?.address || order.destination_location?.address || order.toAddress || null,
 						},
 						
 						// Services array extracted from orderServices (array of {id, name})
@@ -1327,9 +1339,13 @@ export const fetchCompanyAdminOrders = createAsyncThunk(
 						
 						// Keep original API fields
 						status: order.status,
+						company_id: order.company_id, // ✅ preserve v2 company_id for selector matching
 						order_type: order.type || order.order_type || order.orderType,
+						orderType: order.type || order.order_type || order.orderType,
 						preferred_date: order.execution_date || order.preferred_date,
 						preferred_time: order.execution_time || order.preferred_time,
+						execution_date: order.execution_date,
+						execution_time: order.execution_time,
 						number_of_rooms: order.number_of_rooms,
 						notes: order.notes,
 						createdAt: order.createdAt,

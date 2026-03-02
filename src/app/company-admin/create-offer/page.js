@@ -339,13 +339,19 @@ export default function CompanyAdminCreateOfferPage() {
                 rooms = [{ room_type: formData.roomDescription, quantity: 1 }];
             }
 
+            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
+            const globalDate = formData.scheduledDate || firstServicePricing?.scheduledDate || "";
+            const globalTime = formatTime(formData.scheduledTime || firstServicePricing?.scheduledTime);
+
             const services = (formData.services || []).map(serviceId => {
-                const serviceObj = { service_id: serviceId, additions: [] };
                 const selectedAdditions = formData.serviceAdditions?.[serviceId] || {};
                 const pricing = formData.servicePricing?.[serviceId] || {};
                 
-                serviceObj.preferred_date = pricing.scheduledDate;
-                serviceObj.preferred_time = formatTime(pricing.scheduledTime);
+                const serviceObj = { 
+                    service_id: parseInt(serviceId), 
+                    additions: [],
+                    company_id: pricing.assignedCompanyId || selectedCompanyId
+                };
                 
                 Object.entries(selectedAdditions).forEach(([additionId, additionData]) => {
                     if (additionData) {
@@ -353,50 +359,56 @@ export default function CompanyAdminCreateOfferPage() {
                         if (companyScope === "internal") {
                             const additionPricing = pricing.additions?.[additionId];
                             if (additionPricing) {
-                                additionPayload.quantity = Number(additionPricing.amount) || 1;
-                                additionPayload.price = Number(additionPricing.price) || 0;
+                                const price = Number(additionPricing.price) || 0;
+                                const amount = Number(additionPricing.amount) || 1;
+                                additionPayload.pricing_type = additionPricing.pricingType || "flat_rate";
+                                additionPayload.fixed_price = price;
+                                additionPayload.total_price = price;
+                                additionPayload.min_units = amount;
+                                additionPayload.max_units = amount;
                             }
                         }
                         serviceObj.additions.push(additionPayload);
                     }
                 });
                 
-                serviceObj.company_id = pricing.assignedCompanyId || selectedCompanyId;
-                
                 if (companyScope === "internal") {
-                    if (pricing) {
-                        serviceObj.offer = {
-                            hourly_rate: parseFloat(pricing.pricePerHour),
-                            currency: "CHF",
-                            min_hours: Number(pricing.minHours),
-                            max_hours: Number(pricing.maxHours),
-                            notes: pricing.notes || ""
-                        };
+                    const pricingType = pricing.pricingType || "hourly";
+                    serviceObj.pricing_type = pricingType === 'hourly' ? 'per_hour' : (pricingType === 'flat_rate' ? 'flat_rate' : 'max_price');
+                    
+                    if (pricingType === 'hourly') {
+                        serviceObj.price_per_unit = parseFloat(pricing.pricePerHour) || 0;
+                        serviceObj.min_units = Number(pricing.minHours) || 0;
+                        serviceObj.max_units = Number(pricing.maxHours) || 0;
+                    } else if (pricingType === 'flat_rate') {
+                        serviceObj.fixed_price = parseFloat(pricing.flatRatePrice) || 0;
+                    } else if (pricingType === 'max_price') {
+                        serviceObj.fixed_price = parseFloat(pricing.maxPrice) || 0;
+                        serviceObj.price_per_unit = parseFloat(pricing.pricePerHour) || 0;
+                        serviceObj.min_units = Number(pricing.minHours) || 0;
+                        serviceObj.max_units = Number(pricing.maxHours) || 0;
                     }
+
                 }
                 return serviceObj;
             });
 
-            const firstServicePricing = formData.services.length > 0 ? formData.servicePricing?.[formData.services[0]] : {};
-            const globalDate = firstServicePricing?.scheduledDate || "";
-            const globalTime = formatTime(firstServicePricing?.scheduledTime);
 
             const requestBody = {
                 email: formData.customerEmail.trim(),
-                preferred_date: globalDate,
-                preferred_time: globalTime,
-                location,
-                destination_location,
+                execution_date: globalDate,
+                execution_time: globalTime,
+                primary_location: location,
                 number_of_rooms: Number(formData.fromAddress?.numberOfRooms) || 0,
                 rooms,
                 services,
                 notes: formData.notes || '',
-                _imageFiles: formData.images || [],
-                order_type: "offer",
-                client_phone: clientPhone.trim(),
-                client_address: clientAddress.trim(),
-                number_of_workers: Number(numberOfWorkers) || 0
+                order_type: "offer"
             };
+
+            if (destination_location.address) {
+                requestBody.secondary_location = destination_location;
+            }
 
             if (!user?.company_id) {
                 throw new Error("Company ID not found. Please log in again.");

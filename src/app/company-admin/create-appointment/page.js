@@ -154,8 +154,10 @@ export default function CompanyAdminCreateAppointmentPage() {
             const response = await companyAdminApi.createClient(selectedCompanyId, {
                 name: newClientName.trim(),
                 email: newClientEmail.trim(),
-                phone: newClientPhone.trim(),
-                address: newClientAddress.trim(),
+                phones: newClientPhone.trim() ? [newClientPhone.trim()] : [],
+                location: {
+                    address: newClientAddress.trim() || t("common.labels.notAvailable") || "N/A",
+                },
             });
 
             if (response?.success && response?.data) {
@@ -242,27 +244,26 @@ export default function CompanyAdminCreateAppointmentPage() {
 
             const requestBody = {
                 email: clientEmail.trim(),
-                preferred_date: appointmentDate,
-                preferred_time: preferredTime,
-                location: {
+                execution_date: appointmentDate,
+                execution_time: preferredTime,
+                primary_location: {
                     address: clientAddress.trim() || "N/A",
                     floor: 0,
                     has_elevator: false,
                     type: "apartment",
                     area: 0
                 },
-                destination_location: {
-                    address: "",
+                secondary_location: {
+                    address: "N/A",
                     floor: 0,
                     has_elevator: false,
-                    type: ""
+                    type: "apartment"
                 },
                 number_of_rooms: 0,
                 rooms: [],
                 services: [], 
                 notes: appointmentNotes || `Appointment for ${clientName}`,
-                order_type: "appointment",
-                status: "scheduled"
+                order_type: "appointment"
             };
 
             if (!user?.company_id) {

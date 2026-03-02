@@ -529,17 +529,24 @@ export const customerApi = {
 // Company Admin API endpoints
 export const companyAdminApi = {
 	getOrders: (filters = {}) => {
-		// Use /orders endpoint with company_id filter
-		// This endpoint should return orders assigned to the specified company
 		const queryParams = new URLSearchParams();
-		if (filters.company_id) {
+		if (filters.company_id && filters.company_id !== "undefined") {
 			queryParams.append("company_id", filters.company_id);
 		}
-		if (filters.status) {
+		if (filters.status && filters.status !== "all" && filters.status !== "undefined") {
 			queryParams.append("status", filters.status);
 		}
+		if (filters.execution_date) {
+			queryParams.append("execution_date", filters.execution_date);
+		}
+		if (filters.search && filters.search.trim()) {
+			queryParams.append("search", filters.search.trim());
+		}
+		if (filters.type && filters.type !== "all") {
+			queryParams.append("type", filters.type);
+		}
 		const queryString = queryParams.toString();
-		return apiRequest(`/orders${queryString ? `?${queryString}` : ""}`, {
+		return apiRequest(`/orders-v2${queryString ? `?${queryString}` : ""}`, {
 			method: "GET",
 		});
 	},
