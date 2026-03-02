@@ -321,6 +321,7 @@ export default function CreateOfferPage() {
             const globalDate = formData.scheduledDate || firstServicePricing?.scheduledDate || new Date().toISOString().split('T')[0];
             const globalTime = formatTime(formData.scheduledTime || firstServicePricing?.scheduledTime);
 
+            // 1. تجميع الخدمات (مع الاحتفاظ بـ company_id بداخلها كما طلبت)
             const payloadServices = (formData.services || []).map(serviceId => {
                 const pricing = formData.servicePricing?.[serviceId] || {};
                 const actualService = availableServices.find(s => s.id === parseInt(serviceId));
@@ -350,7 +351,7 @@ export default function CreateOfferPage() {
                     additions: additions
                 };
 
-                // إرسال company_id فقط إذا كانت له قيمة
+                // إضافة company_id بداخل السيرفس
                 const compId = pricing.companyId ? parseInt(pricing.companyId) : (selectedCompanyId ? parseInt(selectedCompanyId) : null);
                 if (compId) {
                     servicePayload.company_id = compId;
@@ -359,27 +360,30 @@ export default function CreateOfferPage() {
                 return servicePayload;
             });
 
-            // بناء Primary Location وتجنب قيم null التي تسبب Validation Error
+            // 2. تجهيز العنوان الأساسي (بدون إرسال خطوط الطول والعرض إذا لم تكن موجودة)
             const primary_location = {
                 address: formData.fromAddress?.fullAddress || "",
                 type: formData.fromAddress?.locationType || "apartment",
                 floor: Number(formData.fromAddress?.floor) || 0
             };
+            
             if (formData.fromAddress?.lat && formData.fromAddress?.lon) {
-                primary_location.latitude = formData.fromAddress.lat;
-                primary_location.longitude = formData.fromAddress.lon;
+                primary_location.latitude = Number(formData.fromAddress.lat);
+                primary_location.longitude = Number(formData.fromAddress.lon);
             }
 
-            // بناء الـ Request Body الأساسي (خالي من أي حقول غير ضرورية)
+            // 3. بناء الـ Request Body خطوة بخطوة لتجنب أي حقول إضافية
             const requestBody = {
                 email: formData.customerEmail.trim(),
                 execution_date: globalDate,
                 execution_time: globalTime,
-                primary_location,
-                services: payloadServices
+                primary_location: primary_location,
+                services: payloadServices,
+                timelineMessage: "Offer initiated by Admin for the client",
+                timelineStatus: "pending"
             };
 
-            // إضافة الـ Company ID فقط إذا كان موجوداً
+            // إضافة company_id الخارجي إذا وجد
             if (selectedCompanyId) {
                 requestBody.company_id = parseInt(selectedCompanyId);
             }
@@ -389,18 +393,21 @@ export default function CreateOfferPage() {
                 requestBody.notes = formData.notes.trim();
             }
 
-            // إضافة الـ Secondary Location فقط إذا كان المستخدم قد أدخل عنواناً
+            // إضافة العنوان الثاني (secondary_location) فقط إذا تم إدخاله
             if (formData.toAddress?.fullAddress && formData.toAddress.fullAddress.trim() !== "") {
                 const secondary_location = {
                     address: formData.toAddress.fullAddress.trim(),
                     type: formData.toAddress.locationType || "apartment"
                 };
                 if (formData.toAddress?.lat && formData.toAddress?.lon) {
-                    secondary_location.latitude = formData.toAddress.lat;
-                    secondary_location.longitude = formData.toAddress.lon;
+                    secondary_location.latitude = Number(formData.toAddress.lat);
+                    secondary_location.longitude = Number(formData.toAddress.lon);
                 }
                 requestBody.secondary_location = secondary_location;
             }
+
+            // سيتم طباعة الـ Payload للكونسول لمراجعته لو حصل خطأ
+            console.log("Strict Payload sent to backend:", JSON.stringify(requestBody, null, 2));
 
             const response = await fetch("https://api.angebotsprofi.ch/api/offers-v2/admin-create-offer", {
                 method: "POST",
@@ -417,7 +424,9 @@ export default function CreateOfferPage() {
                 toast.success(t("siteAdmin.dashboard.offerCreatedSuccess") || "Offer created successfully!");
                 router.push("/site-admin/dashboard");
             } else {
-                throw new Error(data?.message || "Failed to create offer");
+                // طباعة الخطأ القادم من الفاليديشن بوضوح
+                console.error("Validation Error Details:", data);
+                throw new Error(data?.message || "Validation Error. Check console for details.");
             }
         } catch (err) {
             console.error("Submission error:", err);
