@@ -20,6 +20,7 @@ import { notificationsApi } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getDashboardPath } from "@/lib/navigation";
+import { getTranslatedNotification } from "@/utils/i18nUtils";
 
 export default function NotificationBell({ role }) {
 	const { t } = useTranslation();
@@ -166,6 +167,9 @@ export default function NotificationBell({ role }) {
 	const getNotificationIcon = (type) => {
 		switch (type) {
 			case "new_order":
+			case "newOrder":
+			case "orderCreated":
+			case "order_created":
 				return (
 					<div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-blue-100 rounded-full flex items-center justify-center">
 						<svg
@@ -184,6 +188,7 @@ export default function NotificationBell({ role }) {
 					</div>
 				);
 			case "order_assigned":
+			case "orderAssigned":
 				return (
 					<div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-indigo-100 rounded-full flex items-center justify-center">
 						<svg
@@ -308,17 +313,26 @@ export default function NotificationBell({ role }) {
 			{isOpen && (
 				<div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 lg:w-96 bg-white rounded-lg sm:rounded-xl shadow-2xl border border-primary-200/60 z-50 max-h-[32rem] flex flex-col">
 					{/* Header */}
-					<div className="flex items-center justify-between p-3 sm:p-4 border-b border-primary-100">
-						<h3 className="text-base sm:text-lg font-bold text-slate-800">
-							{t("notifications.bell.title")}
-						</h3>
+					<div className="flex flex-col p-3 sm:p-4 border-b border-primary-100">
+						<div className="flex items-center justify-between mb-1">
+							<h3 className="text-base sm:text-lg font-bold text-slate-800">
+								{t("notifications.bell.title")}
+							</h3>
+							{unreadCount > 0 && (
+								<button
+									onClick={handleMarkAllAsRead}
+									className="text-[10px] sm:text-xs text-primary-600 hover:text-primary-700 font-medium"
+								>
+									{t("notifications.bell.markAllAsRead")}
+								</button>
+							)}
+						</div>
 						{unreadCount > 0 && (
-							<button
-								onClick={handleMarkAllAsRead}
-								className="text-[10px] sm:text-xs text-primary-600 hover:text-primary-700 font-medium"
-							>
-								{t("notifications.bell.markAllAsRead")}
-							</button>
+							<p className="text-[10px] sm:text-xs text-slate-500">
+								{unreadCount === 1 
+									? t("notifications.unreadMessages", { count: unreadCount })
+									: t("notifications.unreadMessagesPlural", { count: unreadCount })}
+							</p>
 						)}
 					</div>
 
@@ -349,6 +363,7 @@ export default function NotificationBell({ role }) {
 							<div className="divide-y divide-primary-100">
 								{visibleNotifications.map((notification) => {
 									const isUnread = !notification.read && !notification.is_read;
+									const { title, message } = getTranslatedNotification(notification, t);
 									return (
 									<div
 										key={notification.id}
@@ -370,7 +385,7 @@ export default function NotificationBell({ role }) {
 															isUnread ? "font-semibold" : ""
 														}`}
 													>
-														{notification.title || notification.message}
+														{title || message}
 													</p>
 													<button
 														onClick={(e) => handleHideNotification(notification.id, e)}
@@ -382,9 +397,9 @@ export default function NotificationBell({ role }) {
 														</svg>
 													</button>
 												</div>
-												{notification.title && (
+												{title && message && (
 													<p className="text-xs text-slate-700/70 mb-1 line-clamp-2">
-														{notification.message}
+														{message}
 													</p>
 												)}
 												<div className="flex items-center justify-between mt-1">

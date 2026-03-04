@@ -405,7 +405,8 @@ export default function CreateOrderPage() {
                 primary_location: primary_location,
                 services: payloadServices,
                 timelineMessage: "Order initiated by Admin for the client",
-                timelineStatus: "pending"
+                timelineStatus: "pending",
+                order_type: "order"
             };
 
             if (selectedCompanyId) {

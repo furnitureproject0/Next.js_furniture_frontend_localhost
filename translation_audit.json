@@ -1,0 +1,469 @@
+{
+  "missingInEn": [
+    "client",
+    "openOrder",
+    "token",
+    ":",
+    "common.errors.failedToAcceptOffer",
+    "common.errors.failedToRejectOffer",
+    "common.errors.orderNotFound",
+    "email",
+    "common.labels.notAvailable",
+    "T",
+    "orderId",
+    "-",
+    "notifications.offerSent",
+    "common.errors.failedToSendOffer",
+    "siteAdmin.orders.notFoundTitle",
+    "siteAdmin.orders.notFoundDesc",
+    "common.buttons.backToOrders",
+    "redirect",
+    "siteAdmin.dashboard.orderCreatedSuccess",
+    "orderSteps.primaryAddress",
+    "orderSteps.secondaryAddress",
+    "content-type",
+    "iframe",
+    "tab",
+    "orders.offers",
+    "orders.appointments",
+    "orderSteps.validation.roomTypeRequired",
+    "orderDetails.assignedTeam",
+    "driver.orderList.orderNumber",
+    "driver.orderList.client",
+    "driver.orderList.notAssigned",
+    "driver.orderList.noOrdersAssigned",
+    "driver.orderList.newOrdersWillAppear",
+    "driver.orderList.checkBackLater",
+    "finance.chart.financialOverview",
+    "finance.chart.revenue",
+    "finance.chart.expenses",
+    "finance.chart.profit",
+    "finance.chart.noDataForPeriod",
+    "finance.overviewCards.monthlyRevenue",
+    "finance.overviewCards.monthlyExpenses",
+    "finance.overviewCards.netProfit",
+    "finance.pagination.showing",
+    "finance.pagination.previous",
+    "finance.pagination.next",
+    "finance.periodSummary.title",
+    "finance.recentTransactions.noTransactionsAvailable",
+    "finance.recentTransactions.switchToDummyData",
+    "finance.recentTransactions.title",
+    "finance.recentTransactions.viewAll",
+    "finance.timeRange.7days",
+    "finance.timeRange.30days",
+    "finance.timeRange.90days",
+    "finance.timeRange.1year",
+    "finance.timeRange.customRange",
+    "finance.filters.allTypes",
+    "finance.filters.income",
+    "finance.filters.expenses",
+    "finance.filters.allStatus",
+    "finance.filters.completed",
+    "finance.filters.pending",
+    "finance.filters.searchTransactions",
+    "finance.filters.transactionType",
+    "finance.filters.status",
+    "finance.filters.clearAllFilters",
+    "finance.transactionList.noTransactionsFound",
+    "finance.transactionList.tryAdjustingFilters",
+    "common.errors.failedToFetch",
+    "common.errors.invalidEmployee",
+    "common.errors.failedToAssign",
+    "common.errors.failedToUnassign",
+    "common.errors.failedToMakeLeader",
+    "html2pdf.js",
+    "style",
+    "common.noData",
+    "common.notSpecified",
+    "order.orderNumber",
+    "order.created",
+    "order.customer",
+    "order.services",
+    "order.service",
+    "order.company",
+    "order.status",
+    "order.offerDetails",
+    "order.price",
+    "order.estimatedHours",
+    "order.date",
+    "order.noServices",
+    "order.addresses",
+    "order.fromAddress",
+    "order.toAddress",
+    "order.schedule",
+    "order.roomConfiguration",
+    "order.notes",
+    "order.printedOn",
+    "order.type",
+    "order.floor",
+    "order.area",
+    "order.elevator",
+    "calendar.previousMonth",
+    "calendar.nextMonth",
+    "common.notes",
+    "common.loading",
+    "common.min",
+    "common.max",
+    "superAdmin.modals.addCompany.selectServicesError",
+    "common.success",
+    "common.error",
+    "superAdmin.modals.addCompany.description",
+    "superAdmin.modals.addCompany.address",
+    "superAdmin.modals.addCompany.websiteHint",
+    "superAdmin.modals.addUser.password",
+    "superAdmin.modals.editCompany.selectServicesError",
+    "common.update_success",
+    "common.buttons.saving",
+    "siteAdmin.dashboard.overview",
+    "superAdmin.orderManagement.allOrders",
+    "common.items",
+    "superAdmin.orderManagement.cancelReasonPrompt",
+    ".",
+    "a"
+  ],
+  "missingInAr": [
+    "company.name",
+    "company.tagline",
+    "company.contact",
+    "company.thankYou",
+    "common.buttons.apply",
+    "common.buttons.print",
+    "common.buttons.backToDashboard",
+    "common.messages.notSpecified",
+    "common.yes",
+    "common.no",
+    "superAdmin.userManagement.joined",
+    "notifications.assignmentCancelled",
+    "orderSteps.editOrder",
+    "orderSteps.invalidImageType",
+    "orderSteps.imageReadError",
+    "orderSteps.configured",
+    "orderSteps.rooms",
+    "orderSteps.images",
+    "orderSteps.offer",
+    "orderSteps.offerDetails",
+    "orderSteps.internalOfferDesc",
+    "orderSteps.externalOfferNotice",
+    "orderSteps.externalFlowHint",
+    "orderSteps.useManualAddress",
+    "orderSteps.useSearch",
+    "orderSteps.manualAddress",
+    "orderSteps.buildingNumber",
+    "orderSteps.buildingNumberPlaceholder",
+    "orderSteps.streetName",
+    "orderSteps.streetNamePlaceholder",
+    "orderSteps.countryPlaceholder",
+    "orderSteps.roomType",
+    "orderSteps.selectRoomType",
+    "orderSteps.quantity",
+    "orderSteps.addRoom",
+    "orderSteps.roomSummary",
+    "orderSteps.totalRoomsToConfigure",
+    "orderSteps.noRoomsSpecified",
+    "orderSteps.roomsMismatch",
+    "orderSteps.allRoomsConfigured",
+    "orderSteps.roomConfigurationSummary",
+    "pricingModal.workersCount",
+    "roomTypes.bedroom",
+    "roomTypes.livingRoom",
+    "roomTypes.kitchen",
+    "roomTypes.bathroom",
+    "roomTypes.diningRoom",
+    "roomTypes.office",
+    "roomTypes.storageRoom",
+    "roomTypes.balcony",
+    "roomTypes.garage",
+    "roomTypes.other",
+    "orderDetails.assignments",
+    "orderDetails.orderNumber",
+    "orderDetails.service",
+    "orderDetails.printedOn",
+    "orderDetails.notSpecified",
+    "users.title",
+    "users.subtitle",
+    "users.addEmployee",
+    "users.addEmployeeSubtitle",
+    "users.employeeAdded",
+    "users.filterByRole",
+    "users.filterByStatus",
+    "users.sortBy",
+    "users.allRoles",
+    "users.allStatuses",
+    "users.worker",
+    "users.driver",
+    "users.secretary",
+    "users.active",
+    "users.pending",
+    "users.terminated",
+    "users.cancelled",
+    "users.newestFirst",
+    "users.oldestFirst",
+    "users.noEmployees",
+    "users.noEmployeesDescription",
+    "users.startDate",
+    "users.pageInfo",
+    "users.of",
+    "users.total",
+    "users.name",
+    "users.namePlaceholder",
+    "users.nameRequired",
+    "users.email",
+    "users.emailRequired",
+    "users.invalidEmail",
+    "users.phone",
+    "users.phonePlaceholder",
+    "users.phoneRequired",
+    "users.birthdate",
+    "users.birthdateRequired",
+    "users.role",
+    "users.hourlyRate",
+    "users.hourlyRateRequired",
+    "users.hourlyRatePositive",
+    "users.companyIdMissing",
+    "users.employeeCreated",
+    "users.createFailed",
+    "users.inviteSent",
+    "users.inviteFailed",
+    "users.chooseOption",
+    "users.chooseDescription",
+    "users.createNewUser",
+    "users.createNewDescription",
+    "users.inviteExisting",
+    "users.inviteExistingDescription",
+    "users.createNewSubtitle",
+    "users.inviteExistingSubtitle",
+    "users.inviteNote",
+    "users.inviteNoteDescription",
+    "users.createButton",
+    "users.inviteButton",
+    "users.currency",
+    "users.status",
+    "users.edit.button",
+    "users.edit.title",
+    "users.edit.employeeInfo",
+    "users.edit.save",
+    "users.edit.saving",
+    "users.edit.cancel",
+    "users.edit.success",
+    "users.edit.successMessage",
+    "users.edit.errorGeneric",
+    "users.edit.noChanges",
+    "users.edit.warningActiveEdit",
+    "users.edit.errors.invalidRate",
+    "users.edit.rateHistory",
+    "users.edit.noRate",
+    "users.edit.changedBy",
+    "users.terminate.button",
+    "users.terminate.confirmMessage",
+    "users.terminate.success",
+    "users.terminate.error",
+    "users.cancel.button",
+    "users.cancel.confirmMessage",
+    "users.cancel.success",
+    "users.cancel.error"
+  ],
+  "unusedInEnCount": 361,
+  "hardCodedSample": [
+    {
+      "file": "src\\app\\company-admin\\create-appointment\\page.js",
+      "text": "No client found"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-appointment\\page.js",
+      "text": "Cancel"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-appointment\\page.js",
+      "text": "Cancel"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-appointment\\page.js",
+      "text": "Leave this page?"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-appointment\\page.js",
+      "text": "All entered data will be lost."
+    },
+    {
+      "file": "src\\app\\company-admin\\create-appointment\\page.js",
+      "text": "Stay"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-appointment\\page.js",
+      "text": "Leave"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-offer\\page.js",
+      "text": "Submitting…"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-offer\\page.js",
+      "text": "Leave this page?"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-order\\page.js",
+      "text": "Submitting…"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-order\\page.js",
+      "text": "Submit Order"
+    },
+    {
+      "file": "src\\app\\company-admin\\create-order\\page.js",
+      "text": "Leave this page?"
+    },
+    {
+      "file": "src\\app\\company-admin\\orders\\[orderId]\\page.js",
+      "text": "Loading Order Details"
+    },
+    {
+      "file": "src\\app\\company-admin\\users\\page.js",
+      "text": "All Roles"
+    },
+    {
+      "file": "src\\app\\company-admin\\users\\page.js",
+      "text": "Client"
+    },
+    {
+      "file": "src\\app\\company-admin\\users\\page.js",
+      "text": "Driver"
+    },
+    {
+      "file": "src\\app\\company-admin\\users\\page.js",
+      "text": "Worker"
+    },
+    {
+      "file": "src\\app\\company-admin\\users\\page.js",
+      "text": "Company Secretary"
+    },
+    {
+      "file": "src\\app\\orders\\[orderId]\\page.js",
+      "text": "Converting..."
+    },
+    {
+      "file": "src\\app\\orders\\[orderId]\\page.js",
+      "text": "Convert to Order"
+    },
+    {
+      "file": "src\\app\\orders\\[orderId]\\page.js",
+      "text": "Order"
+    },
+    {
+      "file": "src\\app\\site-admin\\clients\\[clientId]\\history\\page.js",
+      "text": "Retry"
+    },
+    {
+      "file": "src\\app\\site-admin\\clients\\[clientId]\\history\\page.js",
+      "text": "Total Activities"
+    },
+    {
+      "file": "src\\app\\site-admin\\clients\\[clientId]\\history\\page.js",
+      "text": "Joined"
+    },
+    {
+      "file": "src\\app\\site-admin\\clients\\[clientId]\\history\\page.js",
+      "text": "Activity Timeline"
+    },
+    {
+      "file": "src\\app\\site-admin\\clients\\[clientId]\\history\\page.js",
+      "text": "Services"
+    },
+    {
+      "file": "src\\app\\site-admin\\clients\\[clientId]\\history\\page.js",
+      "text": "Total Price"
+    },
+    {
+      "file": "src\\app\\site-admin\\clients\\[clientId]\\history\\page.js",
+      "text": "No History Found"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-appointment\\page.js",
+      "text": "No client found"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-appointment\\page.js",
+      "text": "Cancel"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-appointment\\page.js",
+      "text": "Cancel"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-appointment\\page.js",
+      "text": "Leave this page?"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-appointment\\page.js",
+      "text": "All entered data will be lost."
+    },
+    {
+      "file": "src\\app\\site-admin\\create-appointment\\page.js",
+      "text": "Stay"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-appointment\\page.js",
+      "text": "Leave"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Company Type"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Internal Company"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "External Company"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Assigned Company"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "-- Use Global Company --"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Pricing Type"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Per Hour"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Flat Rate"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Max Price (Mixed)"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Fixed Price"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Price per unit"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Min Units"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Max Units"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Additions"
+    },
+    {
+      "file": "src\\app\\site-admin\\create-offer\\page.js",
+      "text": "Per Hour"
+    }
+  ]
+}

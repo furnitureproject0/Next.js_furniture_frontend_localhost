@@ -28,7 +28,7 @@ export default function Pagination({
 						className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-600 bg-white/80 border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer"
 					>
 						<span className="hidden sm:inline">{t("finance.pagination.previous")}</span>
-						<span className="sm:hidden">Prev</span>
+						<span className="sm:hidden">{t("common.buttons.prev")}</span>
 					</button>
 
 					<div className="flex items-center gap-0.5 sm:gap-1">
@@ -76,7 +76,7 @@ export default function Pagination({
 						className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-600 bg-white/80 border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer"
 					>
 						<span className="hidden sm:inline">{t("finance.pagination.next")}</span>
-						<span className="sm:hidden">Next</span>
+						<span className="sm:hidden">{t("common.buttons.next")}</span>
 					</button>
 				</div>
 			</div>

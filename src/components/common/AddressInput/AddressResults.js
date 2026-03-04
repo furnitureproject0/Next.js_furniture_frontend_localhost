@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from '@/hooks/useTranslation';
 import { formatAddress } from '@/utils/geocoding';
 
 /**
@@ -14,6 +15,7 @@ export default function AddressResults({
     onSelect,
     resultsRef,
 }) {
+    const { t } = useTranslation();
     if (!showResults || (!isLoading && results.length === 0)) {
         return null;
     }
@@ -26,11 +28,11 @@ export default function AddressResults({
             {isLoading ? (
                 <div className="p-3 sm:p-4 text-center text-slate-600">
                     <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-primary-300 border-t-primary-600 mx-auto"></div>
-                    <p className="mt-2 text-xs sm:text-sm">Searching...</p>
+                    <p className="mt-2 text-xs sm:text-sm">{t('common.labels.searching')}</p>
                 </div>
             ) : results.length === 0 && displayValue.length >= 3 ? (
                 <div className="p-3 sm:p-4 text-center text-slate-600">
-                    <p className="text-xs sm:text-sm">No addresses found</p>
+                    <p className="text-xs sm:text-sm">{t('common.messages.noAddressesFound')}</p>
                 </div>
             ) : (
                 <ul className="divide-y divide-primary-100">

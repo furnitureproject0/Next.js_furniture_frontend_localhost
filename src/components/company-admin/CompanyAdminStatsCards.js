@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { selectUser, selectCompanyOrders } from "@/store/selectors";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRouter } from "next/navigation";
+import { appointmentsApi } from "@/lib/api";
 
 // ─── Service Color Map ──────────────────────────────────────
 const SERVICE_COLORS = {
@@ -88,19 +89,18 @@ const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrd
 								return acc;
 							}, { orders: 0, offers: 0, appts: 0 });
 
-							const isAr = t.language === 'ar';
 							const parts = [];
 							
 							if (counts.orders > 0 || (services.length === 0 && cardType === 'order')) {
-								const label = isAr ? (counts.orders === 1 ? "طلب" : "طلبات") : (counts.orders === 1 ? "order" : "orders");
+								const label = counts.orders === 1 ? t("pluralForms.order") : t("pluralForms.orders");
 								parts.push(`${counts.orders} ${label}`);
 							}
 							if (counts.offers > 0 || (services.length === 0 && cardType === 'offer')) {
-								const label = isAr ? (counts.offers === 1 ? "عرض" : "عروض") : (counts.offers === 1 ? "offer" : "offers");
+								const label = counts.offers === 1 ? t("pluralForms.offer") : t("pluralForms.offers");
 								parts.push(`${counts.offers} ${label}`);
 							}
 							if (counts.appts > 0 || (services.length === 0 && cardType === 'appointment')) {
-								const label = isAr ? (counts.appts === 1 ? "موعد" : "مواعيد") : (counts.appts === 1 ? "appt" : "appts");
+								const label = counts.appts === 1 ? t("pluralForms.appt") : t("pluralForms.appts");
 								parts.push(`${counts.appts} ${label}`);
 							}
 							
@@ -135,7 +135,7 @@ const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrd
 							return (
 								<button
 									key={`${svc.orderId}-${svc.serviceName}-${idx}`}
-									onClick={() => onViewOrder(svc.orderId)}
+									onClick={() => svc.orderId && onViewOrder(svc.orderId)}
 									className={`
 										w-full ${color.bg} border ${color.border} rounded-xl p-3
 										flex items-center gap-3 text-left
@@ -188,10 +188,60 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 	const companyOrders = useAppSelector(memoizedSelectCompanyOrders);
 	const router = useRouter();
 
+	// Appointments fetched from backend (separate appointments table)
+	const [appointments, setAppointments] = useState([]);
+	const [isLoadingAppointments, setIsLoadingAppointments] = useState(false);
+
+	// Helper function to translate service type name
+	const getServiceTypeName = (orderType, serviceName, status) => {
+		// If service has its own name, use it
+		if (serviceName && serviceName.trim()) return serviceName;
+		
+		// Translate based on order type and status
+		if (orderType === "offer") {
+			return t("orderTypes.offerRequest") || "Offer Request";
+		} else if (orderType === "appointment") {
+			const isPending = status === "pending";
+			return isPending ? (t("orderTypes.newAppointment") || "New Appointment") : (t("orderTypes.appointment") || "Appointment");
+		} else if (orderType === "order") {
+			const isPending = status === "pending";
+			return isPending ? (t("orderTypes.newOrder") || "New Order") : (t("orderTypes.order") || "Order");
+		}
+		return t("orderTypes.newOrder") || "New Order";
+	};
+
 	const activeDateKey = useMemo(() => {
 		if (selectedDate) return toDateKey(selectedDate);
 		return todayKey();
 	}, [selectedDate]);
+
+	// Fetch appointments for the active date (backend `/appointments` table)
+	useEffect(() => {
+		// If no logged-in company admin, skip
+		if (!user) return;
+
+		const fetchAppointments = async () => {
+			setIsLoadingAppointments(true);
+			try {
+				const response = await appointmentsApi.getAppointments({
+					expected_date: activeDateKey,
+				});
+
+				if (response?.success && Array.isArray(response.data)) {
+					setAppointments(response.data);
+				} else {
+					setAppointments([]);
+				}
+			} catch (err) {
+				console.error("Failed to load appointments:", err);
+				setAppointments([]);
+			} finally {
+				setIsLoadingAppointments(false);
+			}
+		};
+
+		fetchAppointments();
+	}, [activeDateKey, user]);
 
 	const dateLabel = useMemo(() => {
 		if (!selectedDate) return t("siteAdmin.cards.today") || "today";
@@ -201,12 +251,34 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 	// Extract services for the active date from orders, grouped by card type
 	const { ordersServices, offersServices, appointmentsServices } = useMemo(() => {
 		if (!companyOrders || companyOrders.length === 0) {
-			return { ordersServices: [], offersServices: [], appointmentsServices: [] };
+			// Still include standalone appointments from backend
+			const appts = [];
+			appointments.forEach((appt) => {
+				if (!appt.expected_date) return;
+				const key = toDateKey(appt.expected_date);
+				if (key !== activeDateKey) return;
+
+				appts.push({
+					orderId: appt.order_id || null,
+					serviceName: getServiceTypeName("appointment", null, appt.status),
+					customerName: appt.client?.name || `Client #${appt.client_id}`,
+					time: appt.expected_time || null,
+					status: appt.status,
+					orderType: "appointment",
+					orderServices: [],
+				});
+			});
+
+			// Sort by time
+			const sortByTime = (a, b) => (a.time || "23:59").localeCompare(b.time || "23:59");
+			appts.sort(sortByTime);
+
+			return { ordersServices: [], offersServices: [], appointmentsServices: appts };
 		}
 
 		const orders = [];   // order_type = 'order' (or default)
 		const offers = [];   // order_type = 'offer'
-		const appointments = []; // orders with status assigned/in_progress/offer_accepted (confirmed work)
+		const appointmentsList = [];
 
 		companyOrders.forEach((order) => {
 			if (order.status === "cancelled") return;
@@ -220,16 +292,16 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 				// Fallback for orders with no services (like appointments)
 				const orderDateKey = order.preferred_date ? toDateKey(order.preferred_date) : null;
 				if (orderDateKey === activeDateKey) {
-					const entry = {
+				const entry = {
 						orderId: order.id,
-						serviceName: order.order_type === "offer" ? "Offer Request" : (order.order_type === "appointment" ? (order.status === "pending" ? "New Appointment" : "Appointment") : (order.order_type === "order" ? (order.status === "pending" ? "New Order" : "Order") : "New Order")),
+						serviceName: getServiceTypeName(order.order_type, null, order.status),
 						customerName: order.customerName || "Unknown",
 						time: order.preferred_time || null,
 						status: order.status,
 						orderType: order.order_type || order.orderType,
 						orderServices: order.orderServices || [],
 					};
-					categorizeEntry(entry, orders, offers, appointments);
+					categorizeEntry(entry, orders, offers, appointmentsList);
 				}
 				return;
 			}
@@ -244,7 +316,7 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 
 				const entry = {
 					orderId: order.id,
-					serviceName: (s.serviceName || s.name || (order.order_type === "offer" ? "New Offer" : (order.order_type === "appointment" ? (order.status === "pending" ? "New Appointment" : "Appointment") : (order.order_type === "order" ? (order.status === "pending" ? "New Order" : "Order") : "New Order")))),
+					serviceName: (s.serviceName || s.name || getServiceTypeName(order.order_type, null, order.status)),
 					customerName: order.customerName || "Unknown",
 					// Use service-specific time if available, otherwise order time
 					time: s.preferred_time || order.preferred_time || null,
@@ -252,47 +324,20 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 					orderType: order.order_type || order.orderType,
 					orderServices: order.orderServices || [],
 				};
-				categorizeEntry(entry, orders, offers, appointments);
+				categorizeEntry(entry, orders, offers, appointmentsList);
 			});
 		});
 
 		function categorizeEntry(entry, orders, offers, appointments) {
-			const status = (entry.status || "").toLowerCase();
 			const orderType = (entry.orderType || entry.order_type || entry.type || "").toLowerCase();
 			
-			// Priority 1: Use explicit orderType if available from creation
+			// Use explicit orderType as the primary source of truth
 			if (orderType === "appointment") {
-				appointments.push(entry);
-				return;
+				appointmentsList.push(entry);
 			} else if (orderType === "offer") {
 				offers.push(entry);
-				return;
-			} else if (orderType === "order") {
-				// For 'order' types, check if it's already transitioned to appointment or offer status
-				if (["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status)) {
-					appointments.push(entry);
-					return;
-				} else if (["offer_sent", "offer_rejected", "assigned"].includes(status)) {
-					offers.push(entry);
-					return;
-				} else {
-					orders.push(entry);
-					return;
-				}
-			}
-
-			// Priority 2: Fallback to smart detection for legacy or missing type
-			const hasPricing = entry.orderServices && entry.orderServices.some(os => 
-				(os.pricing_type && os.pricing_type !== 'custom') || 
-				(os.offer && os.offer.id) ||
-				(parseFloat(os.fixed_price) > 0)
-			);
-
-			if (["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status)) {
-				appointments.push(entry);
-			} else if (hasPricing || ["offer_sent", "offer_rejected", "assigned"].includes(status)) {
-				offers.push(entry);
 			} else {
+				// Default to orders (including "order", "", "new_order")
 				orders.push(entry);
 			}
 		}
@@ -301,10 +346,31 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 		const sortByTime = (a, b) => (a.time || "23:59").localeCompare(b.time || "23:59");
 		orders.sort(sortByTime);
 		offers.sort(sortByTime);
-		appointments.sort(sortByTime);
+		appointmentsList.sort(sortByTime);
 
-		return { ordersServices: orders, offersServices: offers, appointmentsServices: appointments };
-	}, [companyOrders, activeDateKey]);
+		// Merge standalone appointments (from `/appointments`) into the appointments list
+		const mergedAppointments = [...appointmentsList];
+
+		appointments.forEach((appt) => {
+			if (!appt.expected_date) return;
+			const key = toDateKey(appt.expected_date);
+			if (key !== activeDateKey) return;
+
+			mergedAppointments.push({
+				orderId: appt.order_id || null,
+				serviceName: getServiceTypeName("appointment", null, appt.status),
+				customerName: appt.client?.name || `Client #${appt.client_id}`,
+				time: appt.expected_time || null,
+				status: appt.status,
+				orderType: "appointment",
+				orderServices: [],
+			});
+		});
+
+		mergedAppointments.sort(sortByTime);
+
+		return { ordersServices: orders, offersServices: offers, appointmentsServices: mergedAppointments };
+	}, [companyOrders, activeDateKey, appointments]);
 
 	const handleViewOrder = (orderId) => {
 		router.push(`/company-admin/orders/${orderId}`);
@@ -313,7 +379,7 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
 			<TodayServiceCard
-				title={t("siteAdmin.cards.orders") || "Orders"}
+				title={t("siteAdmin.cards.orders") }
 				gradient="from-emerald-500 to-teal-700"
 				icon={<svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
 				services={ordersServices}
@@ -324,7 +390,7 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 				cardType="order"
 			/>
 			<TodayServiceCard
-				title={t("siteAdmin.cards.offers") || "Offers"}
+				title={t("siteAdmin.cards.offers")}
 				gradient="from-orange-500 to-orange-600"
 				icon={<svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>}
 				services={offersServices}
@@ -335,7 +401,7 @@ export default function CompanyAdminStatsCards({ selectedDate }) {
 				cardType="offer"
 			/>
 			<TodayServiceCard
-				title={t("siteAdmin.cards.appointments") || "Appointments"}
+				title={t("siteAdmin.cards.appointments")}
 				gradient="from-primary-500 to-primary-700"
 				icon={<svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>}
 				services={appointmentsServices}

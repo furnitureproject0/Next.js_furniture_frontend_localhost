@@ -88,31 +88,30 @@ const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrd
 								return acc;
 							}, { orders: 0, offers: 0, appts: 0 });
 
-							const isAr = t.language === 'ar';
-							const parts = [];
-							
-							if (counts.orders > 0 || (services.length === 0 && cardType === 'order')) {
-								const label = isAr ? (counts.orders === 1 ? "طلب" : "طلبات") : (counts.orders === 1 ? "order" : "orders");
-								parts.push(`${counts.orders} ${label}`);
-							}
-							if (counts.offers > 0 || (services.length === 0 && cardType === 'offer')) {
-								const label = isAr ? (counts.offers === 1 ? "عرض" : "عروض") : (counts.offers === 1 ? "offer" : "offers");
-								parts.push(`${counts.offers} ${label}`);
-							}
-							if (counts.appts > 0 || (services.length === 0 && cardType === 'appointment')) {
-								const label = isAr ? (counts.appts === 1 ? "موعد" : "مواعيد") : (counts.appts === 1 ? "appt" : "appts");
-								parts.push(`${counts.appts} ${label}`);
-							}
-							
-							return (
-								<p className="text-[10px] sm:text-xs text-white leading-tight flex items-center gap-1">
-									{parts.join(" · ")} {dateLabel}
-								</p>
-							);
-						})()}
-					</div>
+						const parts = [];
+						
+						if (counts.orders > 0 || (services.length === 0 && cardType === 'order')) {
+							const label = counts.orders === 1 ? t("pluralForms.order") : t("pluralForms.orders");
+							parts.push(`${counts.orders} ${label}`);
+						}
+						if (counts.offers > 0 || (services.length === 0 && cardType === 'offer')) {
+							const label = counts.offers === 1 ? t("pluralForms.offer") : t("pluralForms.offers");
+							parts.push(`${counts.offers} ${label}`);
+						}
+						if (counts.appts > 0 || (services.length === 0 && cardType === 'appointment')) {
+							const label = counts.appts === 1 ? t("pluralForms.appt") : t("pluralForms.appts");
+							parts.push(`${counts.appts} ${label}`);
+						}
+						
+						return (
+							<p className="text-[10px] sm:text-xs text-white leading-tight flex items-center gap-1">
+								{parts.join(" · ")} {dateLabel}
+							</p>
+						);
+					})()}
 				</div>
-				<div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+			</div>
+			<div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
 					<span className="text-lg font-bold text-white">{services.length}</span>
 				</div>
 			</div>
@@ -183,6 +182,24 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 	const allOrders = useAppSelector(selectAllOrders);
 	const router = useRouter();
 
+	// Helper function to translate service type name
+	const getServiceTypeName = (orderType, serviceName, status) => {
+		// If service has its own name, use it
+		if (serviceName && serviceName.trim()) return serviceName;
+		
+		// Translate based on order type and status
+		if (orderType === "offer") {
+			return t("orderTypes.offerRequest") || "Offer Request";
+		} else if (orderType === "appointment") {
+			const isPending = status === "pending";
+			return isPending ? (t("orderTypes.newAppointment") || "New Appointment") : (t("orderTypes.appointment") || "Appointment");
+		} else if (orderType === "order") {
+			const isPending = status === "pending";
+			return isPending ? (t("orderTypes.newOrder") || "New Order") : (t("orderTypes.order") || "Order");
+		}
+		return t("orderTypes.newOrder") || "New Order";
+	};
+
 	const activeDateKey = useMemo(() => {
 		if (selectedDate) return toDateKey(selectedDate);
 		return todayKey();
@@ -217,11 +234,12 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 				if (orderDateKey === activeDateKey) {
 					const entry = {
 						orderId: order.id,
-						serviceName: order.order_type === "offer" ? "Offer Request" : (order.order_type === "appointment" ? "Appointment" : "New Order"),
+						serviceName: getServiceTypeName(order.order_type, null, order.status),
 						customerName: order.customerName || "Unknown",
 						time: order.preferred_time || null,
 						status: order.status,
-						orderType: order.order_type || order.orderType,
+						orderType: order.order_type || order.orderType || order.type,
+						orderServices: order.orderServices || [],
 					};
 					categorizeEntry(entry, orders, offers, appointments);
 				}
@@ -238,12 +256,13 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 
 				const entry = {
 					orderId: order.id,
-					serviceName: (s.serviceName || s.name || (order.order_type === "appointment" ? "Appointment" : "New Order")),
+					serviceName: (s.serviceName || s.name || getServiceTypeName(order.order_type, null, order.status)),
 					customerName: order.customerName || "Unknown",
 					// Use service-specific time if available, otherwise order time
 					time: s.preferred_time || order.preferred_time || null,
 					status: s.status || order.status,
-					orderType: order.order_type || order.orderType,
+					orderType: order.order_type || order.orderType || order.type,
+					orderServices: order.orderServices || [],
 				};
 				categorizeEntry(entry, orders, offers, appointments);
 			});
@@ -251,25 +270,41 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 
 		function categorizeEntry(entry, orders, offers, appointments) {
 			const status = (entry.status || "").toLowerCase();
-			const orderType = (entry.orderType || "").toLowerCase();
+			const orderType = (entry.orderType || entry.order_type || entry.type || "").toLowerCase();
 			
-			// 1. Appointments Column (Blue)
-			// confirmed work or explicit appointments
-			if (orderType === "appointment" || ["scheduled", "in_progress", "completed", "accepted_by_company"].includes(status)) {
+			// Priority 1: Use explicit orderType if available from creation
+			if (orderType === "appointment") {
 				appointments.push(entry);
-			}
-			// 2. Offers Column (Orange)
-			else if (orderType === "offer" || ["offer_sent", "offer_rejected", "assigned"].includes(status)) {
-				// Note: if orderType is offer, 'assigned' means waiting for company quote
-				if (orderType === "offer") {
+				return;
+			} else if (orderType === "offer") {
+				offers.push(entry);
+				return;
+			} else if (orderType === "order") {
+				// For 'order' types, check if it's already transitioned to appointment or offer status
+				if (["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status)) {
+					appointments.push(entry);
+					return;
+				} else if (["offer_sent", "offer_rejected", "assigned"].includes(status)) {
 					offers.push(entry);
+					return;
 				} else {
-					// Fallback for types that shouldn't be here
 					orders.push(entry);
+					return;
 				}
 			}
-			// 3. Orders Column (Green)
-			else {
+
+			// Priority 2: Fallback to smart detection for legacy or missing type
+			const hasPricing = entry.orderServices && entry.orderServices.some(os => 
+				(os.pricing_type && os.pricing_type !== 'custom') || 
+				(os.offer && os.offer.id) ||
+				(parseFloat(os.fixed_price) > 0)
+			);
+
+			if (["scheduled", "in_progress", "completed", "accepted_by_company", "offer_accepted"].includes(status)) {
+				appointments.push(entry);
+			} else if (hasPricing || ["offer_sent", "offer_rejected", "assigned"].includes(status)) {
+				offers.push(entry);
+			} else {
 				orders.push(entry);
 			}
 		}

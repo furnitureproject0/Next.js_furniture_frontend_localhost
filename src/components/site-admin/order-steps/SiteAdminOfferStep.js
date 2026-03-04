@@ -29,10 +29,10 @@ export default function SiteAdminOfferStep({
 			<div className="space-y-6">
 				<div>
 					<h3 className="text-lg font-semibold text-slate-800 mb-2">
-						{t("orderSteps.offerDetails") || "Offer Details"}
+						{t("orderSteps.offerDetails")}
 					</h3>
 					<p className="text-sm text-slate-600/70">
-						{t("orderSteps.externalOfferNotice") || "Since you selected an external company, they will provide their own offer later. You don't need to enter any pricing details now."}
+						{t("orderSteps.externalOfferNotice")}
 					</p>
 				</div>
 
@@ -43,7 +43,7 @@ export default function SiteAdminOfferStep({
 						</svg>
 					</div>
 					<p className="text-blue-800 font-medium">
-						{t("orderSteps.externalFlowHint") || "The external company will receive this order and submit their price for your approval."}
+						{t("orderSteps.externalFlowHint")}
 					</p>
 				</div>
 			</div>
@@ -56,10 +56,10 @@ export default function SiteAdminOfferStep({
 		<div className="space-y-6">
 			<div>
 				<h3 className="text-lg font-semibold text-slate-800 mb-2">
-					{t("orderSteps.offerDetails") || "Set Internal Offer"}
+					{t("orderSteps.offerDetails")}
 				</h3>
 				<p className="text-sm text-slate-600/70">
-					{t("orderSteps.internalOfferDesc") || "Enter the pricing and schedule details for this internal order."}
+					{t("orderSteps.internalOfferDesc")}
 				</p>
 			</div>
 
@@ -67,7 +67,7 @@ export default function SiteAdminOfferStep({
 				<div className="space-y-4">
 					<div className="bg-primary-50/50 p-4 rounded-xl border border-primary-100">
 						<label className="block text-sm font-medium text-slate-800 mb-3">
-							{t("pricingModal.hourlyRate") || "Hourly Rate (CHF)"}
+							{t("pricingModal.hourlyRateChf")}
 						</label>
 						<div className="flex items-center gap-3">
 							<input
@@ -76,17 +76,17 @@ export default function SiteAdminOfferStep({
 								onChange={(e) => handleChange("hourly_rate", parseInt(e.target.value) || 0)}
 								className="w-full px-3 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-400"
 							/>
-							<span className="text-slate-600 font-medium whitespace-nowrap">CHF/h</span>
+							<span className="text-slate-600 font-medium whitespace-nowrap">{t("common.currency.chfPerHour")}</span>
 						</div>
 					</div>
 
 					<div className="bg-primary-50/50 p-4 rounded-xl border border-primary-100 space-y-4">
 						<label className="block text-sm font-medium text-slate-800">
-							{t("pricingModal.estimatedHours") || "Estimated Hours"}
+							{t("pricingModal.estimatedHours")}
 						</label>
 						<div className="grid grid-cols-2 gap-3">
 							<div>
-								<span className="text-[10px] text-primary-600 uppercase font-bold">{t("common.min") || "Min"}</span>
+								<span className="text-[10px] text-primary-600 uppercase font-bold">{t("common.labels.min")}</span>
 								<input
 									type="number"
 									value={offerData.min_hours}
@@ -95,7 +95,7 @@ export default function SiteAdminOfferStep({
 								/>
 							</div>
 							<div>
-								<span className="text-[10px] text-primary-600 uppercase font-bold">{t("common.max") || "Max"}</span>
+								<span className="text-[10px] text-primary-600 uppercase font-bold">{t("common.labels.max")}</span>
 								<input
 									type="number"
 									value={offerData.max_hours}
@@ -110,13 +110,13 @@ export default function SiteAdminOfferStep({
 				<div className="space-y-4">
 					<div className="bg-primary-50/50 p-4 rounded-xl border border-primary-100">
 						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("pricingModal.offerNotes") || "Offer Notes"}
+							{t("pricingModal.offerNotes")}
 						</label>
 						<textarea
 							value={offerData.notes}
 							onChange={(e) => handleChange("notes", e.target.value)}
 							rows={5}
-							placeholder={t("pricingModal.notesPlaceholder") || "Any specific details about this price..."}
+							placeholder={t("pricingModal.notesPlaceholder")}
 							className="w-full px-3 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-400 resize-none"
 						/>
 					</div>
@@ -125,13 +125,13 @@ export default function SiteAdminOfferStep({
 
 			<div className="bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-xl border-2 border-green-200/60 text-center">
 				<p className="text-xs font-medium text-green-600/70 uppercase tracking-wide mb-1">
-					{t("pricingModal.estimatedTotal") || "Estimated Total Price"}
+					{t("pricingModal.estimatedTotal")}
 				</p>
 				<p className="text-3xl font-bold text-green-700">
 					{formatCurrency(totalPrice, offerData.currency || "CHF")}
 				</p>
 				<p className="text-xs text-green-600/80 mt-1">
-					{offerData.min_hours}-{offerData.max_hours}h avg @ {offerData.hourly_rate} CHF/h
+					{offerData.min_hours}-{offerData.max_hours}h avg @ {offerData.hourly_rate} {t("common.currency.chfPerHour")}
 				</p>
 			</div>
 		</div>

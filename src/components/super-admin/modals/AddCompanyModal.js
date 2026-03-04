@@ -71,7 +71,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 
 		// Validate services selection
 		if (!formData.services || formData.services.length === 0) {
-			showToast(t("superAdmin.modals.addCompany.selectServicesError") || "Please select at least one service", "error");
+			showToast(t("superAdmin.modals.addCompany.selectServicesError"), "error");
 			return;
 		}
 
@@ -160,7 +160,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 							onChange={handleChange}
 							required
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="Company Name AG"
+							placeholder={t("superAdmin.modals.addCompany.companyNamePlaceholder")}
 						/>
 					</div>
 
@@ -176,14 +176,14 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 							onChange={handleChange}
 							required
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="info@company.ch"
+							placeholder={t("superAdmin.modals.addCompany.emailPlaceholder")}
 						/>
 					</div>
 
 					{/* Description */}
 					<div>
 						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("superAdmin.modals.addCompany.description") || "Description"}
+							{t("superAdmin.modals.addCompany.description")}
 						</label>
 						<textarea
 							name="description"
@@ -192,14 +192,14 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 							required
 							rows="3"
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300 resize-none"
-							placeholder="Describe your company and services..."
+							placeholder={t("superAdmin.modals.addCompany.descriptionPlaceholder")}
 						/>
 					</div>
 
 					{/* Address */}
 					<div>
 						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("superAdmin.modals.addCompany.address") || "Address"}
+							{t("superAdmin.modals.addCompany.address")}
 						</label>
 						<input
 							type="text"
@@ -208,7 +208,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 							onChange={handleChange}
 							required
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="Street Address, City, Country"
+							placeholder={t("superAdmin.modals.addCompany.addressPlaceholder")}
 						/>
 					</div>
 
@@ -223,7 +223,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 							value={formData.phone}
 							onChange={handleChange}
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="+41-44-234-5678"
+							placeholder={t("superAdmin.modals.addCompany.phonePlaceholder")}
 						/>
 					</div>
 
@@ -239,10 +239,10 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 							onChange={handleChange}
 							required
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="https://company.com"
+							placeholder={t("superAdmin.modals.addCompany.websitePlaceholder")}
 						/>
 					<p className="text-xs text-primary-600/60 mt-1">
-						{t("superAdmin.modals.addCompany.websiteHint") || "e.g., company.com or https://company.com"}
+						{t("superAdmin.modals.addCompany.websiteHint")}
 					</p>
 				</div>
 
@@ -259,10 +259,10 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 						className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
 					>
 						<option value="Furniture Moving">
-							{getTranslatedServiceTypes(t).find(s => s.id === "furniture_moving")?.name || "Furniture Moving"}
+							{getTranslatedServiceTypes(t).find(s => s.id === "furniture_moving")?.name}
 						</option>
-						<option value="Cleaning">{getTranslatedServiceTypes(t).find(s => s.id === "cleaning_service")?.name || "Cleaning"}</option>
-						<option value="Painting">{getTranslatedServiceTypes(t).find(s => s.id === "painting")?.name || "Painting"}</option>
+						<option value="Cleaning">{getTranslatedServiceTypes(t).find(s => s.id === "cleaning_service")?.name}</option>
+						<option value="Painting">{getTranslatedServiceTypes(t).find(s => s.id === "painting")?.name}</option>
 					</select>
 				</div>
 
@@ -272,7 +272,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 						{t("superAdmin.modals.addCompany.services")}
 					</label>
 				{loadingServices ? (
-					<p className="text-sm text-slate-500">Loading services...</p>
+					<p className="text-sm text-slate-500">{t("common.labels.loading")}</p>
 				) : availableServices.length > 0 ? (
 					<div className="space-y-2 bg-slate-50 p-3 rounded-lg border border-primary-100">
 						{availableServices.map((service) => (
@@ -296,7 +296,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 						))}
 					</div>
 				) : (
-					<p className="text-sm text-slate-500">No services available</p>
+					<p className="text-sm text-slate-500">{t("common.messages.noServices")}</p>
 				)}
 			</div>
 

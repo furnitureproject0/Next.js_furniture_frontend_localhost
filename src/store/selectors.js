@@ -1,4 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { DEFAULT_LANGUAGE } from "@/lib/i18n/config";
 
 // Auth selectors
 export const selectAuth = (state) => state.auth;
@@ -11,12 +12,13 @@ export const selectDataSource = (state) => state.dataSource;
 export const selectUseRealData = (state) => state.dataSource?.useRealData ?? false;
 
 // Language selectors
-export const selectLanguage = (state) => state.language?.currentLanguage || "de";
+export const selectLanguage = (state) => state.language?.currentLanguage || DEFAULT_LANGUAGE;
 
 // Orders selectors
 export const selectOrders = (state) => state.orders;
 export const selectOrdersData = (state) => state.orders.orders;
 export const selectSelectedFilter = (state) => state.orders.selectedFilter;
+export const selectPagination = (state) => state.orders.pagination;
 
 // Combined orders selector (for backwards compatibility)
 export const selectDisplayOrders = (state) => state.orders.orders;

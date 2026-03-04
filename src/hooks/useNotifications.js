@@ -5,8 +5,11 @@ import { selectUser } from '@/store/selectors';
 import { addNotification, setNotifications } from '@/store/slices/notificationsSlice';
 import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
+import { useTranslation } from '@/hooks/useTranslation';
+import { getTranslatedNotification } from '@/utils/i18nUtils';
 
 export const useNotifications = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const { toast } = useGlobalToast();
@@ -105,9 +108,10 @@ export const useNotifications = () => {
       // Show toast notification if show is true
       if (notification.show) {
         // Show notification with title and message
-        const toastMessage = notification.title 
-          ? `${notification.title}: ${notification.message}`
-          : notification.message;
+        const { title, message } = getTranslatedNotification(notification, t);
+        const toastMessage = title 
+          ? `${title}: ${message}`
+          : message;
         toast.info(toastMessage, 5000);
       }
     });

@@ -361,7 +361,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
 						errors.email ? "border-red-300" : "border-primary-200"
 					}`}
-					placeholder="john@example.com"
+					placeholder={t("users.emailPlaceholder") || "john@example.com"}
 				/>
 				{errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
 			</div>
@@ -440,9 +440,9 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 								onChange={(e) => setFormData(prev => ({ ...prev, currency: e.target.value }))}
 								className="px-4 py-3 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 							>
-								<option value="CHF">CHF</option>
-								<option value="EUR">EUR</option>
-								<option value="USD">USD</option>
+								<option value="CHF">{t("common.currency.chf")}</option>
+								<option value="EUR">{t("common.currency.eur")}</option>
+								<option value="USD">{t("common.currency.usd")}</option>
 							</select>
 						</div>
 						{errors.hourlyRate && <p className="mt-1 text-sm text-red-600">{errors.hourlyRate}</p>}
@@ -511,7 +511,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 					className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
 						errors.inviteEmail ? "border-red-300" : "border-primary-200"
 					}`}
-					placeholder="existing-user@example.com"
+					placeholder={t("users.emailPlaceholder") || "existing-user@example.com"}
 				/>
 				{errors.inviteEmail && <p className="mt-1 text-sm text-red-600">{errors.inviteEmail}</p>}
 			</div>
@@ -538,9 +538,9 @@ export default function AddEmployeeModal({ isOpen, onClose, onSuccess }) {
 						onChange={(e) => setFormData(prev => ({ ...prev, inviteCurrency: e.target.value }))}
 						className="px-4 py-3 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
 					>
-						<option value="CHF">CHF</option>
-						<option value="EUR">EUR</option>
-						<option value="USD">USD</option>
+						<option value="CHF">{t("common.currency.chf")}</option>
+						<option value="EUR">{t("common.currency.eur")}</option>
+						<option value="USD">{t("common.currency.usd")}</option>
 					</select>
 				</div>
 				{errors.inviteHourlyRate && <p className="mt-1 text-sm text-red-600">{errors.inviteHourlyRate}</p>}

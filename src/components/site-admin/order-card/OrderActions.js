@@ -34,7 +34,7 @@ export default function OrderActions({
 	return (
 		<div className="flex items-center justify-between pt-3 border-t border-primary-100/50">
 			<div className="flex items-center gap-2">
-				{shouldShowAssignButton() && (
+				{onAssignCompany && shouldShowAssignButton() && (
 					<button
 						onClick={() => onAssignCompany(order)}
 						className="px-4 py-2 btn-primary text-sm font-medium rounded-lg transition-colors flex items-center gap-2 cursor-pointer"

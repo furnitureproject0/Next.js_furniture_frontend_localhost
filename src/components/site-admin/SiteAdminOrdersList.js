@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
 	selectAllOrders,
 	selectOrders,
+	selectPagination,
 } from "@/store/selectors";
 import { fetchSiteAdminOrders } from "@/store/slices/ordersSlice";
 import SiteAdminOrderCard from "./SiteAdminOrderCard";
@@ -15,11 +16,15 @@ export default function SiteAdminOrdersList({
 	refreshTrigger = 0,
 	filters,
 	onFilterChange,
+	type, // 'order', 'offer', or 'appointment'
 }) {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const orders = useAppSelector(selectAllOrders);
 	const { isLoading } = useAppSelector(selectOrders);
+	const pagination = useAppSelector(selectPagination);
+
+	const [currentPage, setCurrentPage] = useState(1);
 
 	// Debounce search to prevent excessive API calls
 	const [debouncedSearch, setDebouncedSearch] = useState(filters.search);
@@ -28,6 +33,7 @@ export default function SiteAdminOrdersList({
 	useEffect(() => {
 		const handler = setTimeout(() => {
 			setDebouncedSearch(filters.search);
+			setCurrentPage(1); // Reset to first page on new search
 		}, 500);
 		return () => clearTimeout(handler);
 	}, [filters.search]);
@@ -35,11 +41,15 @@ export default function SiteAdminOrdersList({
 	// Fetch orders when filters change
 	useEffect(() => {
 		// Format filters for API
-		const apiFilters = {};
+		const apiFilters = {
+			page: currentPage,
+			limit: 10,
+		};
 		
 		if (filters.status && filters.status !== 'all') apiFilters.status = filters.status;
 		if (debouncedSearch) apiFilters.search = debouncedSearch;
 		if (filters.service_id && filters.service_id !== 'all') apiFilters.service_id = filters.service_id;
+		if (type) apiFilters.type = type;
 		
 		if (filters.selectedDate) {
 			const date = new Date(filters.selectedDate);
@@ -51,23 +61,36 @@ export default function SiteAdminOrdersList({
 		}
 
 		dispatch(fetchSiteAdminOrders(apiFilters));
-	}, [dispatch, debouncedSearch, filters.status, filters.selectedDate, filters.service_id, refreshTrigger, localRefresh]);
+	}, [dispatch, debouncedSearch, filters.status, filters.selectedDate, filters.service_id, type, refreshTrigger, localRefresh, currentPage]);
 
-	const handleFilterChange = (newFilters) => {
-		onFilterChange(newFilters);
-	};
+	useEffect(() => {
+		// Reset to page 1 when other filters change
+		setCurrentPage(1);
+	}, [filters.status, filters.selectedDate, filters.service_id, type]);
 
 	const handleAssignCompany = (order) => {
 		onAssignCompany(order);
 	};
 
+	const handlePageChange = (newPage) => {
+		setCurrentPage(newPage);
+		// Scroll to top of list container
+		const container = document.getElementById('orders-list-container');
+		if (container) {
+			container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	};
+
 	return (
-		<div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg">
+		<div id="orders-list-container" className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-primary-200/60 shadow-lg overflow-hidden">
 				{/* Header */}
-				<div className="p-4 sm:p-6 border-b border-primary-100/50 flex justify-between items-center">
+				<div className="p-4 sm:p-6 border-b border-primary-100/50 flex justify-between items-center bg-white/50">
 					<div>
-						<h2 className="text-lg sm:text-xl font-bold text-slate-800">
-							{t("orders.allOrders")}
+						<h2 className="text-lg sm:text-xl font-bold text-slate-800 capitalize">
+							{type === 'order' && (t("orders.allOrders") || "New Orders")}
+							{type === 'offer' && (t("orders.offers") || "Offers")}
+							{type === 'appointment' && (t("orders.appointments") || "Appointments")}
+							{!type && (t("orders.allOrders") || "All Orders")}
 						</h2>
 					</div>
 					<button
@@ -110,8 +133,11 @@ export default function SiteAdminOrdersList({
 									/>
 								</svg>
 							</div>
-							<h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-1 sm:mb-2">
-								{t("orders.noOrdersYet") || "No orders found"}
+							<h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-1 sm:mb-2 text-pretty">
+								{type === 'order' && (filters.selectedDate ? "No orders today" : "No orders found")}
+								{type === 'offer' && (filters.selectedDate ? "No offers today" : "No offers found")}
+								{type === 'appointment' && (filters.selectedDate ? "No appointments today" : "No appointments found")}
+								{!type && (t("orders.noOrdersYet") || "No orders found")}
 							</h3>
 							<p className="text-sm sm:text-base text-slate-600/70 mb-4 sm:mb-6 max-w-md mx-auto">
 								{t("siteAdmin.filters.tryAdjustingFilters") || "Try adjusting your filters or search criteria"}
@@ -126,6 +152,31 @@ export default function SiteAdminOrdersList({
 									onAssignCompany={() => handleAssignCompany(order)}
 								/>
 							))}
+
+							{/* Pagination UI */}
+							{pagination && pagination.totalPages > 1 && (
+								<div className="flex items-center justify-between mt-8 pt-6 border-t border-primary-100/50">
+									<p className="text-sm text-slate-500">
+										{t("common.pagination.showingPage") || "Page"} <span className="font-semibold text-slate-800">{pagination.page}</span> {t("common.pagination.of") || "of"} <span className="font-semibold text-slate-800">{pagination.totalPages}</span>
+									</p>
+									<div className="flex items-center gap-2">
+										<button
+											disabled={pagination.page <= 1}
+											onClick={() => handlePageChange(pagination.page - 1)}
+											className="px-4 py-2 border border-primary-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-primary-50 hover:border-primary-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-primary-200 transition-all cursor-pointer"
+										>
+											{t("common.buttons.previous") || "Previous"}
+										</button>
+										<button
+											disabled={pagination.page >= pagination.totalPages}
+											onClick={() => handlePageChange(pagination.page + 1)}
+											className="px-4 py-2 border border-primary-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-primary-50 hover:border-primary-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-primary-200 transition-all cursor-pointer"
+										>
+											{t("common.buttons.next") || "Next"}
+										</button>
+									</div>
+								</div>
+							)}
 						</div>
 					)}
 				</div>

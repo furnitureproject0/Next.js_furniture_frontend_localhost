@@ -227,7 +227,7 @@ export default function EditCustomerOrderModal({
 					const loadedFormData = orderToFormData(order);
 					setFormData(loadedFormData);
 					setCurrentStep(1);
-					setError("Failed to load order details. Using cached data.");
+					setError(t("orders.messages.fetchError"));
 				} finally {
 					setIsLoading(false);
 				}
@@ -301,7 +301,7 @@ export default function EditCustomerOrderModal({
 
 	const handleSubmit = async () => {
 		if (!order || !order.id) {
-			setError("Invalid order data");
+			setError(t("orders.messages.invalidData"));
 			return;
 		}
 
@@ -513,7 +513,7 @@ export default function EditCustomerOrderModal({
 					{isLoading ? (
 						<div className="flex items-center justify-center py-12">
 							<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
-							<span className="ml-3 text-sm text-slate-600">Loading order data...</span>
+							<span className="ml-3 text-sm text-slate-600">{t("orders.labels.loadingDetails")}</span>
 						</div>
 					) : (
 						renderStepContent()
@@ -557,7 +557,7 @@ export default function EditCustomerOrderModal({
 								className="flex-1 sm:flex-none px-4 sm:px-6 py-2 text-xs sm:text-sm btn-primary font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer"
 							>
 								<span className="hidden sm:inline">{t("common.buttons.next")}</span>
-								<span className="sm:hidden">Next</span>
+								<span className="sm:hidden">{t("common.buttons.next")}</span>
 								<svg
 									className="w-4 h-4 sm:w-5 sm:h-5"
 									fill="none"

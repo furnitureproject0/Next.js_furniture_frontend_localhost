@@ -349,6 +349,8 @@ export default function CompanyAdminCreateOfferPage() {
                 
                 const serviceObj = { 
                     service_id: parseInt(serviceId), 
+                    preferred_date: pricing.scheduledDate || globalDate,
+                    preferred_time: formatTime(pricing.scheduledTime || globalTime),
                     additions: [],
                     company_id: pricing.assignedCompanyId || selectedCompanyId
                 };
@@ -395,6 +397,7 @@ export default function CompanyAdminCreateOfferPage() {
 
 
             const requestBody = {
+                company_id: selectedCompanyId || user?.company_id,
                 email: formData.customerEmail.trim(),
                 execution_date: globalDate,
                 execution_time: globalTime,
@@ -403,7 +406,6 @@ export default function CompanyAdminCreateOfferPage() {
                 rooms,
                 services,
                 notes: formData.notes || '',
-                order_type: "offer"
             };
 
             if (destination_location.address) {

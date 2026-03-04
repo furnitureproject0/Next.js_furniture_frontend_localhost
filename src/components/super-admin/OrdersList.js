@@ -54,7 +54,7 @@ const OrderCard = ({ order, onCancel, t, index }) => {
 					<div className="flex-1 min-w-0">
 						<div className="flex flex-wrap items-center gap-3 mb-2">
 							<h3 className="text-xl font-black text-slate-800 group-hover/order:text-primary-600 transition-colors">
-								ORDER #{order.id}
+								{t("common.labels.order").toUpperCase()} #{order.id}
 							</h3>
 							<span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border shadow-sm ${getStatusBadgeColor(order.status)}`}>
 								{getTranslatedStatusLabel(order.status, t)}
@@ -77,7 +77,7 @@ const OrderCard = ({ order, onCancel, t, index }) => {
 					<div className="px-4 py-2 bg-slate-50 rounded-xl border border-slate-100 shadow-sm group-hover/order:bg-white group-hover/order:shadow-md transition-all">
 						<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{t("superAdmin.orderDetails.price")}</p>
 						<p className="text-lg font-black text-slate-800 text-right">
-							{order.price ? `CHF ${order.price.toLocaleString()}` : "PENDING"}
+							{order.price ? `${t("common.currency.chf")} ${order.price.toLocaleString()}` : t("common.status.pending").toUpperCase()}
 						</p>
 					</div>
 				</div>
@@ -86,21 +86,21 @@ const OrderCard = ({ order, onCancel, t, index }) => {
 			{/* Info Grid */}
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-slate-50/50 rounded-2xl border border-slate-100 mt-2">
 				<div className="space-y-1">
-					<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">SCHEDULE</p>
+					<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t("common.labels.schedule").toUpperCase()}</p>
 					<div className="flex items-center gap-2 text-slate-700">
 						<svg className="w-3.5 h-3.5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 						</svg>
-						<p className="text-xs font-bold uppercase">{order.date || "NOT SET"}</p>
+						<p className="text-xs font-bold uppercase">{order.date || t("common.labels.notSet").toUpperCase()}</p>
 					</div>
 				</div>
 				<div className="col-span-1 space-y-1">
-					<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">LOCATION</p>
+					<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t("common.labels.location").toUpperCase()}</p>
 					<div className="flex items-center gap-2 text-slate-700">
 						<svg className="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
 						</svg>
-						<p className="text-xs font-bold truncate">{order.address || "NO ADDRESS"}</p>
+						<p className="text-xs font-bold truncate">{order.address || t("common.labels.noAddress").toUpperCase()}</p>
 					</div>
 				</div>
 				<div className="col-span-2 flex justify-end items-center gap-3">
@@ -109,11 +109,11 @@ const OrderCard = ({ order, onCancel, t, index }) => {
 							onClick={() => onCancel(order)}
 							className="px-4 py-2 bg-white text-rose-600 text-[10px] font-black uppercase tracking-tighter rounded-lg border border-rose-100 shadow-sm hover:bg-rose-50 transition-all transform hover:scale-105 active:scale-95"
 						>
-							CANCEL ORDER
+							{t("common.buttons.cancelOrder").toUpperCase()}
 						</button>
 					)}
 					<button className="px-4 py-2 bg-white text-primary-600 text-[10px] font-black uppercase tracking-tighter rounded-lg border border-primary-100 shadow-sm hover:bg-primary-600 hover:text-white transition-all transform hover:scale-105 active:scale-95">
-						VIEW DETAILS
+						{t("common.buttons.viewDetails").toUpperCase()}
 					</button>
 				</div>
 			</div>

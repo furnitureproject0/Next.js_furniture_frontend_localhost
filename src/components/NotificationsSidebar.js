@@ -208,6 +208,19 @@ export default function NotificationsSidebar() {
 	const [showScrollTop, setShowScrollTop] = useState(false);
 	const scrollContainerRef = useRef(null);
 
+	// Helper function to translate notification labels
+	const getTranslatedLabel = (label) => {
+		const labelMap = {
+			"Order": t("orderTypes.order") || "Order",
+			"Success": t("orderTypes.order") || "Success",
+			"Offer": t("orderTypes.offerRequest") || "Offer",
+			"Appointment": t("orderTypes.appointment") || "Appointment",
+			"Important": "Important",
+			"Notification": t("notifications.title") || "Notification",
+		};
+		return labelMap[label] || label;
+	};
+
 	const allNotifications = useAppSelector(selectAllNotifications);
 	const currentUser = useAppSelector(selectUser);
 
@@ -437,55 +450,53 @@ export default function NotificationsSidebar() {
 
 													{/* Type badge */}
 													<span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full mb-1.5 ${theme.badge}`}>
-														{theme.label}
-													</span>
-
-													<p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">
-														{notification.message || notification.body || ""}
+													{getTranslatedLabel(theme.label)}
+												</span>
+												<p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">
+													{notification.message || notification.body || ""}
+												</p>
+												<div className="flex items-center justify-between mt-1.5">
+													<p className="text-[10px] text-slate-400 flex items-center gap-1">
+														<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+														</svg>
+														{notification.createdAt
+															? formatTime(notification.createdAt)
+															: notification.timestamp
+															? formatTime(notification.timestamp)
+															: ""}
 													</p>
 
-													<div className="flex items-center justify-between mt-1.5">
-														<p className="text-[10px] text-slate-400 flex items-center gap-1">
+													{(orderUrl || (notification.payload?.link && typeof notification.payload.link === 'string')) && (
+														<button
+															onClick={(e) => {
+																e.stopPropagation();
+																handleNotificationClick(notification);
+															}}
+															className={`flex items-center gap-1 text-[10px] font-bold transition-colors ${theme.actionBtn}`}
+														>
+															{theme.label === "Offer" 
+															? t("notifications.viewOffer")
+															: theme.label === "Order" 
+																? t("notifications.viewOrder")
+																: t("notifications.viewNotification")}
 															<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-																<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+																<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
 															</svg>
-															{notification.createdAt
-																? formatTime(notification.createdAt)
-																: notification.timestamp
-																? formatTime(notification.timestamp)
-																: ""}
-														</p>
-
-														{(orderUrl || (notification.payload?.link && typeof notification.payload.link === 'string')) && (
-															<button
-																onClick={(e) => {
-																	e.stopPropagation();
-																	handleNotificationClick(notification);
-																}}
-																className={`flex items-center gap-1 text-[10px] font-bold transition-colors ${theme.actionBtn}`}
-															>
-																{theme.label === "Offer" 
-																	? "View Offer" 
-																	: theme.label === "Order" 
-																		? "View Order" 
-																		: "View Notification"}
-																<svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-																	<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-																</svg>
-															</button>
-														)}
-													</div>
+														</button>
+													)}
 												</div>
 											</div>
 										</div>
 									</div>
-								);
-							})}
-							<div className="h-4" />
-						</div>
+								</div>
+							);
+						})}
+						<div className="h-4" />
 					</div>
+				</div>
 
-					{/* Bottom gradient fade */}
+				{/* Bottom gradient fade */}
 					{showScrollIndicator && (
 						<div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-white/95 to-transparent pointer-events-none" />
 					)}

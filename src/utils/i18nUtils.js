@@ -111,3 +111,44 @@ export const getTranslatedStatusLabel = (status, t) => {
 	return translation;
 };
 
+// Get translated notification title and message
+export const getTranslatedNotification = (notification, t) => {
+	if (!notification) return { title: "", message: "" };
+
+	const orderId = notification.payload?.order_id || notification.payload?.orderId || 
+					notification.order_id || notification.orderId || "";
+	const type = notification.type;
+
+	// If we have a type and translation keys for it, use them
+	if (type) {
+		// Normalize type (handle CamelCase or snake_case)
+		const normalizedType = ['new_order', 'newOrder', 'orderCreated', 'order_created'].includes(type) ? 'new_order' :
+							 ['order_assigned', 'orderAssigned'].includes(type) ? 'order_assigned' :
+							 ['offer_sent', 'offerSent'].includes(type) ? 'offer_sent' :
+							 ['offer_modified', 'offerModified', 'offer_updated'].includes(type) ? 'offer_modified' :
+							 ['offer_accepted', 'offerAccepted'].includes(type) ? 'offer_accepted' :
+							 ['offer_rejected', 'offerRejected'].includes(type) ? 'offer_rejected' :
+							 type;
+
+		const titleKey = `notifications.types.${normalizedType}.title`;
+		const messageKey = `notifications.types.${normalizedType}.message`;
+		
+		const translatedTitle = t(titleKey);
+		const translatedMessage = t(messageKey, { id: orderId });
+
+		// Check if translation was successful (isn't returning the key itself)
+		if (translatedTitle && translatedTitle !== titleKey && !translatedTitle.startsWith('notifications.')) {
+			return {
+				title: translatedTitle,
+				message: translatedMessage
+			};
+		}
+	}
+
+	// Fallback to original notification content
+	return {
+		title: notification.title || notification.message || "",
+		message: notification.title ? notification.message : ""
+	};
+};
+

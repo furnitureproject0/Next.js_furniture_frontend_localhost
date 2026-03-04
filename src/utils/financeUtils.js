@@ -1,7 +1,9 @@
+import { DEFAULT_LANGUAGE } from "@/lib/i18n/config";
+
 export const formatCurrency = (amount, currency = "CHF", locale = null) => {
 	// Get locale from parameter, localStorage, or use default based on language
 	if (!locale && typeof window !== "undefined") {
-		const savedLanguage = localStorage.getItem("app_language") || "en";
+		const savedLanguage = localStorage.getItem("app_language") || DEFAULT_LANGUAGE;
 		// Map language codes to locale codes for currency formatting
 		const localeMap = {
 			de: "de-CH",
@@ -10,9 +12,16 @@ export const formatCurrency = (amount, currency = "CHF", locale = null) => {
 			it: "it-CH",
 			ar: "ar-SA",
 		};
-		locale = localeMap[savedLanguage] || "en-US";
+		locale = localeMap[savedLanguage] || localeMap[DEFAULT_LANGUAGE] || "en-US";
 	} else if (!locale) {
-		locale = "en-US"; // Default fallback
+		const localeMap = {
+			de: "de-CH",
+			en: "en-US",
+			fr: "fr-CH",
+			it: "it-CH",
+			ar: "ar-SA",
+		};
+		locale = localeMap[DEFAULT_LANGUAGE] || "en-US"; // Default fallback
 	}
 	
 	return new Intl.NumberFormat(locale, {

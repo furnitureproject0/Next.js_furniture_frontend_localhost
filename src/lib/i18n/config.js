@@ -37,7 +37,7 @@ export const SUPPORTED_LANGUAGES = {
 	},
 };
 
-export const DEFAULT_LANGUAGE = "en";
+export const DEFAULT_LANGUAGE = "de";
 
 export const getLanguageFromStorage = () => {
 	if (typeof window === "undefined") return DEFAULT_LANGUAGE;

@@ -28,6 +28,30 @@ export default function CustomerScheduleStep({ formData, setFormData, validation
 
 	return (
 		<div className="space-y-4">
+			<div className="grid grid-cols-2 gap-4">
+				<div>
+					<label className="block text-xs font-medium text-gray-600 mb-1">
+						{t("orderSteps.preferredDate") || "Preferred Date"} <span className="text-red-500">*</span>
+					</label>
+					<input
+						type="date"
+						value={formData.scheduledDate || ""}
+						onChange={(e) => setFormData(prev => ({ ...prev, scheduledDate: e.target.value }))}
+						min={new Date().toISOString().split("T")[0]}
+						className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-800"
+					/>
+				</div>
+				<div>
+					<label className="block text-xs font-medium text-gray-600 mb-1">
+						{t("orderSteps.preferredTime") || "Preferred Time"} <span className="text-red-500">*</span>
+					</label>
+					<TimePicker24
+						value={formData.scheduledTime || ""}
+						onChange={(time) => setFormData(prev => ({ ...prev, scheduledTime: time }))}
+					/>
+				</div>
+			</div>
+
 			{/* Notes */}
 			<div>
 				<label className="block text-xs font-medium text-gray-600 mb-1">

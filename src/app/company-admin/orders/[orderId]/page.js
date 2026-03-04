@@ -40,7 +40,7 @@ export default function CompanyAdminOrderDetailsPage() {
 				// Try fetching single order from API directly
 				const response = await siteAdminApi.getOrder(orderId);
 				if (response?.success) {
-					setSingleOrder(response.data.order);
+					setSingleOrder(response.data.order || response.data);
 				} else {
 					// Fallback to fetching all company orders
 					if (user?.company_id) {

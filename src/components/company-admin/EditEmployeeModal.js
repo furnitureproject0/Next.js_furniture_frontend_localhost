@@ -221,9 +221,9 @@ export default function EditEmployeeModal({ isOpen, onClose, onSuccess, employme
 								className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 								disabled={!isPending}
 							>
-								<option value="CHF">CHF</option>
-								<option value="EUR">EUR</option>
-								<option value="USD">USD</option>
+								<option value="CHF">{t("common.currency.chf")}</option>
+								<option value="EUR">{t("common.currency.eur")}</option>
+								<option value="USD">{t("common.currency.usd")}</option>
 							</select>
 						</div>
 

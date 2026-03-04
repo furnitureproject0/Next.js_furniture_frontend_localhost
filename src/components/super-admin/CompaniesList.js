@@ -183,7 +183,7 @@ const CompanyCard = ({ company, onEdit, onDelete, onToggleStatus, t, index }) =>
 								<svg className="w-3.5 h-3.5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 								</svg>
-								<p className="text-xs font-bold uppercase">{company.joined || "12/13/2025"}</p>
+								<p className="text-xs font-bold uppercase">{company.joined || t("common.labels.notSet").toUpperCase()}</p>
 							</div>
 						</div>
 
@@ -196,7 +196,7 @@ const CompanyCard = ({ company, onEdit, onDelete, onToggleStatus, t, index }) =>
 								<svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
 								</svg>
-								<p className="text-xs font-bold uppercase">{company.lastActivity || "12/13/2025"}</p>
+								<p className="text-xs font-bold uppercase">{company.lastActivity || t("common.labels.notSet").toUpperCase()}</p>
 							</div>
 						</div>
 					</div>

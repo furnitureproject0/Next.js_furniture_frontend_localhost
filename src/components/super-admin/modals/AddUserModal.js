@@ -86,7 +86,7 @@ export default function AddUserModal({ isOpen, onClose }) {
 							onChange={handleChange}
 							required
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="John Doe"
+							placeholder={t("superAdmin.modals.addUser.namePlaceholder")}
 						/>
 					</div>
 
@@ -102,14 +102,14 @@ export default function AddUserModal({ isOpen, onClose }) {
 							onChange={handleChange}
 							required
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="john@example.com"
+							placeholder={t("superAdmin.modals.addUser.emailPlaceholder")}
 						/>
 					</div>
 
 					{/* Password */}
 					<div>
 						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("superAdmin.modals.addUser.password") || "Initial Password"}
+							{t("superAdmin.modals.addUser.password")}
 						</label>
 						<input
 							type="password"

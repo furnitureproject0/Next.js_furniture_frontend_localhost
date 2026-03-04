@@ -166,12 +166,12 @@ export default function SiteAdminOrderDetailsPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h1 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">Order Not Found</h1>
+                <h1 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">{t("common.messages.orderNotFound")}</h1>
                 <p className="text-slate-500 max-w-sm mb-10 leading-relaxed font-medium">
-                    We couldn&apos;t find order #{orderId} in our records.
+                    {t("orders.notFound")} #{orderId}
                 </p>
                 <button onClick={handleBack} className="flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold shadow-xl shadow-slate-200/60 border border-slate-100 hover:bg-slate-50">
-                    Go Back
+                    {t("common.buttons.goBack")}
                 </button>
             </div>
         );
@@ -209,11 +209,11 @@ export default function SiteAdminOrderDetailsPage() {
                             ) : (
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                             )}
-                            {isPrinting ? "Loading PDF..." : "Print PDF"}
+                            {isPrinting ? t("common.buttons.loadingPDF") : t("common.buttons.printPDF")}
                         </button>
                         <button onClick={() => router.push(`/site-admin/orders/${order.id}/edit`)} className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition-colors shadow-md shadow-emerald-500/20">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                            Edit Order
+                            {t("common.buttons.editOrder")}
                         </button>
                     </div>
                 </div>
@@ -224,7 +224,7 @@ export default function SiteAdminOrderDetailsPage() {
                         
                         {/* Client Info */}
                         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Client Details</h3>
+                            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">{t("orderDetails.clientDetails")}</h3>
                             <div className="flex items-center gap-4 mb-4">
                                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-black border border-blue-100">
                                     {order.client?.name?.charAt(0).toUpperCase()}
@@ -246,22 +246,22 @@ export default function SiteAdminOrderDetailsPage() {
 
                         {/* Execution & Company */}
                         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Execution Info</h3>
+                            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">{t("orderDetails.executionInfo")}</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <p className="text-xs text-slate-400 mb-1">Scheduled Date & Time</p>
+                                    <p className="text-xs text-slate-400 mb-1">{t("orderDetails.scheduledDateTime")}</p>
                                     <p className="text-sm font-bold text-slate-800">
                                         {formatDate(order.execution_date) || "TBD"} 
                                         {order.execution_time && ` at ${order.execution_time.substring(0,5)}`}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-slate-400 mb-1">Lead Company</p>
+                                    <p className="text-xs text-slate-400 mb-1">{t("orderDetails.leadCompany")}</p>
                                     <p className="text-sm font-bold text-slate-800">{order.company?.name || "Not Assigned"}</p>
                                 </div>
                                 {order.assigned_vehicles?.length > 0 && (
                                     <div>
-                                        <p className="text-xs text-slate-400 mb-1">Assigned Vehicles</p>
+                                        <p className="text-xs text-slate-400 mb-1">{t("orderDetails.assignedVehicles")}</p>
                                         <div className="flex flex-wrap gap-2 mt-1">
                                             {order.assigned_vehicles.map(v => (
                                                 <span key={v.id} className="px-2 py-1 bg-slate-100 border border-slate-200 rounded text-xs font-bold text-slate-600">

@@ -78,11 +78,11 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 					<div className="flex items-center justify-between gap-3">
 						<div className="flex-1 min-w-0">
 							<h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary-600 to-slate-600 bg-clip-text text-transparent truncate">
-								{isModifying ? t("pricingModal.modifyOffer") || "Modify Offer" : t("pricingModal.sendOffer") || "Send Offer"}
+								{isModifying ? t("pricingModal.modifyOffer") : t("pricingModal.sendOffer")}
 							</h2>
 							<p className="text-xs sm:text-sm text-slate-600/70 mt-0.5 sm:mt-1 truncate">
-								{t("pricingModal.order") || "Order"} #{order?.id}
-								{isModifying && <span className="text-purple-600 ml-1 sm:ml-2">(Modifying v{existingOffer?.version || 1})</span>}
+								{t("pricingModal.order", { id: order?.id })}
+								{isModifying && <span className="text-purple-600 ml-1 sm:ml-2">{t("pricingModal.modifyingVersion", { version: existingOffer?.version || 1 })}</span>}
 							</p>
 						</div>
 						<button
@@ -111,14 +111,14 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 					{/* Hours Range - Combined */}
 					<div className="bg-gradient-to-br from-primary-50 to-primary-50 rounded-xl p-4 border border-primary-200/50">
 						<label className="block text-sm font-semibold text-slate-800 mb-4">
-							Estimated Hours Range
+							{t("pricingModal.estimatedHoursRange")}
 						</label>
 						
 						{/* Min Hours */}
 						<div className="mb-4">
 							<div className="flex items-center justify-between mb-2">
 								<label className="text-sm font-medium text-slate-700">
-									Minimum Hours
+									{t("pricingModal.minHours")}
 								</label>
 								<div className="flex items-center gap-2">
 									<input
@@ -132,7 +132,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 										}}
 										className="w-20 px-2 py-1 text-center border border-primary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 text-slate-800 font-semibold"
 									/>
-									<span className="text-sm text-primary-600">hours</span>
+									<span className="text-sm text-primary-600">{t("pricingModal.hours")}</span>
 								</div>
 							</div>
 							<input
@@ -150,7 +150,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 						<div>
 							<div className="flex items-center justify-between mb-2">
 								<label className="text-sm font-medium text-slate-700">
-									Maximum Hours
+									{t("pricingModal.maxHours")}
 								</label>
 								<div className="flex items-center gap-2">
 									<input
@@ -164,7 +164,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 										}}
 										className="w-20 px-2 py-1 text-center border border-primary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 text-slate-800 font-semibold"
 									/>
-									<span className="text-sm text-primary-600">hours</span>
+									<span className="text-sm text-primary-600">{t("pricingModal.hours")}</span>
 								</div>
 							</div>
 							<input
@@ -183,7 +183,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 					<div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200/50">
 						<div className="flex items-center justify-between mb-2">
 							<label className="text-sm font-semibold text-slate-800">
-								Hourly Rate (CHF)
+								{t("pricingModal.hourlyRateChf")}
 							</label>
 							<div className="flex items-center gap-2">
 								<input
@@ -198,7 +198,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 									}}
 									className="w-24 px-2 py-1 text-center border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 text-slate-800 font-semibold"
 								/>
-								<span className="text-sm text-primary-600">CHF/hour</span>
+								<span className="text-sm text-primary-600">{t("common.currency.chfPerHour")}</span>
 							</div>
 						</div>
 						<input
@@ -211,8 +211,8 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 							className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider"
 						/>
 						<div className="flex justify-between text-xs text-primary-600/70 mt-1">
-							<span>CHF 50</span>
-							<span>CHF 300</span>
+							<span>{t("common.currency.chf")} 50</span>
+							<span>{t("common.currency.chf")} 300</span>
 						</div>
 					</div>
 
@@ -220,7 +220,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 					<div className="grid grid-cols-2 gap-3">
 						<div>
 							<label className="block text-sm font-medium text-slate-800 mb-2">
-								Date <span className="text-primary-500/70 text-xs">(Optional)</span>
+								{t("common.labels.date")} <span className="text-primary-500/70 text-xs">({t("common.labels.optional")})</span>
 							</label>
 							<input
 								type="date"
@@ -232,7 +232,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-slate-800 mb-2">
-								Time <span className="text-primary-500/70 text-xs">(Optional)</span>
+								{t("common.labels.time")} <span className="text-primary-500/70 text-xs">({t("common.labels.optional")})</span>
 							</label>
 							<input
 								type="time"
@@ -261,10 +261,10 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 					<div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 border-2 border-green-200/60">
 						<div className="text-center">
 							<p className="text-xs font-medium text-green-600/70 uppercase tracking-wide mb-1.5 sm:mb-2">
-								Estimated Total Price
+								{t("pricingModal.estimatedTotal")}
 							</p>
 							<p className="text-3xl sm:text-4xl font-bold text-green-700 mb-1.5 sm:mb-2">
-								CHF {Math.round(totalPrice)}
+								{t("common.currency.chf")} {Math.round(totalPrice)}
 							</p>
 							<div className="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2 text-xs sm:text-sm text-green-600/80">
 								<span className="font-medium">
@@ -274,7 +274,7 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 									}
 								</span>
 								<span>×</span>
-								<span className="font-medium">CHF {hourlyRate}/h</span>
+								<span className="font-medium">{t("common.currency.chf")} {hourlyRate}/h</span>
 							</div>
 						</div>
 					</div>
@@ -288,14 +288,14 @@ export default function PricingModal({ isOpen, onClose, order, orderServiceId, o
 							onClick={onClose}
 							className="flex-1 px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-600 hover:text-slate-800 border border-primary-200/60 rounded-lg hover:bg-primary-50/60 transition-colors font-medium"
 						>
-							{t("pricingModal.cancel") || "Cancel"}
+							{t("pricingModal.cancel")}
 						</button>
 						<button
 							type="button"
 							onClick={handleSubmit}
 							className="flex-1 px-4 py-2.5 sm:py-3 text-xs sm:text-sm bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-slate-600 text-white font-medium rounded-lg transition-all cursor-pointer hover:shadow-lg transform hover:scale-[1.02]"
 						>
-							{isModifying ? (t("pricingModal.updateOffer") || "Update Offer") : (t("pricingModal.sendOfferButton") || "Send Offer")}
+							{isModifying ? t("pricingModal.updateOffer") : t("pricingModal.sendOfferButton")}
 						</button>
 					</div>
 				</div>

@@ -148,7 +148,7 @@ export default function OrderWizardModal({
 								className="flex-1 sm:flex-none px-4 sm:px-6 py-2 text-xs sm:text-sm btn-primary font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer"
 							>
 								<span className="hidden sm:inline">{t("common.buttons.next")}</span>
-								<span className="sm:hidden">Next</span>
+								<span className="sm:hidden">{t("common.buttons.next")}</span>
 								<svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
 								</svg>
@@ -184,23 +184,23 @@ export default function OrderWizardModal({
 							</svg>
 						</div>
 						<h3 className="text-xl font-bold text-slate-800 mb-2">
-							{t("orderWizard.cancelConfirmTitle") || "Cancel Order Creation?"}
+							{t("orderWizard.cancelConfirmTitle")}
 						</h3>
 						<p className="text-slate-600/70 mb-6">
-							{t("orderWizard.cancelConfirmBody") || "Are you sure you want to cancel? All progress will be lost."}
+							{t("orderWizard.cancelConfirmBody")}
 						</p>
 						<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
 							<button
 								onClick={() => setShowCancelConfirm(false)}
 								className="px-6 py-2 border border-primary-200 text-slate-600 hover:bg-primary-50 rounded-lg transition-colors font-medium"
 							>
-								{t("common.buttons.keepEditing") || "Keep Editing"}
+								{t("common.buttons.keepEditing")}
 							</button>
 							<button
 								onClick={confirmCancel}
 								className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium"
 							>
-								{t("common.buttons.yesCancel") || "Yes, Cancel"}
+								{t("common.buttons.yesCancel")}
 							</button>
 						</div>
 					</div>

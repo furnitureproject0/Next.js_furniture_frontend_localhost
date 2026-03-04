@@ -427,7 +427,8 @@ export default function CreateOfferPage() {
                 primary_location: primary_location,
                 services: payloadServices,
                 timelineMessage: "Offer initiated by Admin for the client",
-                timelineStatus: "pending"
+                timelineStatus: "pending",
+                order_type: "offer"
             };
 
             if (selectedCompanyId) {

@@ -202,7 +202,7 @@ export default function CreateOrderPage() {
             setPendingNavigation("orders");
             setShowLeaveConfirm(true);
         } else {
-            router.push("/company-admin/orders");
+            router.push("/company-admin/dashboard");
         }
     };
 
@@ -211,7 +211,7 @@ export default function CreateOrderPage() {
         if (pendingNavigation === "back") {
             window.history.go(-2);
         } else {
-            router.push("/company-admin/orders");
+            router.push("/company-admin/dashboard");
         }
     };
 
@@ -258,6 +258,8 @@ export default function CreateOrderPage() {
                 
                 const serviceObj = { 
                     service_id: parseInt(serviceId), 
+                    preferred_date: pricing.scheduledDate || globalDate,
+                    preferred_time: formatTime(pricing.scheduledTime || globalTime),
                     additions: [],
                     company_id: pricing.assignedCompanyId || selectedCompanyId,
                     pricing_type: pricing.pricingType === 'hourly' ? 'per_hour' : (pricing.pricingType === 'flat_rate' ? 'flat_rate' : 'max_price'),
@@ -310,7 +312,6 @@ export default function CreateOrderPage() {
                 rooms,
                 services,
                 notes: formData.notes || '',
-                order_type: orderType
             };
 
             const { companyAdminApi } = await import("@/lib/api");
@@ -318,7 +319,7 @@ export default function CreateOrderPage() {
 
             if (response && response.success) {
                 toast.success(t("orders.createSuccess") || "Order created successfully");
-                router.push("/company-admin/orders");
+                router.push("/company-admin/dashboard");
             } else {
                 throw new Error(response?.message || "Failed to create order");
             }

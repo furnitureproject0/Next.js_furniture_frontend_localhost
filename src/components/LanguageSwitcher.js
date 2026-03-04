@@ -1,6 +1,6 @@
 "use client";
 
-import { SUPPORTED_LANGUAGES } from "@/lib/i18n/config";
+import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from "@/lib/i18n/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setLanguage } from "@/store/slices/languageSlice";
 import { useEffect, useRef, useState } from "react";
@@ -8,7 +8,8 @@ import { createPortal } from "react-dom";
 
 export default function LanguageSwitcher() {
 	const dispatch = useAppDispatch();
-	const currentLanguage = useAppSelector((state) => state.language?.currentLanguage) || "de";
+	const currentLanguage =
+		useAppSelector((state) => state.language?.currentLanguage) || DEFAULT_LANGUAGE;
 	const [isOpen, setIsOpen] = useState(false);
 	const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, right: 0 });
 	const buttonRef = useRef(null);

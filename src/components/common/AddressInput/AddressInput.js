@@ -4,6 +4,7 @@ import { useRef, useEffect } from 'react';
 import { useAddressSearch } from '@/hooks/useAddressSearch';
 import { useAddressValue } from '@/hooks/useAddressValue';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useTranslation } from '@/hooks/useTranslation';
 import AddressResults from './AddressResults';
 
 /**
@@ -13,7 +14,7 @@ import AddressResults from './AddressResults';
 export default function AddressInput({
     value = '',
     onChange,
-    placeholder = 'Start typing address...',
+    placeholder,
     disabled = false,
     className = '',
     label,
@@ -21,6 +22,8 @@ export default function AddressInput({
     error,
     ...props
 }) {
+    const { t } = useTranslation();
+    const finalPlaceholder = placeholder || t('common.placeholders.searchAddress');
     const inputRef = useRef(null);
     const resultsRef = useRef(null);
     const debounceTimer = useRef(null);
@@ -87,7 +90,7 @@ export default function AddressInput({
                     value={displayValue}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
-                    placeholder={placeholder}
+                    placeholder={finalPlaceholder}
                     disabled={disabled}
                     className={`${baseInputClasses} ${className} ${error ? 'border-red-500 focus:ring-red-500' : ''}`}
                     autoComplete="off"

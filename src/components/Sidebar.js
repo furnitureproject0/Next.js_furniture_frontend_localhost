@@ -202,10 +202,10 @@ export default function Sidebar({ onClose }) {
 						</div>
 						<div className="min-w-0 flex-1">
 							<h2 className="text-slate-800 font-semibold text-xs sm:text-sm truncate">
-								{user?.name || "User"}
+								{user?.name || t("common.labels.user")}
 							</h2>
 							<p className="text-slate-600/70 text-xs truncate">
-								{user?.role || "User"}
+								{user?.role || t("common.labels.user")}
 							</p>
 						</div>
 					</div>
@@ -214,7 +214,7 @@ export default function Sidebar({ onClose }) {
 						<button
 							onClick={onClose}
 							className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-primary-50 transition-colors"
-							aria-label="Close menu"
+							aria-label={t("sidebar.aria.closeMenu")}
 						>
 							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -224,7 +224,7 @@ export default function Sidebar({ onClose }) {
 						<button
 							onClick={handleLogout}
 							className="flex items-center curser-pointer justify-center p-2 rounded-lg transition-all duration-200 text-slate-600 hover:bg-red-50/60 hover:text-red-700 border border-primary-200/40 hover:border-red-200/60 bg-gradient-to-br from-primary-50/60 to-primary-50/60 hover:from-red-50/60 hover:to-red-50/60 shadow-sm hover:shadow-md"
-							title="Logout"
+							title={t("common.buttons.logout")}
 						>
 							<LogoutIcon className="w-4 h-4" />
 						</button>

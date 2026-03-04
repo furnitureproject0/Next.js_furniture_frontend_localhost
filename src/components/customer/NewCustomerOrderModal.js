@@ -586,7 +586,7 @@ export default function NewCustomerOrderModal({
 									className="flex-1 sm:flex-none px-4 sm:px-6 py-2 text-xs sm:text-sm btn-primary font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer"
 								>
 									<span className="hidden sm:inline">{t("common.buttons.next")}</span>
-									<span className="sm:hidden">Next</span>
+									<span className="sm:hidden">{t("common.buttons.next")}</span>
 									<svg
 										className="w-4 h-4 sm:w-5 sm:h-5"
 										fill="none"

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from '@/hooks/useTranslation';
+
 /**
  * OSMMapPreview - Display OpenStreetMap preview using iframe embed
  * Shows a marker at the specified lat/lon coordinates
@@ -10,6 +12,7 @@
  * @param {boolean} isLoading - Whether location is being updated
  */
 export default function OSMMapPreview({ lat, lon, fullAddress, title, isLoading = false }) {
+    const { t } = useTranslation();
 	// Don't show map if we don't have coordinates
 	if (!lat || !lon) {
 		return null;
@@ -43,10 +46,10 @@ export default function OSMMapPreview({ lat, lon, fullAddress, title, isLoading 
                             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" 
                         />
                     </svg>
-                    {title || "Location Preview"}
+                    {title || t('mapPreview.locationPreview')}
                 </h5>
                 <span className="text-[10px] sm:text-xs text-primary-600 bg-primary-50 px-2 py-0.5 sm:py-1 rounded">
-                    Live Map
+                    {t('mapPreview.liveMap')}
                 </span>
             </div>
 
@@ -61,7 +64,7 @@ export default function OSMMapPreview({ lat, lon, fullAddress, title, isLoading 
 					marginWidth="0"
 					src={mapUrl}
 					style={{ border: 0 }}
-					title="OpenStreetMap Location Preview"
+					title={t('mapPreview.mapPreview')}
 					className={isLoading ? "opacity-50" : ""}
 				/>
 				
@@ -71,7 +74,7 @@ export default function OSMMapPreview({ lat, lon, fullAddress, title, isLoading 
 						<div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
 							<div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 sm:border-3 border-primary-300 border-t-primary-600"></div>
 							<span className="text-xs sm:text-sm font-medium text-slate-800">
-								Updating location...
+								{t('mapPreview.updating')}
 							</span>
 						</div>
 					</div>
@@ -82,7 +85,7 @@ export default function OSMMapPreview({ lat, lon, fullAddress, title, isLoading 
             <div className="mt-2 sm:mt-3 p-2 bg-primary-50 border border-primary-200 rounded text-[10px] sm:text-xs text-slate-800">
                 <p className="font-medium">📍 {fullAddress}</p>
                 <p className="text-primary-600 mt-0.5 sm:mt-1">
-                    Coordinates: {parseFloat(lat).toFixed(6)}, {parseFloat(lon).toFixed(6)}
+                    {t('mapPreview.coordinates')}: {parseFloat(lat).toFixed(6)}, {parseFloat(lon).toFixed(6)}
                 </p>
             </div>
 
@@ -92,7 +95,7 @@ export default function OSMMapPreview({ lat, lon, fullAddress, title, isLoading 
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span>
-                    This location will be saved with your order. Make sure it&apos;s accurate!
+                    {t('mapPreview.mapAccuracyWarning')}
                 </span>
             </div>
         </div>

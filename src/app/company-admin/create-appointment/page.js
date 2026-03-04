@@ -242,33 +242,20 @@ export default function CompanyAdminCreateAppointmentPage() {
             let preferredTime = appointmentTime;
             if (preferredTime.length === 5) preferredTime += ":00";
 
-            const requestBody = {
-                email: clientEmail.trim(),
-                execution_date: appointmentDate,
-                execution_time: preferredTime,
-                primary_location: {
-                    address: clientAddress.trim() || "N/A",
-                    floor: 0,
-                    has_elevator: false,
-                    type: "apartment",
-                    area: 0
-                },
-                secondary_location: {
-                    address: "N/A",
-                    floor: 0,
-                    has_elevator: false,
-                    type: "apartment"
-                },
-                number_of_rooms: 0,
-                rooms: [],
-                services: [], 
-                notes: appointmentNotes || `Appointment for ${clientName}`,
-                order_type: "appointment"
-            };
-
             if (!user?.company_id) {
                 throw new Error("Company ID not found. Please log in again.");
             }
+
+            if (!selectedClient?.id) {
+                throw new Error("Please select a client.");
+            }
+
+            const requestBody = {
+                client_id: selectedClient.id,
+                expected_date: appointmentDate,
+                expected_time: preferredTime,
+                notes: appointmentNotes || `Appointment for ${clientName}`,
+            };
 
             const response = await companyAdminApi.createAppointment(user.company_id, requestBody);
 

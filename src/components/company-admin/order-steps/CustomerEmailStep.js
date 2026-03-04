@@ -186,7 +186,7 @@ export default function CustomerEmailStep({
               type="text"
               value={query}
               onChange={handleInputChange}
-              placeholder="Enter name, phone or email"
+              placeholder={t("common.placeholders.enterNamePhoneEmail")}
               className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-800 placeholder-gray-400 pr-7"
               disabled={!!clientInfo}
             />
@@ -203,7 +203,7 @@ export default function CustomerEmailStep({
               onClick={handleClear}
               className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-medium rounded-md border border-gray-200"
             >
-              Clear
+              {t("common.buttons.clear")}
             </button>
           )}
         </div>
@@ -240,7 +240,7 @@ export default function CustomerEmailStep({
                         : "bg-yellow-100 text-yellow-700"
                     }`}
                   >
-                    {client.is_verified ? "Verified" : "Unverified"}
+                    {client.is_verified ? t("common.labels.verified") : t("common.labels.unverified")}
                   </span>
                 </div>
               </button>
@@ -257,7 +257,7 @@ export default function CustomerEmailStep({
           <tbody>
             <tr className="bg-green-50">
               <td className="px-2.5 py-1.5 text-gray-500 font-medium w-20 border-r border-gray-200">
-                Name
+                {t("common.labels.name")}
               </td>
               <td className="px-2.5 py-1.5 text-gray-800">
                 {clientInfo.name}
@@ -266,7 +266,7 @@ export default function CustomerEmailStep({
 
             <tr className="border-t border-gray-200">
               <td className="px-2.5 py-1.5 text-gray-500 font-medium border-r border-gray-200">
-                Email
+                {t("common.labels.email")}
               </td>
               <td className="px-2.5 py-1.5 text-gray-800">
                 {clientInfo.email}
@@ -275,7 +275,7 @@ export default function CustomerEmailStep({
 
             <tr className="border-t border-gray-200">
               <td className="px-2.5 py-1.5 text-gray-500 font-medium border-r border-gray-200">
-                Phone
+                {t("common.labels.phone")}
               </td>
               <td className="px-2.5 py-1.5 text-gray-800">
                 {clientInfo.phone || "—"}
@@ -284,7 +284,7 @@ export default function CustomerEmailStep({
 
             <tr className="border-t border-gray-200">
               <td className="px-2.5 py-1.5 text-gray-500 font-medium border-r border-gray-200">
-                Verified
+                {t("common.labels.verified")}
               </td>
               <td className="px-2.5 py-1.5">
                 <span
@@ -294,7 +294,7 @@ export default function CustomerEmailStep({
                       : "bg-yellow-100 text-yellow-700"
                   }`}
                 >
-                  {clientInfo.is_verified ? "Yes" : "No"}
+                  {clientInfo.is_verified ? t("common.yes") : t("common.no")}
                 </span>
               </td>
             </tr>
@@ -306,14 +306,14 @@ export default function CustomerEmailStep({
       {notFound && (
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-500">
-            Customer not found.
+            {t("orderSteps.customerNotFound")}
           </span>
           <button
             type="button"
             onClick={onCreateUserClick}
             className="text-xs font-medium text-gray-800 underline hover:text-gray-600"
           >
-            Create customer
+            {t("orderSteps.createUser")}
           </button>
         </div>
       )}

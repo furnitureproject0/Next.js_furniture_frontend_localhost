@@ -84,12 +84,12 @@ const UserRow = ({ user, onEdit, onDelete, t, index }) => {
 					<div className="flex items-center gap-4">
 						{user.company && (
 							<div className="text-right">
-								<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">COMPANY</p>
+								<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{t("superAdmin.modals.addUser.company").toUpperCase()}</p>
 								<p className="text-sm font-bold text-slate-700">{user.company}</p>
 							</div>
 						)}
 						<div className="text-right border-l border-slate-100 pl-4">
-							<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">JOINED</p>
+							<p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{t("common.labels.joined").toUpperCase()}</p>
 							<p className="text-sm font-bold text-slate-700">{user.created || "12/13/2025"}</p>
 						</div>
 					</div>

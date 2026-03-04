@@ -237,31 +237,16 @@ export default function CreateAppointmentPage() {
             let preferredTime = appointmentTime;
             if (preferredTime.length === 5) preferredTime += ":00";
 
+            if (!selectedClient?.id) {
+                throw new Error("Please select a client.");
+            }
+
             const requestBody = {
-                email: clientEmail.trim(),
                 company_id: selectedCompanyId,
-                execution_date: appointmentDate,
-                execution_time: preferredTime,
-                primary_location: {
-                    address: clientAddress.trim() || "N/A",
-                    floor: 0,
-                    has_elevator: false,
-                    type: "apartment",
-                    area: 0
-                },
-                secondary_location: {
-                    address: "",
-                    floor: 0,
-                    has_elevator: false,
-                    type: ""
-                },
-                number_of_rooms: 0,
-                rooms: [],
-                // Virtual service to satisfy backend requirements and stats categorization
-                services: [], 
+                client_id: selectedClient.id,
+                expected_date: appointmentDate,
+                expected_time: preferredTime,
                 notes: appointmentNotes || `Appointment for ${clientName}`,
-                type: "appointment",
-                status: "scheduled"
             };
 
             const response = await siteAdminApi.createAppointment(requestBody);

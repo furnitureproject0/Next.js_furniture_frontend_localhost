@@ -31,9 +31,9 @@ export default function ServicePricingInputs({ serviceId, pricing, onPricingChan
 					onClick={(e) => e.stopPropagation()}
 					className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white font-medium text-gray-800"
 				>
-					<option value="hourly">Hourly Rate</option>
-					<option value="flat_rate">Flat Rate Price</option>
-					<option value="max_price">Max Price</option>
+					<option value="hourly">{t("siteAdmin.pricing.hourly")}</option>
+					<option value="flat_rate">{t("siteAdmin.pricing.flatRate")}</option>
+					<option value="max_price">{t("siteAdmin.pricing.maxPriceOption")}</option>
 				</select>
 			</div>
 

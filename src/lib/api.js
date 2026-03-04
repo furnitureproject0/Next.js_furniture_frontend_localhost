@@ -102,8 +102,14 @@ const apiRequest = async (endpoint, options = {}) => {
 		}
 	};
 
-	// Check if this is the create order endpoint - must use multipart/form-data
-	const isCreateOrderEndpoint = (url.includes('/orders') || url.includes('/offers') || url.includes('/appointments')) && options.method === 'POST' && !url.includes('/orders/') && !url.includes('-v2');
+	// Check if this is the create order/offer endpoint - must use multipart/form-data
+	// NOTE: Appointments do NOT support multipart/form-data and expect JSON bodies,
+	// so they are intentionally excluded here.
+	const isCreateOrderEndpoint =
+		(url.includes('/orders') || url.includes('/offers')) &&
+		options.method === 'POST' &&
+		!url.includes('/orders/') &&
+		!url.includes('-v2');
 
 	// Handle multipart/form-data for file uploads OR create order endpoint
 	if (options.body && options.method !== "GET" && (hasFile(options.body) || isCreateOrderEndpoint) && typeof FormData !== 'undefined') {
@@ -584,19 +590,26 @@ export const companyAdminApi = {
 	createOrder: (companyId, orderData) =>
 		apiRequest("/orders-v2/admin-create-order", {
 			method: "POST",
-			body: { ...orderData, company_id: companyId },
+			body: { ...orderData, company_id: orderData?.company_id ?? companyId },
 		}),
 
 	createOffer: (companyId, orderData) =>
 		apiRequest("/offers-v2/admin-create-offer", {
 			method: "POST",
-			body: { ...orderData, company_id: companyId },
+			body: { ...orderData, company_id: orderData?.company_id ?? companyId },
 		}),
 
-	createAppointment: (companyId, orderData) =>
-		apiRequest("/orders-v2/admin-create-order", {
+	createAppointment: (companyId, appointmentData) =>
+		apiRequest("/appointments/", {
 			method: "POST",
-			body: { ...orderData, company_id: companyId, order_type: 'appointment' },
+			body: {
+				company_id: companyId,
+				client_id: appointmentData.client_id,
+				expected_date: appointmentData.expected_date || appointmentData.execution_date,
+				expected_time: appointmentData.expected_time || appointmentData.execution_time,
+				notes: appointmentData.notes || null,
+				order_id: appointmentData.order_id || null,
+			},
 		}),
 
 	acceptOrderService: (orderId, orderServiceId) =>
@@ -743,6 +756,26 @@ export const notificationsApi = {
 		}),
 };
 
+// Appointments API endpoints
+export const appointmentsApi = {
+	getAppointments: (filters = {}) => {
+		const queryParams = new URLSearchParams();
+		if (filters.status) queryParams.append("status", filters.status);
+		if (filters.company_id) queryParams.append("company_id", filters.company_id);
+		if (filters.client_id) queryParams.append("client_id", filters.client_id);
+		if (filters.order_id) queryParams.append("order_id", filters.order_id);
+		if (filters.expected_date) queryParams.append("expected_date", filters.expected_date);
+		if (filters.search) queryParams.append("search", filters.search);
+		if (filters.page) queryParams.append("page", filters.page);
+		if (filters.limit) queryParams.append("limit", filters.limit);
+
+		const queryString = queryParams.toString();
+		return apiRequest(`/appointments${queryString ? `?${queryString}` : ""}`, {
+			method: "GET",
+		});
+	},
+};
+
 // Employee API endpoints (for workers and drivers)
 export const employeeApi = {
 	getAssignments: () =>
@@ -863,10 +896,17 @@ export const siteAdminApi = {
 			body: orderData,
 		}),
 
-	createAppointment: (orderData) =>
-		apiRequest("/orders-v2/admin-create-order", {
+	createAppointment: (appointmentData) =>
+		apiRequest("/appointments/", {
 			method: "POST",
-			body: { ...orderData, order_type: 'appointment' },
+			body: {
+				company_id: appointmentData.company_id,
+				client_id: appointmentData.client_id,
+				expected_date: appointmentData.expected_date || appointmentData.execution_date,
+				expected_time: appointmentData.expected_time || appointmentData.execution_time,
+				notes: appointmentData.notes || null,
+				order_id: appointmentData.order_id || null,
+			},
 		}),
 
 	updateOrder: (orderId, orderData) =>

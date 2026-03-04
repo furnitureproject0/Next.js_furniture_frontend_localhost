@@ -1252,6 +1252,10 @@ export const fetchCompanyAdminOrders = createAsyncThunk(
 							serviceId: os.service?.id || os.service_id,
 							serviceName: os.service?.name || "Unknown Service",
 							status: os.status,
+							fixed_price: os.fixed_price,
+							total_price: os.total_price,
+							min_total_price: os.min_total_price,
+							max_total_price: os.max_total_price,
 							assignedCompanyId: os.company_id,
 							assignedCompanyName: os.company?.name,
 							offer: transformedOffer, // Latest offer for card display (one offer per service)
