@@ -48,6 +48,9 @@
 	},
 	"common": {
 		"allServices": "All Services",
+		"countWithLabel": "{{count}} {{label}}",
+		"countWithDate": "{{count}} {{label}} {{date}}",
+		"items": "items",
 		"buttons": {
 			"accept": "Accept",
 			"acceptOffer": "Accept Offer",
@@ -1194,6 +1197,7 @@
 		"clientAddress": "Client's Address",
 		"companyScope": "Assignment Category",
 		"dashboard": {
+			"overview": "Daily Overview",
 			"appointmentCreatedSuccess": "Appointment created successfully!",
 			"createAppointment": "Create Appointment",
 			"createOffer": "Create Offer",
@@ -1398,6 +1402,8 @@
 			"status": "Status"
 		},
 		"orderManagement": {
+			"allOrders": "All Orders",
+			"cancelReasonPrompt": "Enter reason for cancellation:",
 			"noOrdersFound": "No orders found matching your criteria",
 			"ordersCount": "Orders ({{filtered}} of {{total}})",
 			"searchPlaceholder": "Search orders by ID, customer, address, or description...",
@@ -1406,7 +1412,9 @@
 		},
 		"orders": "Orders",
 		"roles": {
+			"client": "Client",
 			"company_admin": "Company Admin",
+			"company_secretary": "Company Secretary",
 			"customer": "Customer",
 			"driver": "Driver",
 			"site_admin": "Site Admin",

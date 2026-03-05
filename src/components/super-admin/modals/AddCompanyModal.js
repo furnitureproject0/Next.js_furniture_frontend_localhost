@@ -11,7 +11,7 @@ import { useGlobalToast } from "@/hooks/useGlobalToast";
 export default function AddCompanyModal({ isOpen, onClose }) {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
-	const { showToast } = useGlobalToast();
+	const { toast } = useGlobalToast();
 	const [availableServices, setAvailableServices] = useState([]);
 	const [loadingServices, setLoadingServices] = useState(false);
 	const [formData, setFormData] = useState({
@@ -71,7 +71,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 
 		// Validate services selection
 		if (!formData.services || formData.services.length === 0) {
-			showToast(t("superAdmin.modals.addCompany.selectServicesError"), "error");
+			toast.error(t("superAdmin.modals.addCompany.selectServicesError"));
 			return;
 		}
 
@@ -96,7 +96,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 			};
 			
 			await dispatch(createCompanyThunk(formattedData)).unwrap();
-			showToast(t("common.success"), "success");
+			toast.success(t("common.success"));
 			onClose();
 			setFormData({
 				name: "",
@@ -110,7 +110,7 @@ export default function AddCompanyModal({ isOpen, onClose }) {
 				available: true,
 			});
 		} catch (error) {
-			showToast(error?.message || error || t("common.error"), "error");
+			toast.error(error?.message || error || t("common.error"));
 		}
 	};
 

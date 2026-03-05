@@ -9,7 +9,7 @@ export default function UserFilters({ roleFilter, setRoleFilter }) {
 		{ value: "super_admin", label: t("superAdmin.roles.super_admin") },
 		{ value: "site_admin", label: t("superAdmin.roles.site_admin") },
 		{ value: "company_admin", label: t("superAdmin.roles.company_admin") },
-		{ value: "client", label: t("superAdmin.roles.customer") },
+		{ value: "client", label: t("superAdmin.roles.client") },
 		{ value: "driver", label: t("superAdmin.roles.driver") },
 		{ value: "worker", label: t("superAdmin.roles.worker") },
 	];

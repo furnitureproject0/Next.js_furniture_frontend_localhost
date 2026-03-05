@@ -48,6 +48,9 @@
 	},
 	"common": {
 		"allServices": "Alle Dienstleistungen",
+		"countWithLabel": "{{count}} {{label}}",
+		"countWithDate": "{{count}} {{label}} {{date}}",
+		"items": "Elemente",
 		"buttons": {
 			"accept": "Akzeptieren",
 			"acceptOffer": "Angebot annehmen",
@@ -1184,24 +1187,25 @@
 		},
 		"assignCompanyForService": "Assign Company for this Service",
 		"cards": {
-			"appointments": "Appointments",
-			"noAppointmentsToday": "No appointments today",
-			"noOffersToday": "No offers today",
-			"noOrdersToday": "No new orders today",
-			"offers": "Offers",
-			"orders": "Orders",
-			"today": "Today"
+			"appointments": "Termine",
+			"noAppointmentsToday": "Heute keine Termine",
+			"noOffersToday": "Heute keine Angebote",
+			"noOrdersToday": "Heute keine neuen Aufträge",
+			"offers": "Angebote",
+			"orders": "Aufträge",
+			"today": "Heute"
 		},
 		"clientAddress": "Client's Address",
 		"companyScope": "Firmentyp",
 		"dashboard": {
-			"appointmentCreatedSuccess": "Appointment created successfully!",
-			"createAppointment": "Create Appointment",
-			"createOffer": "Create Offer",
+			"overview": "Tagesübersicht",
+			"appointmentCreatedSuccess": "Termin erfolgreich erstellt!",
+			"createAppointment": "Termin erstellen",
+			"createOffer": "Angebot erstellen",
 			"createOrder": "Bestellung erstellen",
-			"offerCreatedSuccess": "Offer created successfully!",
+			"offerCreatedSuccess": "Angebot erfolgreich erstellt!",
 			"subtitle": "Verwalten Sie alle Transportaufträge und überwachen Sie Geschäftsabläufe",
-			"title": "Site Admin Dashboard"
+			"title": "Site-Admin Dashboard"
 		},
 		"externalCompany": "Externe Firma",
 		"externalCompanyDesc": "Drittanbieter-Dienstleister",
@@ -1399,6 +1403,8 @@
 			"status": "Status"
 		},
 		"orderManagement": {
+			"allOrders": "Alle Aufträge",
+			"cancelReasonPrompt": "Grund für die Stornierung eingeben:",
 			"noOrdersFound": "Keine Aufträge gefunden, die Ihren Kriterien entsprechen",
 			"ordersCount": "Aufträge ({{filtered}} von {{total}})",
 			"searchPlaceholder": "Aufträge nach ID, Kunde, Adresse oder Beschreibung suchen...",
@@ -1407,11 +1413,13 @@
 		},
 		"orders": "Aufträge",
 		"roles": {
+			"client": "Kunde",
 			"company_admin": "Unternehmens-Admin",
+			"company_secretary": "Firmen-Sekretär(in)",
 			"customer": "Kunde",
 			"driver": "Fahrer",
-			"site_admin": "Site Admin",
-			"super_admin": "Super Admin",
+			"site_admin": "Site-Admin",
+			"super_admin": "Super-Admin",
 			"worker": "Arbeiter"
 		},
 		"settings": "Einstellungen",

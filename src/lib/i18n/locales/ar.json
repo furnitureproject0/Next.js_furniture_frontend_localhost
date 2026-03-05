@@ -48,6 +48,9 @@
 	},
 	"common": {
 		"allServices": "جميع الخدمات",
+		"countWithLabel": "{{count}} {{label}}",
+		"countWithDate": "{{count}} {{label}} {{date}}",
+		"items": "عنصر",
 		"buttons": {
 			"accept": "قبول",
 			"acceptOffer": "قبول العرض",
@@ -1192,6 +1195,7 @@
 		"clientAddress": "عنوان العميل",
 		"companyScope": "فئة التعيين",
 		"dashboard": {
+			"overview": "نظرة عامة يومية",
 			"appointmentCreatedSuccess": "تم إنشاء الموعد بنجاح!",
 			"createAppointment": "إنشاء موعد",
 			"createOffer": "إنشاء عرض",
@@ -1396,6 +1400,8 @@
 			"status": "الحالة"
 		},
 		"orderManagement": {
+			"allOrders": "جميع الطلبات",
+			"cancelReasonPrompt": "أدخل سبب الإلغاء:",
 			"noOrdersFound": "لم يتم العثور على طلبات تطابق معاييرك",
 			"ordersCount": "الطلبات ({{filtered}} من {{total}})",
 			"searchPlaceholder": "البحث عن الطلبات حسب المعرف أو العميل أو العنوان أو الوصف...",
@@ -1404,7 +1410,9 @@
 		},
 		"orders": "الطلبات",
 		"roles": {
+			"client": "عميل",
 			"company_admin": "مدير الشركة",
+			"company_secretary": "سكرتير الشركة",
 			"customer": "عميل",
 			"driver": "سائق",
 			"site_admin": "مدير الموقع",

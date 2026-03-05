@@ -47,7 +47,10 @@
 		}
 	},
 	"common": {
-		"allServices": "All Services",
+		"allServices": "Tous les services",
+		"countWithLabel": "{{count}} {{label}}",
+		"countWithDate": "{{count}} {{label}} {{date}}",
+		"items": "éléments",
 		"buttons": {
 			"accept": "Accepter",
 			"acceptOffer": "Accepter l'offre",
@@ -1181,22 +1184,23 @@
 		},
 		"assignCompanyForService": "Assign Company for this Service",
 		"cards": {
-			"appointments": "Appointments",
-			"noAppointmentsToday": "No appointments today",
-			"noOffersToday": "No offers today",
-			"noOrdersToday": "No new orders today",
-			"offers": "Offers",
-			"orders": "Orders",
-			"today": "Today"
+			"appointments": "Rendez-vous",
+			"noAppointmentsToday": "Aucun rendez-vous aujourd'hui",
+			"noOffersToday": "Aucune offre aujourd'hui",
+			"noOrdersToday": "Aucune nouvelle commande aujourd'hui",
+			"offers": "Offres",
+			"orders": "Commandes",
+			"today": "Aujourd'hui"
 		},
 		"clientAddress": "Client's Address",
 		"companyScope": "Type d'entreprise",
 		"dashboard": {
-			"appointmentCreatedSuccess": "Appointment created successfully!",
-			"createAppointment": "Create Appointment",
-			"createOffer": "Create Offer",
+			"overview": "Aperçu quotidien",
+			"appointmentCreatedSuccess": "Rendez-vous créé avec succès !",
+			"createAppointment": "Créer un rendez-vous",
+			"createOffer": "Créer une offre",
 			"createOrder": "Créer une commande",
-			"offerCreatedSuccess": "Offer created successfully!",
+			"offerCreatedSuccess": "Offre créée avec succès !",
 			"subtitle": "Gérer toutes les commandes de transport et superviser les opérations commerciales",
 			"title": "Tableau de bord administrateur"
 		},
@@ -1396,6 +1400,8 @@
 			"status": "Statut"
 		},
 		"orderManagement": {
+			"allOrders": "Toutes les commandes",
+			"cancelReasonPrompt": "Entrez la raison de l'annulation :",
 			"noOrdersFound": "Aucune commande trouvée correspondant à vos critères",
 			"ordersCount": "Commandes ({{filtered}} sur {{total}})",
 			"searchPlaceholder": "Rechercher des commandes par ID, client, adresse ou description...",
@@ -1404,11 +1410,13 @@
 		},
 		"orders": "Commandes",
 		"roles": {
+			"client": "Client",
 			"company_admin": "Admin d'entreprise",
+			"company_secretary": "Secrétaire d'entreprise",
 			"customer": "Client",
 			"driver": "Chauffeur",
 			"site_admin": "Admin du site",
-			"super_admin": "Super Admin",
+			"super_admin": "Super admin",
 			"worker": "Travailleur"
 		},
 		"settings": "Paramètres",

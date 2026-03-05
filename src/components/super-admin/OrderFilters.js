@@ -24,10 +24,10 @@ export default function OrderFilters({
 	const translatedServices = getTranslatedServiceTypes(t);
 	const services = [
 		{ value: "all", label: t("superAdmin.filters.allServices") },
-		{ value: "furniture_moving", label: translatedServices.find(s => s.id === "furniture_moving")?.name || "Moving" },
-		{ value: "cleaning_service", label: translatedServices.find(s => s.id === "cleaning_service")?.name || "Cleaning" },
-		{ value: "painting", label: translatedServices.find(s => s.id === "painting")?.name || "Painting" },
-		{ value: "packing", label: translatedServices.find(s => s.id === "packing")?.name || "Assembly" },
+		{ value: "furniture_moving", label: translatedServices.find(s => s.id === "furniture_moving")?.name || t("common.unknown") },
+		{ value: "cleaning_service", label: translatedServices.find(s => s.id === "cleaning_service")?.name || t("common.unknown") },
+		{ value: "painting", label: translatedServices.find(s => s.id === "painting")?.name || t("common.unknown") },
+		{ value: "packing", label: translatedServices.find(s => s.id === "packing")?.name || t("common.unknown") },
 	];
 
 	return (

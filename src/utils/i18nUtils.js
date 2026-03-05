@@ -52,16 +52,16 @@ export const getTranslatedLocationTypes = (t) => {
 // Create a function to get translated ROOM_TYPES
 export const getTranslatedRoomTypes = (t) => {
 	return [
-		{ id: "bedroom", name: t("roomTypes.bedroom") || "Bedroom" },
-		{ id: "living_room", name: t("roomTypes.livingRoom") || "Living Room" },
-		{ id: "kitchen", name: t("roomTypes.kitchen") || "Kitchen" },
-		{ id: "bathroom", name: t("roomTypes.bathroom") || "Bathroom" },
-		{ id: "dining_room", name: t("roomTypes.diningRoom") || "Dining Room" },
-		{ id: "office", name: t("roomTypes.office") || "Office" },
-		{ id: "storage_room", name: t("roomTypes.storageRoom") || "Storage Room" },
-		{ id: "balcony", name: t("roomTypes.balcony") || "Balcony" },
-		{ id: "garage", name: t("roomTypes.garage") || "Garage" },
-		{ id: "other", name: t("roomTypes.other") || "Other" },
+		{ id: "bedroom", name: t("roomTypes.bedroom") },
+		{ id: "living_room", name: t("roomTypes.livingRoom") },
+		{ id: "kitchen", name: t("roomTypes.kitchen") },
+		{ id: "bathroom", name: t("roomTypes.bathroom") },
+		{ id: "dining_room", name: t("roomTypes.diningRoom") },
+		{ id: "office", name: t("roomTypes.office") },
+		{ id: "storage_room", name: t("roomTypes.storageRoom") },
+		{ id: "balcony", name: t("roomTypes.balcony") },
+		{ id: "garage", name: t("roomTypes.garage") },
+		{ id: "other", name: t("roomTypes.other") },
 	];
 };
 
@@ -76,7 +76,7 @@ export const getTranslatedLocationType = (locationType, t) => {
 // Create a function to get translated STATUS_LABELS
 // Hide "offer_sent" status - show as "pending" instead
 export const getTranslatedStatusLabel = (status, t) => {
-	if (!status) return t("common.nA") || "N/A";
+	if (!status) return t("common.nA");
 
 	// Map "offer_sent" to "pending" to hide it from all roles
 	const normalizedStatus = status === "offer_sent" ? "pending" : status;

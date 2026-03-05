@@ -104,6 +104,33 @@ body {
   }
 }
 
+@keyframes bounce-subtle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes shine-slow {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 4s ease-in-out infinite;
+}
+
+.animate-shine-slow {
+  animation: shine-slow 5s ease-in-out infinite;
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }

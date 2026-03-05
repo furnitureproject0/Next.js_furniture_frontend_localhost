@@ -48,6 +48,9 @@
 	},
 	"common": {
 		"allServices": "Tutti i servizi",
+		"countWithLabel": "{{count}} {{label}}",
+		"countWithDate": "{{count}} {{label}} {{date}}",
+		"items": "elementi",
 		"buttons": {
 			"accept": "Accetta",
 			"acceptOffer": "Accetta offerta",
@@ -1181,22 +1184,23 @@
 		},
 		"assignCompanyForService": "Assign Company for this Service",
 		"cards": {
-			"appointments": "Appointments",
-			"noAppointmentsToday": "No appointments today",
-			"noOffersToday": "No offers today",
-			"noOrdersToday": "No new orders today",
-			"offers": "Offers",
-			"orders": "Orders",
-			"today": "Today"
+			"appointments": "Appuntamenti",
+			"noAppointmentsToday": "Nessun appuntamento oggi",
+			"noOffersToday": "Nessuna offerta oggi",
+			"noOrdersToday": "Nessun nuovo ordine oggi",
+			"offers": "Offerte",
+			"orders": "Ordini",
+			"today": "Oggi"
 		},
 		"clientAddress": "Client's Address",
 		"companyScope": "Tipo Azienda",
 		"dashboard": {
-			"appointmentCreatedSuccess": "Appointment created successfully!",
-			"createAppointment": "Create Appointment",
-			"createOffer": "Create Offer",
+			"overview": "Panoramica giornaliera",
+			"appointmentCreatedSuccess": "Appuntamento creato con successo!",
+			"createAppointment": "Crea appuntamento",
+			"createOffer": "Crea offerta",
 			"createOrder": "Crea ordine",
-			"offerCreatedSuccess": "Offer created successfully!",
+			"offerCreatedSuccess": "Offerta creata con successo!",
 			"subtitle": "Gestisci tutti gli ordini di trasporto e supervisiona le operazioni aziendali",
 			"title": "Dashboard amministratore"
 		},
@@ -1396,6 +1400,8 @@
 			"status": "Stato"
 		},
 		"orderManagement": {
+			"allOrders": "Tutti gli ordini",
+			"cancelReasonPrompt": "Inserisci il motivo dell'annullamento:",
 			"noOrdersFound": "Nessun ordine trovato corrispondente ai tuoi criteri",
 			"ordersCount": "Ordini ({{filtered}} di {{total}})",
 			"searchPlaceholder": "Cerca ordini per ID, cliente, indirizzo o descrizione...",
@@ -1404,7 +1410,9 @@
 		},
 		"orders": "Ordini",
 		"roles": {
+			"client": "Cliente",
 			"company_admin": "Admin aziendale",
+			"company_secretary": "Segretario aziendale",
 			"customer": "Cliente",
 			"driver": "Autista",
 			"site_admin": "Admin del sito",

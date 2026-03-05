@@ -126,7 +126,7 @@ export default function OrdersList({ orders }) {
 	const dispatch = useAppDispatch();
 
 	const handleCancelOrder = (order) => {
-		const reason = window.prompt(t("superAdmin.orderManagement.cancelReasonPrompt") || "Enter reason for cancellation:");
+		const reason = window.prompt(t("superAdmin.orderManagement.cancelReasonPrompt"));
 		if (reason !== null) {
 			dispatch(cancelOrderThunk({ orderId: order.id, reason }));
 		}

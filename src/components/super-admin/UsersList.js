@@ -35,6 +35,10 @@ const UserRow = ({ user, onEdit, onDelete, t, index }) => {
 			.substring(0, 2);
 	};
 
+	const roleKey = `superAdmin.roles.${user.role}`;
+const roleLabel = t(roleKey);
+	const roleText = roleLabel === roleKey ? user.role : roleLabel;
+
 	return (
 		<div 
 			className="group/user bg-white border border-primary-100 hover:border-primary-400 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-in"
@@ -57,7 +61,7 @@ const UserRow = ({ user, onEdit, onDelete, t, index }) => {
 								{user.name}
 							</h3>
 							<span className={`px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest rounded-full border shadow-sm ${getRoleBadgeColor(user.role)}`}>
-								{t(`superAdmin.roles.${user.role}`) || user.role}
+								{roleText}
 							</span>
 						</div>
 						<div className="flex flex-col gap-1">

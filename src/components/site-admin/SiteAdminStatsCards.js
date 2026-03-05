@@ -69,6 +69,14 @@ const ServiceIcon = ({ name, className = "w-4 h-4" }) => {
 
 // ─── Card Component ─────────────────────────────────────────
 const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrder, dateLabel, t, cardType }) => {
+	const count = services.length;
+	const label =
+		cardType === "appointment"
+			? t(count === 1 ? "pluralForms.appt" : "pluralForms.appts")
+			: cardType === "offer"
+				? t(count === 1 ? "pluralForms.offer" : "pluralForms.offers")
+				: t(count === 1 ? "pluralForms.order" : "pluralForms.orders");
+
 	return (
 		<div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-primary-200/40 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
 			{/* Card Header */}
@@ -79,36 +87,9 @@ const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrd
 				<div className="flex-1 min-w-0">
 					<h3 className="text-sm font-bold text-white truncate">{title}</h3>
 					<div className="flex flex-wrap gap-x-2 gap-y-0.5 mt-0.5 opacity-90">
-						{(() => {
-							const counts = services.reduce((acc, s) => {
-								const type = (s.orderType || "").toLowerCase();
-								if (type === "offer") acc.offers++;
-								else if (type === "appointment") acc.appts++;
-								else acc.orders++;
-								return acc;
-							}, { orders: 0, offers: 0, appts: 0 });
-
-						const parts = [];
-						
-						if (counts.orders > 0 || (services.length === 0 && cardType === 'order')) {
-							const label = counts.orders === 1 ? t("pluralForms.order") : t("pluralForms.orders");
-							parts.push(`${counts.orders} ${label}`);
-						}
-						if (counts.offers > 0 || (services.length === 0 && cardType === 'offer')) {
-							const label = counts.offers === 1 ? t("pluralForms.offer") : t("pluralForms.offers");
-							parts.push(`${counts.offers} ${label}`);
-						}
-						if (counts.appts > 0 || (services.length === 0 && cardType === 'appointment')) {
-							const label = counts.appts === 1 ? t("pluralForms.appt") : t("pluralForms.appts");
-							parts.push(`${counts.appts} ${label}`);
-						}
-						
-						return (
-							<p className="text-[10px] sm:text-xs text-white leading-tight flex items-center gap-1">
-								{parts.join(" · ")} {dateLabel}
-							</p>
-						);
-					})()}
+						<p className="text-[10px] sm:text-xs text-white leading-tight flex items-center gap-1">
+							{t("common.countWithDate", { count, label, date: dateLabel })}
+						</p>
 				</div>
 			</div>
 			<div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
@@ -134,7 +115,7 @@ const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrd
 							return (
 								<button
 									key={`${svc.orderId}-${svc.serviceName}-${idx}`}
-									onClick={() => onViewOrder(svc.orderId)}
+									onClick={() => svc.orderId && onViewOrder(svc.orderId)}
 									className={`
 										w-full ${color.bg} border ${color.border} rounded-xl p-3
 										flex items-center gap-3 text-left
@@ -145,7 +126,7 @@ const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrd
 									{/* Time badge */}
 									<div className={`flex-shrink-0 w-12 h-12 rounded-lg bg-white/80 border ${color.border} flex flex-col items-center justify-center`}>
 										<span className={`text-xs font-bold ${color.text}`}>
-											{svc.time ? formatTime(svc.time) : "—"}
+											{svc.time ? formatTime(svc.time) : t("common.nA")}
 										</span>
 									</div>
 
@@ -157,7 +138,7 @@ const TodayServiceCard = ({ title, icon, gradient, services, emptyMsg, onViewOrd
 										</div>
 										<div className="flex items-center gap-1.5">
 											<span className="text-[10px] text-slate-500 truncate">
-												#{svc.orderId} · {svc.customerName}
+												#{svc.orderId || t("common.nA")} · {svc.customerName || t("common.unknown")}
 											</span>
 										</div>
 									</div>
@@ -189,15 +170,15 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 		
 		// Translate based on order type and status
 		if (orderType === "offer") {
-			return t("orderTypes.offerRequest") || "Offer Request";
+			return t("orderTypes.offerRequest");
 		} else if (orderType === "appointment") {
 			const isPending = status === "pending";
-			return isPending ? (t("orderTypes.newAppointment") || "New Appointment") : (t("orderTypes.appointment") || "Appointment");
+			return isPending ? t("orderTypes.newAppointment") : t("orderTypes.appointment");
 		} else if (orderType === "order") {
 			const isPending = status === "pending";
-			return isPending ? (t("orderTypes.newOrder") || "New Order") : (t("orderTypes.order") || "Order");
+			return isPending ? t("orderTypes.newOrder") : t("orderTypes.order");
 		}
-		return t("orderTypes.newOrder") || "New Order";
+		return t("orderTypes.newOrder");
 	};
 
 	const activeDateKey = useMemo(() => {
@@ -206,7 +187,7 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 	}, [selectedDate]);
 
 	const dateLabel = useMemo(() => {
-		if (!selectedDate) return t("siteAdmin.cards.today") || "today";
+		if (!selectedDate) return t("siteAdmin.cards.today");
 		return new Date(selectedDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 	}, [selectedDate, t]);
 
@@ -235,7 +216,7 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 					const entry = {
 						orderId: order.id,
 						serviceName: getServiceTypeName(order.order_type, null, order.status),
-						customerName: order.customerName || "Unknown",
+						customerName: order.customerName || t("common.unknown"),
 						time: order.preferred_time || null,
 						status: order.status,
 						orderType: order.order_type || order.orderType || order.type,
@@ -325,33 +306,33 @@ export default function SiteAdminStatsCards({ selectedDate }) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
 			<TodayServiceCard
-				title={t("siteAdmin.cards.orders") || "Orders"}
+				title={t("siteAdmin.cards.orders")}
 				gradient="from-emerald-500 to-teal-700"
 				icon={<svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
 				services={ordersServices}
-				emptyMsg={t("siteAdmin.cards.noOrdersToday") || "No new orders today"}
+				emptyMsg={t("siteAdmin.cards.noOrdersToday")}
 				onViewOrder={handleViewOrder}
 				dateLabel={dateLabel}
 				t={t}
 				cardType="order"
 			/>
 			<TodayServiceCard
-				title={t("siteAdmin.cards.offers") || "Offers"}
+				title={t("siteAdmin.cards.offers")}
 				gradient="from-orange-500 to-orange-600"
 				icon={<svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>}
 				services={offersServices}
-				emptyMsg={t("siteAdmin.cards.noOffersToday") || "No offers today"}
+				emptyMsg={t("siteAdmin.cards.noOffersToday")}
 				onViewOrder={handleViewOrder}
 				dateLabel={dateLabel}
 				t={t}
 				cardType="offer"
 			/>
 			<TodayServiceCard
-				title={t("siteAdmin.cards.appointments") || "Appointments"}
+				title={t("siteAdmin.cards.appointments")}
 				gradient="from-primary-500 to-primary-700"
 				icon={<svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>}
 				services={appointmentsServices}
-				emptyMsg={t("siteAdmin.cards.noAppointmentsToday") || "No appointments today"}
+				emptyMsg={t("siteAdmin.cards.noAppointmentsToday")}
 				onViewOrder={handleViewOrder}
 				dateLabel={dateLabel}
 				t={t}

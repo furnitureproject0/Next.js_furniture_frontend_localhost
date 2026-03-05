@@ -9,7 +9,7 @@ import { useGlobalToast } from "@/hooks/useGlobalToast";
 export default function AddUserModal({ isOpen, onClose }) {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
-	const { showToast } = useGlobalToast();
+	const { toast } = useGlobalToast();
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
@@ -27,7 +27,7 @@ export default function AddUserModal({ isOpen, onClose }) {
 
 		try {
 			await dispatch(createUserThunk(formData)).unwrap();
-			showToast(t("common.success"), "success");
+			toast.success(t("common.success"));
 			onClose();
 			setFormData({
 				name: "",
@@ -36,7 +36,7 @@ export default function AddUserModal({ isOpen, onClose }) {
 				role: "client",
 			});
 		} catch (error) {
-			showToast(error?.message || error || t("common.error"), "error");
+			toast.error(error?.message || error || t("common.error"));
 		}
 	};
 
@@ -134,7 +134,7 @@ export default function AddUserModal({ isOpen, onClose }) {
 							required
 							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
 						>
-							<option value="client">{t("superAdmin.roles.customer")}</option>
+							<option value="client">{t("superAdmin.roles.client")}</option>
 							<option value="super_admin">{t("superAdmin.roles.super_admin")}</option>
 							<option value="site_admin">{t("superAdmin.roles.site_admin")}</option>
 							<option value="company_admin">
