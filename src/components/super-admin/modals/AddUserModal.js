@@ -3,168 +3,361 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import { useAppDispatch } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/usersSlice";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGlobalToast } from "@/hooks/useGlobalToast";
 
 export default function AddUserModal({ isOpen, onClose }) {
-	const { t } = useTranslation();
-	const dispatch = useAppDispatch();
-	const { toast } = useGlobalToast();
-	const [formData, setFormData] = useState({
-		name: "",
-		email: "",
-		password: "",
-		role: "client",
-	});
+    const { t } = useTranslation();
+    const dispatch = useAppDispatch();
+    const { toast } = useGlobalToast();
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({ ...prev, [name]: value }));
-	};
+    const searchRef = useRef(null);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+    // 🟢 State لحالة التحميل لمنع إرسال الريكويست أكتر من مرة 🟢
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-		try {
-			await dispatch(createUserThunk(formData)).unwrap();
-			toast.success(t("common.success"));
-			onClose();
-			setFormData({
-				name: "",
-				email: "",
-				password: "",
-				role: "client",
-			});
-		} catch (error) {
-			toast.error(error?.message || error || t("common.error"));
-		}
-	};
+    // States الخاصة ببحث الخرائط
+    const [addressQuery, setAddressQuery] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const [showSuggestions, setShowSuggestions] = useState(false);
 
-	if (!isOpen) return null;
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "", // اختياري
+        role: "client",
+        birthdate: "",
+        phones: [""], // ديناميكي
+        address: "",
+    });
 
-	return (
-		<div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-2 sm:p-4">
-			<div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-				{/* Header */}
-				<div className="sticky top-0 bg-white border-b border-primary-200/40 px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6 rounded-t-xl sm:rounded-t-2xl">
-					<div className="flex items-center justify-between gap-3">
-						<h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 truncate">
-							{t("superAdmin.modals.addUser.title")}
-						</h2>
-						<button
-							onClick={onClose}
-							className="p-1.5 sm:p-2 hover:bg-primary-50 rounded-lg transition-colors flex-shrink-0"
-						>
-							<svg
-								className="w-5 h-5 sm:w-6 sm:h-6 text-slate-600"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M6 18L18 6M6 6l12 12"
-								/>
-							</svg>
-						</button>
-					</div>
-				</div>
+    // بحث العناوين (OpenStreetMap)
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(async () => {
+            if (addressQuery.trim().length > 2 && showSuggestions) {
+                setIsSearching(true);
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addressQuery)}&format=json&addressdetails=1&limit=5&accept-language=en`);
+                    const data = await res.json();
+                    setSuggestions(data);
+                } catch (err) {
+                    console.error("Address search error:", err);
+                } finally {
+                    setIsSearching(false);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        }, 500);
 
-				{/* Form */}
-				<form onSubmit={handleSubmit} className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-5 lg:space-y-6">
-					{/* Name */}
-					<div>
-						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("superAdmin.modals.addUser.fullName")}
-						</label>
-						<input
-							type="text"
-							name="name"
-							value={formData.name}
-							onChange={handleChange}
-							required
-							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder={t("superAdmin.modals.addUser.namePlaceholder")}
-						/>
-					</div>
+        return () => clearTimeout(delayDebounceFn);
+    }, [addressQuery, showSuggestions]);
 
-					{/* Email */}
-					<div>
-						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("superAdmin.modals.addUser.email")}
-						</label>
-						<input
-							type="email"
-							name="email"
-							value={formData.email}
-							onChange={handleChange}
-							required
-							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder={t("superAdmin.modals.addUser.emailPlaceholder")}
-						/>
-					</div>
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setShowSuggestions(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
-					{/* Password */}
-					<div>
-						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("superAdmin.modals.addUser.password")}
-						</label>
-						<input
-							type="password"
-							name="password"
-							value={formData.password}
-							onChange={handleChange}
-							required
-							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 placeholder-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-							placeholder="••••••••"
-						/>
-					</div>
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
-					{/* Role */}
-					<div>
-						<label className="block text-sm font-medium text-slate-800 mb-2">
-							{t("superAdmin.modals.addUser.role")}
-						</label>
-						<select
-							name="role"
-							value={formData.role}
-							onChange={handleChange}
-							required
-							className="w-full px-4 py-3 bg-white border border-primary-200/60 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-300"
-						>
-							<option value="client">{t("superAdmin.roles.client")}</option>
-							<option value="super_admin">{t("superAdmin.roles.super_admin")}</option>
-							<option value="site_admin">{t("superAdmin.roles.site_admin")}</option>
-							<option value="company_admin">
-								{t("superAdmin.roles.company_admin")}
-							</option>
-							<option value="driver">{t("superAdmin.roles.driver")}</option>
-							<option value="worker">{t("superAdmin.roles.worker")}</option>
-						</select>
-					</div>
+    // دوال العنوان
+    const handleAddressInputChange = (e) => {
+        const val = e.target.value;
+        setAddressQuery(val);
+        setFormData((prev) => ({ ...prev, address: val }));
+        setShowSuggestions(true);
+    };
 
+    const handleSelectAddress = (suggestion) => {
+        const selectedAddress = suggestion.display_name;
+        setAddressQuery(selectedAddress);
+        setFormData((prev) => ({ ...prev, address: selectedAddress }));
+        setShowSuggestions(false);
+    };
 
-					{/* Actions */}
-					<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 sm:pt-4">
-						<button
-							type="button"
-							onClick={onClose}
-							className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm bg-white border border-primary-200/60 text-slate-800 rounded-lg sm:rounded-xl font-medium hover:bg-primary-50 transition-colors"
-						>
-							{t("common.buttons.cancel")}
-						</button>
-						<button
-							type="submit"
-							className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg sm:rounded-xl font-medium shadow-md hover:shadow-lg hover:from-red-600 hover:to-red-700 transition-all"
-						>
-							{t("superAdmin.modals.addUser.addUserButton")}
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	);
+    // دوال أرقام التليفونات
+    const handlePhoneChange = (index, value) => {
+        const newPhones = [...formData.phones];
+        newPhones[index] = value;
+        setFormData(prev => ({ ...prev, phones: newPhones }));
+    };
+    const addPhoneField = () => {
+        setFormData(prev => ({ ...prev, phones: [...prev.phones, ""] }));
+    };
+    const removePhoneField = (index) => {
+        const newPhones = formData.phones.filter((_, i) => i !== index);
+        setFormData(prev => ({ ...prev, phones: newPhones.length ? newPhones : [""] }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // 🟢 منع التنفيذ لو الريكويست لسه شغال 🟢
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
+
+        // تنظيف وتجهيز الداتا
+        const validPhones = formData.phones.filter(phone => phone.trim() !== "");
+        
+        const payload = {
+            name: formData.name,
+            email: formData.email,
+            role: formData.role,
+        };
+
+        if (formData.password.trim() !== "") {
+            payload.password = formData.password;
+        }
+        if (formData.birthdate) {
+            payload.birthdate = formData.birthdate;
+        }
+        if (validPhones.length > 0) {
+            payload.phones = validPhones;
+        }
+        if (formData.address) {
+            payload.location = {
+                address: formData.address
+            };
+        }
+
+        try {
+            await dispatch(createUserThunk(payload)).unwrap();
+            toast.success(t("common.success") || "User created successfully");
+            onClose();
+            setFormData({
+                name: "", email: "", password: "", role: "client",
+                birthdate: "", phones: [""], address: ""
+            });
+            setAddressQuery("");
+        } catch (error) {
+            toast.error(error?.message || error || t("common.error"));
+        } finally {
+            // 🟢 إرجاع حالة الزرار لو حصل خطأ أو خلص 🟢
+            setIsSubmitting(false);
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-2 sm:p-4 animate-fade-in">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-scale-in custom-scrollbar flex flex-col">
+                {/* Header */}
+                <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 px-4 sm:px-6 py-4 rounded-t-xl sm:rounded-t-2xl z-10 flex-shrink-0">
+                    <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                            </div>
+                            <h2 className="text-xl font-bold text-slate-800">
+                                {t("superAdmin.modals.addUser.title") || "Add New User"}
+                            </h2>
+                        </div>
+                        <button
+                            onClick={onClose}
+                            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Form */}
+                <form id="add-user-form" onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-6">
+                    
+                    {/* Basic Info */}
+                    <div className="bg-slate-50/50 p-5 rounded-2xl border border-slate-100 space-y-5">
+                        <h3 className="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">Basic Information</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div className="space-y-1.5 sm:col-span-2">
+                                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                                    {t("superAdmin.modals.addUser.fullName")} <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-400 transition-all"
+                                    placeholder={t("superAdmin.modals.addUser.namePlaceholder")}
+                                />
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                                    {t("superAdmin.modals.addUser.email")} <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-400 transition-all"
+                                    placeholder={t("superAdmin.modals.addUser.emailPlaceholder")}
+                                />
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                                    Birthdate
+                                </label>
+                                <input
+                                    type="date"
+                                    name="birthdate"
+                                    value={formData.birthdate}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-400 transition-all text-slate-700"
+                                />
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                                    {t("superAdmin.modals.addUser.role")} <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    name="role"
+                                    value={formData.role}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-400 transition-all cursor-pointer"
+                                >
+                                    <option value="client">{t("superAdmin.roles.customer") || "Client"}</option>
+                                    <option value="super_admin">{t("superAdmin.roles.super_admin") || "Super Admin"}</option>
+                                    <option value="site_admin">{t("superAdmin.roles.site_admin") || "Site Admin"}</option>
+                                    <option value="company_admin">{t("superAdmin.roles.company_admin") || "Company Admin"}</option>
+                                    <option value="company_secretary">{t("superAdmin.roles.company_secretary") || "Company Secretary"}</option>
+                                    <option value="driver">{t("superAdmin.roles.driver") || "Driver"}</option>
+                                    <option value="worker">{t("superAdmin.roles.worker") || "Worker"}</option>
+                                </select>
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide flex justify-between">
+                                    <span>{t("superAdmin.modals.addUser.password")}</span>
+                                </label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-400 transition-all"
+                                    placeholder="••••••••"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Phones */}
+                    <div className="bg-slate-50/50 p-5 rounded-2xl border border-slate-100 space-y-4">
+                        <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                            <h3 className="text-sm font-bold text-slate-800">Phone Numbers</h3>
+                            <button type="button" onClick={addPhoneField} className="text-xs font-bold text-primary-600 hover:text-primary-800 bg-primary-50 px-2 py-1 rounded-lg">+ Add Phone</button>
+                        </div>
+                        <div className="space-y-3">
+                            {formData.phones.map((phone, index) => (
+                                <div key={index} className="flex items-center gap-2">
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => handlePhoneChange(index, e.target.value)}
+                                        placeholder="+2010..."
+                                        className="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-400 transition-all"
+                                    />
+                                    <button type="button" onClick={() => removePhoneField(index)} className="p-2.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl shrink-0">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Location (Autocomplete) */}
+                    <div className="bg-slate-50/50 p-5 rounded-2xl border border-slate-100 space-y-4">
+                        <h3 className="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">Location Address</h3>
+                        <div className="space-y-1.5" ref={searchRef}>
+                            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
+                                Search Address
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                    <svg className="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    name="addressQuery"
+                                    value={addressQuery}
+                                    onChange={handleAddressInputChange}
+                                    onFocus={() => addressQuery.length > 2 && setShowSuggestions(true)}
+                                    placeholder="Type to search for user address..."
+                                    className="w-full pl-11 pr-10 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-400 transition-all"
+                                    autoComplete="off"
+                                />
+                                {isSearching && (
+                                    <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+                                        <svg className="animate-spin h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    </div>
+                                )}
+                                {showSuggestions && suggestions.length > 0 && (
+                                    <ul className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                        {suggestions.map((suggestion) => (
+                                            <li 
+                                                key={suggestion.place_id}
+                                                onClick={() => handleSelectAddress(suggestion)}
+                                                className="px-4 py-2.5 text-sm text-slate-700 hover:bg-primary-50 hover:text-primary-700 cursor-pointer border-b border-slate-50 last:border-0 flex items-start gap-2"
+                                            >
+                                                <svg className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+                                                <span>{suggestion.display_name}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                {/* Footer / Actions */}
+                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50 flex-shrink-0 rounded-b-2xl">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        disabled={isSubmitting} // 🟢 تعطيل زر الإلغاء أثناء التحميل 🟢
+                        className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {t("common.buttons.cancel")}
+                    </button>
+                    <button
+                        type="submit"
+                        form="add-user-form"
+                        disabled={isSubmitting} // 🟢 تعطيل زر الحفظ لمنع التكرار 🟢
+                        className="flex items-center justify-center min-w-[120px] gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                        {isSubmitting ? (
+                            <>
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Creating...
+                            </>
+                        ) : (
+                            t("superAdmin.modals.addUser.addUserButton") || "Add User"
+                        )}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
 }
-

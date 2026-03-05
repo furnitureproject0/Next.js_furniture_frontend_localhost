@@ -10,26 +10,24 @@
 /**
  * Transform backend user to frontend format
  */
-export const transformUser = (backendUser) => {
-	if (!backendUser) return null;
-	
-	return {
-		id: backendUser.id,
-		name: backendUser.user_name || backendUser.name || "Unknown",
-		email: backendUser.email || "",
-		phone: backendUser.phone || "",
-		role: backendUser.user_role || backendUser.role || "client",
-		company: backendUser.company_name || (backendUser.company ? backendUser.company.name : ""),
-		companyId: backendUser.company_id || (backendUser.company ? backendUser.company.id : null),
-		status: backendUser.status || "active",
-		created: backendUser.date_added || backendUser.createdAt || new Date().toISOString(),
-		lastLogin: backendUser.last_login || "Never",
-		avatar: backendUser.avatar || null,
-		// Raw data for actions
-		_original: backendUser,
-	};
-};
+export const transformUser = (user) => {
+    // كودك القديم غالباً بيكون شبه كده:
+    return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        birthdate: user.birthdate,
+        created: user.createdAt,
+        // ... أي حقول تانية عندك ...
 
+        // 🟢 الحل: ضيف السطور دي عشان الداتا توصل للمودال كاملة 🟢
+        phones: user.phones || [],       // نحتفظ بمصفوفة الأرقام الأصلية
+        phone: user.phones?.[0]?.phone || "", // لو محتاج رقم واحد للجدول
+        location: user.location || null, // نحتفظ ببيانات العنوان كاملة
+        address: user.location?.address || "", // لو محتاج العنوان كنص مباشر
+    };
+};
 /**
  * Transform array of backend users
  */

@@ -1419,7 +1419,9 @@
 			"driver": "Driver",
 			"site_admin": "Site Admin",
 			"super_admin": "Super Admin",
-			"worker": "Worker"
+			"worker": "Worker",
+			"client": "Client",
+			"company_secretary": "Company Secretary"
 		},
 		"settings": "Settings",
 		"settingsComingSoon": "Settings management coming soon...",

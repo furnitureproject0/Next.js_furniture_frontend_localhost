@@ -111,8 +111,13 @@ const apiRequest = async (endpoint, options = {}) => {
 		!url.includes('/orders/') &&
 		!url.includes('-v2');
 
-	// Handle multipart/form-data for file uploads OR create order endpoint
-	if (options.body && options.method !== "GET" && (hasFile(options.body) || isCreateOrderEndpoint) && typeof FormData !== 'undefined') {
+
+	if (typeof FormData !== 'undefined' && options.body instanceof FormData) {
+        config.body = options.body;
+        delete config.headers["Content-Type"];
+    }
+    // Handle multipart/form-data for file uploads OR create order endpoint
+    else if (options.body && options.method !== "GET" && (hasFile(options.body) || isCreateOrderEndpoint) && typeof FormData !== 'undefined') {
 		const formData = new FormData();
 
 		// Handle image files separately - backend expects them in req.files, not req.body
@@ -1135,10 +1140,16 @@ export const adminCompaniesV2Api = {
 		}),
 
 	updateCompanyAssignments: (userId, assignmentData) =>
-		apiRequest(`/admin-companies-v2/assign-companies/${userId}`, {
+		apiRequest(`/admin-companies-v2/update-assignments/${userId}`, {
 			method: "PATCH",
 			body: assignmentData,
 		}),
+
+	getUserCompanies: (userId) =>
+        apiRequest(`/admin-companies-v2/${userId}/companies?limit=&type=`, {
+            method: "GET",
+        }),
 };
+
 
 export { ApiError, apiRequest };

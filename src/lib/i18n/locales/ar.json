@@ -1417,7 +1417,9 @@
 			"driver": "سائق",
 			"site_admin": "مدير الموقع",
 			"super_admin": "المشرف الرئيسي",
-			"worker": "عامل"
+			"worker": "عامل",
+			"client": "عميل",
+			"company_secretary": "سكرتير"
 		},
 		"settings": "الإعدادات",
 		"settingsComingSoon": "إدارة الإعدادات قريباً...",

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { usersV2Api } from "@/lib/api";
+import { usersV2Api, adminCompaniesV2Api } from "@/lib/api";
 import { transformUser, transformUsers, extractArrayData } from "@/lib/services/superAdminTransformers";
 
 export const fetchAllUsers = createAsyncThunk(
@@ -21,6 +21,42 @@ export const fetchAllUsers = createAsyncThunk(
 	}
 );
 
+export const assignUserCompaniesThunk = createAsyncThunk(
+    "users/assignCompanies",
+    async ({ userId, payload }, { rejectWithValue }) => {
+        try {
+            // 🟢 استخدمنا الدالة اللي إنت لقيتها جاهزة 🟢
+            const response = await adminCompaniesV2Api.assignCompanies(userId, payload);
+            
+            if (response?.success) {
+                return { userId, data: response.data }; 
+            }
+            throw new Error(response?.message || "Failed to assign companies");
+        } catch (error) {
+            console.error("Error assigning companies:", error);
+            return rejectWithValue(error?.message || "Failed to assign companies");
+        }
+    }
+);
+
+export const updateCompanyAssignmentsThunk = createAsyncThunk(
+    "users/updateCompanyAssignments",
+    async ({ userId, payload }, { rejectWithValue }) => {
+        try {
+            // بنستخدم دالة الأبديت اللي إنت بعتهالي جاهزة في adminCompaniesV2Api
+            const response = await adminCompaniesV2Api.updateCompanyAssignments(userId, payload);
+            
+            if (response?.success) {
+                return { userId, data: response.data }; 
+            }
+            throw new Error(response?.message || "Failed to update assignments");
+        } catch (error) {
+            console.error("Error updating assignments:", error);
+            return rejectWithValue(error?.message || "Failed to update assignments");
+        }
+    }
+);
+
 export const createUserThunk = createAsyncThunk(
 	"users/createUser",
 	async (userData, { rejectWithValue }) => {
@@ -28,7 +64,7 @@ export const createUserThunk = createAsyncThunk(
 			const response = await usersV2Api.createUser(userData);
 			
 			if (response?.success && response?.data) {
-				return transformUser(response.data);
+				return transformUser(response.data.user || response.data);
 			}
 			throw new Error(response?.message || "Failed to create user");
 		} catch (error) {
@@ -44,7 +80,7 @@ export const updateUserThunk = createAsyncThunk(
 		try {
 			const response = await usersV2Api.updateUser(id, updates);
 			if (response?.success && response?.data) {
-				const updatedUser = transformUser(response.data);
+				const updatedUser = transformUser(response.data.user || response.data);
 				return { id, user: updatedUser };
 			}
 			throw new Error(response?.message || "Failed to update user");

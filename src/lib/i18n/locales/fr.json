@@ -1416,8 +1416,10 @@
 			"customer": "Client",
 			"driver": "Chauffeur",
 			"site_admin": "Admin du site",
-			"super_admin": "Super admin",
-			"worker": "Travailleur"
+			"super_admin": "Super Admin",
+			"worker": "Travailleur",
+			"client": "Cliente",
+			"company_secretary": "secrétaire de l'entreprise"
 		},
 		"settings": "Paramètres",
 		"settingsComingSoon": "Gestion des paramètres à venir...",

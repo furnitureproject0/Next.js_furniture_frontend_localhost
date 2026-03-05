@@ -1417,7 +1417,9 @@
 			"driver": "Autista",
 			"site_admin": "Admin del sito",
 			"super_admin": "Super Admin",
-			"worker": "Lavoratore"
+			"worker": "Lavoratore",
+			"client": "Cliente",
+			"company_secretary": "segretario d'azienda"
 		},
 		"settings": "Impostazioni",
 		"settingsComingSoon": "Gestione impostazioni in arrivo...",

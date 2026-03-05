@@ -1413,14 +1413,14 @@
 		},
 		"orders": "Aufträge",
 		"roles": {
-			"client": "Kunde",
 			"company_admin": "Unternehmens-Admin",
-			"company_secretary": "Firmen-Sekretär(in)",
 			"customer": "Kunde",
 			"driver": "Fahrer",
-			"site_admin": "Site-Admin",
-			"super_admin": "Super-Admin",
-			"worker": "Arbeiter"
+			"site_admin": "Site Admin",
+			"super_admin": "Super Admin",
+			"worker": "Arbeiter",
+			"client": "Kunde",
+			"company_secretary": "Firmensekretärin"
 		},
 		"settings": "Einstellungen",
 		"settingsComingSoon": "Einstellungsverwaltung kommt bald...",
