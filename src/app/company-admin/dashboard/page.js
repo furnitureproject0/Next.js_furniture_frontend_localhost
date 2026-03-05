@@ -218,7 +218,6 @@ export default function CompanyAdminDashboard() {
 
 				{/* 3. Stats Cards */}
 				<CompanyAdminStatsCards selectedDate={filters.selectedDate} />
-
 				{/* 4. TABS & LISTS */}
 				<div className="pt-4">
 					{/* Tabs UI */}
@@ -227,19 +226,19 @@ export default function CompanyAdminDashboard() {
 							className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors cursor-pointer ${filters.type === 'order' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
 							onClick={() => setFilters(prev => ({ ...prev, type: 'order' }))}
 						>
-							{t("sidebar.orders") || "Orders List"}
+							{t("sidebar.orders")}
 						</button>
 						<button
 							className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors cursor-pointer ${filters.type === 'offer' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
 							onClick={() => setFilters(prev => ({ ...prev, type: 'offer' }))}
 						>
-							{t("orders.offers") || "Offers List"}
+							{t("orders.offers")}
 						</button>
 						<button
 							className={`pb-3 px-2 text-sm font-bold border-b-2 transition-colors cursor-pointer ${filters.type === 'appointment' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
 							onClick={() => setFilters(prev => ({ ...prev, type: 'appointment' }))}
 						>
-							{t("orders.appointments") || "Appointments List"}
+							{t("orders.appointments")}
 						</button>
 					</div>
 

@@ -16,7 +16,8 @@
 		"noOffersToday": "Heute keine Angebote",
 		"noOrdersToday": "Heute keine neuen Aufträge",
 		"offers": "Angebote",
-		"orders": "Aufträge"
+		"orders": "Aufträge",
+		"today": "heute"
 	},
 	"client": {
 		"dashboard": {
@@ -294,9 +295,9 @@
 	},
 	"dashboards": {
 		"companyAdmin": {
-			"createAppointment": "Create Appointment",
-			"createOffer": "Create Offer",
-			"createOrder": "Create Order",
+			"createAppointment": "Termin erstellen",
+			"createOffer": "Angebot erstellen",
+			"createOrder": "Auftrag erstellen",
 			"subtitle": "Verwalten Sie Ihre zugewiesenen Aufträge und Teamoperationen",
 			"title": "Firmen-Dashboard"
 		},
@@ -1419,7 +1420,6 @@
 			"site_admin": "Site Admin",
 			"super_admin": "Super Admin",
 			"worker": "Arbeiter",
-			"client": "Kunde",
 			"company_secretary": "Firmensekretärin"
 		},
 		"settings": "Einstellungen",

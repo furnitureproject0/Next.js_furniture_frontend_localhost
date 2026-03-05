@@ -16,7 +16,8 @@
 		"noOffersToday": "No offers today",
 		"noOrdersToday": "No new orders today",
 		"offers": "Offers",
-		"orders": "Orders"
+		"orders": "Orders",
+		"today": "today"
 	},
 	"client": {
 		"dashboard": {
@@ -1419,9 +1420,7 @@
 			"driver": "Driver",
 			"site_admin": "Site Admin",
 			"super_admin": "Super Admin",
-			"worker": "Worker",
-			"client": "Client",
-			"company_secretary": "Company Secretary"
+			"worker": "Worker"
 		},
 		"settings": "Settings",
 		"settingsComingSoon": "Settings management coming soon...",

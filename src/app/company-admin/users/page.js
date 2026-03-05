@@ -79,10 +79,10 @@ export default function CompanyAdminUsersPage() {
 					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 						<div>
 							<h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-								{t("companyAdmin.clients") || "Our Clients"}
+								{t("companyAdmin.clients")}
 							</h1>
 							<p className="text-gray-600 mt-1">
-								{t("companyAdmin.clientsDescription") || "Manage your company's clients"}
+								{t("companyAdmin.clientsDescription")}
 							</p>
 						</div>
 					</div>
@@ -94,7 +94,7 @@ export default function CompanyAdminUsersPage() {
 						<div className="flex-1">
 							<input
 								type="text"
-								placeholder={t("companyAdmin.searchClients") || "Search clients by name, email, or phone..."}
+								placeholder={t("companyAdmin.searchClients")}
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
 								className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -107,7 +107,7 @@ export default function CompanyAdminUsersPage() {
 							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 							</svg>
-							{t("common.refresh") || "Refresh"}
+							{t("common.refresh")}
 						</button>
 					</div>
 				</div>
@@ -130,12 +130,12 @@ export default function CompanyAdminUsersPage() {
 								/>
 							</svg>
 							<h3 className="text-lg font-semibold text-gray-900 mb-1">
-								{t("companyAdmin.noClientsFound") || "No clients found"}
+								{t("companyAdmin.noClientsFound")}
 							</h3>
 							<p className="text-gray-600 mb-4">
 								{searchTerm 
-									? (t("companyAdmin.tryAdjustingSearch") || "Try adjusting your search criteria")
-									: (t("companyAdmin.noClientsYet") || "No clients have been added yet")
+									? (t("companyAdmin.tryAdjustingSearch"))
+									: (t("companyAdmin.noClientsYet"))
 								}
 							</p>
 						</div>
@@ -145,16 +145,16 @@ export default function CompanyAdminUsersPage() {
 								<thead className="bg-gray-50 border-b border-gray-200">
 									<tr>
 										<th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-											{t("common.labels.name") || "Name"}
+											{t("common.labels.name")}
 										</th>
 										<th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-											{t("common.labels.email") || "Email"}
+											{t("common.labels.email")}
 										</th>
 										<th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider hidden sm:table-cell">
-											{t("common.labels.phone") || "Phone"}
+											{t("common.labels.phone")}
 										</th>
 										<th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
-											{t("common.labels.actions") || "Actions"}
+											{t("common.labels.actions")}
 										</th>
 									</tr>
 								</thead>
@@ -192,7 +192,7 @@ export default function CompanyAdminUsersPage() {
 														<svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
 														</svg>
-														{t("companyAdmin.createOffer") || "Offer"}
+														{t("companyAdmin.createOffer")}
 													</button>
 													<button
 														onClick={() => handleCreateAppointment(client)}
@@ -201,7 +201,7 @@ export default function CompanyAdminUsersPage() {
 														<svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 														</svg>
-														{t("companyAdmin.createAppointment") || "Appt"}
+														{t("companyAdmin.createAppointment")}
 													</button>
 												</div>
 											</td>
@@ -221,7 +221,7 @@ export default function CompanyAdminUsersPage() {
 								{clients.length}
 							</div>
 							<div className="text-xs sm:text-sm text-gray-600 mt-1">
-								{t("companyAdmin.totalClients") || "Total Clients"}
+								{t("companyAdmin.totalClients")}
 							</div>
 						</div>
 					</div>
